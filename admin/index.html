@@ -37,12 +37,12 @@
                 <a href="index.html"><i class="icon icon-home"></i><span>Dashboard</span></a>
             </li>
 
-            <li>
-                <a href="add_new_user.php"><i class="icon icon-user"></i><span>Add New User</span></a>
+            <li class="<?php echo ($current_page == 'add_new_user.php') ? 'active' : ''; ?>">
+                <a href="add_new_user.php"><i class="icon icon-user"></i><span>User List</span></a>
             </li>
-
-            <li>
-                <a href="add_new_user.php"><i class="icon icon-user"></i><span>Add New Products</span></a>
+    
+            <li class="<?php echo ($current_page == 'add_new_equipment.php') ? 'active' : ''; ?>">
+                <a href="add_new_equipment.php"><i class="icon icon-user"></i><span>Equipment List</span></a>
             </li>
 
             <li class="submenu"><a href="#"><i class="icon icon-th-list"></i> <span>Forms</span> <span
