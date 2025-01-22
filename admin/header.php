@@ -34,11 +34,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </li>
 
         <li class="<?php echo ($current_page == 'add_new_user.php') ? 'active' : ''; ?>">
-            <a href="add_new_user.php"><i class="icon icon-user"></i><span>Add New User</span></a>
+            <a href="add_new_user.php"><i class="icon icon-user"></i><span>User List</span></a>
         </li>
 
-        <li class="<?php echo ($current_page == 'add_new_product.php') ? 'active' : ''; ?>">
-            <a href="add_new_product.php"><i class="icon icon-user"></i><span>Add New Products</span></a>
+        <li class="<?php echo ($current_page == 'add_new_equipment.php') ? 'active' : ''; ?>">
+            <a href="add_new_equipment.php"><i class="icon icon-user"></i><span>Equipment List</span></a>
         </li>
 
         <li class="submenu <?php echo ($current_page == 'form-common.html' || $current_page == 'form-validation.html' || $current_page == 'form-wizard.html') ? 'active' : ''; ?>">
