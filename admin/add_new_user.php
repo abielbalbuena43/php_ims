@@ -12,6 +12,7 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 ?>
+
 <!--main-container-part-->
 <div id="content">
     <!--breadcrumbs-->
@@ -60,7 +61,7 @@ if (isset($_SESSION["alert"])) {
                                 <label class="control-label">Department</label>
                                 <div class="controls">
                                     <select name="department" class="span11">
-                                        <option value="" disabled selected>Select Department</option> <!-- Placeholder -->
+                                        <option value="" disabled selected>Select Department</option>
                                         <option>Accounting & Finance</option>
                                         <option>Advertising</option>
                                         <option>Circulation</option>
@@ -78,7 +79,7 @@ if (isset($_SESSION["alert"])) {
                                 <label class="control-label">Select Role</label>
                                 <div class="controls">
                                     <select name="role" class="span11">
-                                        <option value="" disabled selected>Select Role</option> <!-- Placeholder -->
+                                        <option value="" disabled selected>Select Role</option>
                                         <option>user</option>
                                         <option>admin</option>
                                     </select>
@@ -101,6 +102,7 @@ if (isset($_SESSION["alert"])) {
                         </form>
                     </div>
                 </div>
+
                 <div class="widget-content nopadding">
                     <table class="table table-bordered table-striped">
                         <thead>
@@ -134,7 +136,6 @@ if (isset($_SESSION["alert"])) {
                             }
                             ?>
                         </tbody>
-
                     </table>
                 </div>
             </div>
@@ -144,14 +145,21 @@ if (isset($_SESSION["alert"])) {
 
 <?php
 if (isset($_POST["submit1"])) {
-    $res = mysqli_query($link, "SELECT * FROM user_registration WHERE username='$_POST[username]'");
+    // Check if the username already exists
+    $res = mysqli_query($link, "SELECT * FROM user_registration WHERE username = '" . mysqli_real_escape_string($link, $_POST['username']) . "'");
+    
+    // If username doesn't exist, insert new user
     if (mysqli_num_rows($res) > 0) {
         $_SESSION["alert"] = "error";
     } else {
-        mysqli_query($link, "INSERT INTO user_registration VALUES(NULL, '$_POST[firstname]', '$_POST[lastname]', '$_POST[username]', '$_POST[password]', '$_POST[department]', '$_POST[role]', 'active')");
+        mysqli_query($link, "INSERT INTO user_registration (firstname, lastname, username, password, department, role, status) VALUES ('" . mysqli_real_escape_string($link, $_POST['firstname']) . "', '" . mysqli_real_escape_string($link, $_POST['lastname']) . "', '" . mysqli_real_escape_string($link, $_POST['username']) . "', '" . mysqli_real_escape_string($link, $_POST['password']) . "', '" . mysqli_real_escape_string($link, $_POST['department']) . "', '" . mysqli_real_escape_string($link, $_POST['role']) . "', 'active')");
+        
+        // Set the success alert
         $_SESSION["alert"] = "success";
     }
-    header("Location: " . $_SERVER['PHP_SELF']); // Redirect to the same page to refresh
+
+    // Redirect to avoid form resubmission
+    echo "<script>window.location.href = window.location.href;</script>";
     exit();
 }
 ?>

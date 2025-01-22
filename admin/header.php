@@ -25,23 +25,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </h2>
 </div>
 
-<!--top-Header-menu-->
-<div id="user-nav" class="navbar navbar-inverse">
-    <ul class="nav">
-        <li class="dropdown" id="profile-messages">
-            <a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i
-                    class="icon icon-user"></i> <span class="text">Welcome User</span><b class="caret"></b></a>
-            <ul class="dropdown-menu">
-                <li><a href="#"><i class="icon-user"></i> My Profile</a></li>
-                <li class="divider"></li>
-                <li><a href="#"><i class="icon-check"></i> My Tasks</a></li>
-                <li class="divider"></li>
-                <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li>
-            </ul>
-        </li>
-    </ul>
-</div>
-
 <!--sidebar-menu-->
 <div id="sidebar">
     <ul>
@@ -52,6 +35,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
         <li class="<?php echo ($current_page == 'add_new_user.php') ? 'active' : ''; ?>">
             <a href="add_new_user.php"><i class="icon icon-user"></i><span>Add New User</span></a>
+        </li>
+
+        <li class="<?php echo ($current_page == 'add_new_product.php') ? 'active' : ''; ?>">
+            <a href="add_new_product.php"><i class="icon icon-user"></i><span>Add New Products</span></a>
         </li>
 
         <li class="submenu <?php echo ($current_page == 'form-common.html' || $current_page == 'form-validation.html' || $current_page == 'form-wizard.html') ? 'active' : ''; ?>">
