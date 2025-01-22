@@ -14,7 +14,7 @@ include "header.php"
     <div class="container-fluid">
 
         <div class="row-fluid" style="background-color: white; min-height: 1000px; padding:10px;">
-            sdsd
+            Dashboard
         </div>
 
     </div>

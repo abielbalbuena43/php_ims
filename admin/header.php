@@ -1,3 +1,7 @@
+<?php
+// Dynamically set the active tab based on the current page
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,15 +19,11 @@
 </head>
 <body>
 
-
 <div id="header">
-
-    <h2 style="color: white;position: absolute">
+    <h2 style="color: white; position: absolute">
         <a href="dashboard.html" style="color:white; margin-left: 30px; margin-top: 40px">PHP IMS</a>
     </h2>
 </div>
-
-
 
 <!--top-Header-menu-->
 <div id="user-nav" class="navbar navbar-inverse">
@@ -39,36 +39,33 @@
                 <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li>
             </ul>
         </li>
-
-
     </ul>
 </div>
 
 <!--sidebar-menu-->
 <div id="sidebar">
     <ul>
-        <li class="active">
+        <!-- Dynamically add "active" class based on the current page -->
+        <li class="<?php echo ($current_page == 'index.html') ? 'active' : ''; ?>">
             <a href="index.html"><i class="icon icon-home"></i><span>Dashboard</span></a>
         </li>
 
-        <li>
+        <li class="<?php echo ($current_page == 'add_new_user.php') ? 'active' : ''; ?>">
             <a href="add_new_user.php"><i class="icon icon-user"></i><span>Add New User</span></a>
         </li>
 
-        <li class="submenu"><a href="#"><i class="icon icon-th-list"></i> <span>Forms</span> <span
-                class="label label-important">3</span></a>
+        <li class="submenu <?php echo ($current_page == 'form-common.html' || $current_page == 'form-validation.html' || $current_page == 'form-wizard.html') ? 'active' : ''; ?>">
+            <a href="#"><i class="icon icon-th-list"></i> <span>Forms</span> <span class="label label-important">3</span></a>
             <ul>
-                <li><a href="form-common.html">Basic Form</a></li>
-                <li><a href="form-validation.html">Form with Validation</a></li>
-                <li><a href="form-wizard.html">Form with Wizard</a></li>
+                <li class="<?php echo ($current_page == 'form-common.html') ? 'active' : ''; ?>"><a href="form-common.html">Basic Form</a></li>
+                <li class="<?php echo ($current_page == 'form-validation.html') ? 'active' : ''; ?>"><a href="form-validation.html">Form with Validation</a></li>
+                <li class="<?php echo ($current_page == 'form-wizard.html') ? 'active' : ''; ?>"><a href="form-wizard.html">Form with Wizard</a></li>
             </ul>
         </li>
-
     </ul>
 </div>
-<!--sidebar-menu-->
+
+<!-- Logout link -->
 <div id="search">
-
-        <a href="index.html" style="color:white"><i class="icon icon-share-alt"></i><span>LogOut</span></a>
-
+    <a href="index.html" style="color:white"><i class="icon icon-share-alt"></i><span>LogOut</span></a>
 </div>
