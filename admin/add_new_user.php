@@ -13,7 +13,6 @@ if (isset($_SESSION["alert"])) {
 }
 ?>
 
-<!--main-container-part-->
 <div id="content">
     <!--breadcrumbs-->
     <div id="content-header">
