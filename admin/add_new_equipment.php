@@ -35,7 +35,6 @@ if (isset($_SESSION["alert"])) {
                 <!-- Button to toggle the form -->
                 <button id="toggleFormButton" class="btn btn-primary" onclick="toggleForm()">Add New Equipment</button>
 
-
                 <div id="addEquipmentForm" style="display: none; margin-top: 20px;">
                     <div class="widget-box">
                         <div class="widget-title"> 
@@ -141,7 +140,6 @@ if (isset($_SESSION["alert"])) {
                     </div>
                 <?php } ?>
 
-                
                 <div class="widget-content nopadding" style="margin-top: 20px;">
                     <div style="overflow-x: auto;">
                         <table class="table table-bordered table-striped">
@@ -183,8 +181,8 @@ if (isset($_SESSION["alert"])) {
                                         <td><?php echo $row["macaddress"]; ?></td>
                                         <td><?php echo $row["osversion"]; ?></td>
                                         <td><?php echo $row["msversion"]; ?></td>
-                                        <td><a href="edit_equipment.php?id=<?php echo $row["id"]; ?>">Edit</a></td>
-                                        <td><a href="delete_equipment.php?id=<?php echo $row["id"]; ?>" onclick="return confirm('Are you sure you want to delete this equipment?');">Delete</a></td>
+                                        <td><a href="edit_equipment.php?equipment_id=<?php echo $row["equipment_id"]; ?>">Edit</a></td>
+                                        <td><a href="delete_equipment.php?equipment_id=<?php echo $row["equipment_id"]; ?>" onclick="return confirm('Are you sure you want to delete this equipment?');">Delete</a></td>
                                     </tr>
                                 <?php
                                 }
