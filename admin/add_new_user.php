@@ -151,8 +151,18 @@ if (isset($_SESSION["alert"])) {
                                     <td><?php echo $row["department"]; ?></td>
                                     <td><?php echo $row["role"]; ?></td>
                                     <td><?php echo $row["status"]; ?></td>
-                                    <td><a href="edit_user.php?id=<?php echo $row["id"]; ?>">Edit</a></td>
-                                    <td><a href="delete_user.php?id=<?php echo $row["id"]; ?>" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a></td>
+                                    <td>
+                                        <!-- Edit Button with Updated Styling -->
+                                        <a href="edit_user.php?user_id=<?php echo $row["user_id"]; ?>" class="btn btn-warning" style="font-size: 14px; padding: 5px 10px;">
+                                            <i class="icon-pencil"></i> Edit
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <!-- Delete Button with Updated Styling -->
+                                        <a href="delete_user.php?user_id=<?php echo $row["user_id"]; ?>" class="btn btn-danger" style="font-size: 14px; padding: 5px 10px;" onclick="return confirm('Are you sure you want to delete this user?');">
+                                            <i class="icon-trash"></i> Delete
+                                        </a>
+                                    </td>
                                 </tr>
                             <?php
                             }
@@ -181,12 +191,29 @@ function toggleForm() {
 
 <?php
 if (isset($_POST["submit1"])) {
+    // Check if username already exists
     $res = mysqli_query($link, "SELECT * FROM user_registration WHERE username = '" . mysqli_real_escape_string($link, $_POST['username']) . "'");
 
     if (mysqli_num_rows($res) > 0) {
         $_SESSION["alert"] = "error";
     } else {
-        mysqli_query($link, "INSERT INTO user_registration (firstname, lastname, username, password, department, role, status) VALUES ('" . mysqli_real_escape_string($link, $_POST['firstname']) . "', '" . mysqli_real_escape_string($link, $_POST['lastname']) . "', '" . mysqli_real_escape_string($link, $_POST['username']) . "', '" . mysqli_real_escape_string($link, $_POST['password']) . "', '" . mysqli_real_escape_string($link, $_POST['department']) . "', '" . mysqli_real_escape_string($link, $_POST['role']) . "', '" . mysqli_real_escape_string($link, $_POST['status']) . "')");
+        // Insert new user into the database
+        $firstname = mysqli_real_escape_string($link, $_POST['firstname']);
+        $lastname = mysqli_real_escape_string($link, $_POST['lastname']);
+        $username = mysqli_real_escape_string($link, $_POST['username']);
+        $password = mysqli_real_escape_string($link, $_POST['password']);
+        $department = mysqli_real_escape_string($link, $_POST['department']);
+        $role = mysqli_real_escape_string($link, $_POST['role']);
+        $status = mysqli_real_escape_string($link, $_POST['status']);
+
+        // Insert the new user
+        mysqli_query($link, "INSERT INTO user_registration (firstname, lastname, username, password, department, role, status) 
+            VALUES ('$firstname', '$lastname', '$username', '$password', '$department', '$role', '$status')");
+
+        // Log the action of adding a new user
+        $log_action = "Added new user: $firstname $lastname, Username: $username, Department: $department, Role: $role, Status: $status";
+        $log_query = "INSERT INTO logs (action) VALUES ('$log_action')";
+        mysqli_query($link, $log_query);
 
         $_SESSION["alert"] = "success";
     }
