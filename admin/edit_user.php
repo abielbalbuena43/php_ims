@@ -2,10 +2,10 @@
 include "header.php";
 include "../user/connection.php";
 
-$id = $_GET["id"]; // Get the user ID from the URL
+$user_id = $_GET["user_id"]; // Get the user ID from the URL
 
 // Fetch the user details from the database
-$query = "SELECT * FROM user_registration WHERE id = $id";
+$query = "SELECT * FROM user_registration WHERE user_id = $user_id";
 $result = mysqli_query($link, $query);
 $user = mysqli_fetch_array($result);
 
@@ -27,14 +27,14 @@ if (isset($_POST["submit1"])) {
     $department = $_POST['department'];
     $role = $_POST['role'];
 
-    $query = "UPDATE user_registration SET firstname='$firstname', lastname='$lastname', username='$username', password='$password', department='$department', role='$role' WHERE id=$id";
+    $query = "UPDATE user_registration SET firstname='$firstname', lastname='$lastname', username='$username', password='$password', department='$department', role='$role' WHERE user_id=$user_id";
     if (mysqli_query($link, $query)) {
         $_SESSION["alert"] = "success";
-        header("Location: edit_user.php?id=$id"); // Redirect to the same page to reload and show the changes
+        header("Location: edit_user.php?user_id=$user_id"); // Redirect to the same page to reload and show the changes
         exit(); // Ensure the script stops after the redirect
     } else {
         $_SESSION["alert"] = "error";
-        header("Location: edit_user.php?id=$id"); // Redirect to show error
+        header("Location: edit_user.php?user_id=$user_id"); // Redirect to show error
         exit();
     }
 }
