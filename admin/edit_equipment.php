@@ -1,49 +1,55 @@
 <?php
+session_start();
 include "header.php";
 include "../user/connection.php";
 
-// Start session for alert messages
-session_start();
-
+// Get the equipment ID from the URL
 $equipment_id = $_GET["equipment_id"];
 
+// Fetch the existing equipment details
 $query = "SELECT * FROM new_equipment WHERE equipment_id = $equipment_id";
 $result = mysqli_query($link, $query);
 $equipment = mysqli_fetch_array($result);
 
-// Alert logic for success/error messages
+// Handling alert messages for success or error
 if (isset($_SESSION["alert"])) {
     $alert = $_SESSION["alert"];
-    unset($_SESSION["alert"]); // Clear alert after page load
+    unset($_SESSION["alert"]);
 } else {
     $alert = null;
 }
 
+// Handle form submission to update the equipment
 if (isset($_POST["submit1"])) {
-    // Get the form data
-    $pcname = $_POST['pcname'];
-    $cpu = $_POST['cpu'];
-    $motherboard = $_POST['motherboard'];
-    $ram = $_POST['ram'];
-    $hdd = $_POST['hdd'];
-    $ssd = $_POST['ssd'];
-    $gpu = $_POST['gpu'];
-    $psu = $_POST['psu'];
-    $pccase = $_POST['pccase'];
-    $monitor = $_POST['monitor'];
-    $macaddress = $_POST['macaddress'];
-    $osversion = $_POST['osversion'];
-    $msversion = $_POST['msversion'];
+    // Get the form data and escape special characters
+    $pcname = mysqli_real_escape_string($link, $_POST["pcname"]);
+    $cpu = mysqli_real_escape_string($link, $_POST["cpu"]);
+    $motherboard = mysqli_real_escape_string($link, $_POST["motherboard"]);
+    $ram = mysqli_real_escape_string($link, $_POST["ram"]);
+    $hdd = mysqli_real_escape_string($link, $_POST["hdd"]);
+    $ssd = mysqli_real_escape_string($link, $_POST["ssd"]);
+    $gpu = mysqli_real_escape_string($link, $_POST["gpu"]);
+    $psu = mysqli_real_escape_string($link, $_POST["psu"]);
+    $pccase = mysqli_real_escape_string($link, $_POST["pccase"]);
+    $monitor = mysqli_real_escape_string($link, $_POST["monitor"]);
+    $macaddress = mysqli_real_escape_string($link, $_POST["macaddress"]);
+    $osversion = mysqli_real_escape_string($link, $_POST["osversion"]);
+    $msversion = mysqli_real_escape_string($link, $_POST["msversion"]);
 
+    // Update the equipment in the database
     $query = "UPDATE new_equipment SET 
-                pcname='$pcname', cpu='$cpu', motherboard='$motherboard', 
-                ram='$ram', hdd='$hdd', ssd='$ssd', gpu='$gpu', 
-                psu='$psu', pccase='$pccase', monitor='$monitor', 
-                macaddress='$macaddress', osversion='$osversion', 
-                msversion='$msversion' 
-              WHERE equipment_id=$equipment_id";
-    
+              pcname='$pcname', cpu='$cpu', motherboard='$motherboard', 
+              ram='$ram', hdd='$hdd', ssd='$ssd', gpu='$gpu', 
+              psu='$psu', pccase='$pccase', monitor='$monitor', 
+              macaddress='$macaddress', osversion='$osversion', 
+              msversion='$msversion' WHERE equipment_id = $equipment_id";
+
     if (mysqli_query($link, $query)) {
+        // Log the action after successful update
+        $log_action = "Updated equipment: $pcname";
+        $log_query = "INSERT INTO logs (pcname, action) VALUES ('$pcname', '$log_action')";
+        mysqli_query($link, $log_query);
+
         $_SESSION["alert"] = "success";
         header("Location: edit_equipment.php?equipment_id=$equipment_id"); // Redirect to avoid form resubmission
         exit();
@@ -57,13 +63,10 @@ if (isset($_POST["submit1"])) {
 
 <!--main-container-part-->
 <div id="content">
-    <!--breadcrumbs-->
     <div id="content-header">
         <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i> Edit Equipment</a></div>
     </div>
-    <!--End-breadcrumbs-->
 
-    <!--Action boxes-->
     <div class="container-fluid">
         <div class="row-fluid" style="background-color: white; min-height: 1000px; padding:10px;">
             <div class="span12">
@@ -77,25 +80,25 @@ if (isset($_POST["submit1"])) {
                             <div class="control-group">
                                 <label class="control-label">PC Name :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="pcname" value="<?php echo $equipment['pcname']; ?>" />
+                                    <input type="text" class="span11" name="pcname" value="<?php echo $equipment['pcname']; ?>" required />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">CPU :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="cpu" value="<?php echo $equipment['cpu']; ?>" />
+                                    <input type="text" class="span11" name="cpu" value="<?php echo $equipment['cpu']; ?>" required />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Motherboard :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="motherboard" value="<?php echo $equipment['motherboard']; ?>" />
+                                    <input type="text" class="span11" name="motherboard" value="<?php echo $equipment['motherboard']; ?>" required />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">RAM :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="ram" value="<?php echo $equipment['ram']; ?>" />
+                                    <input type="text" class="span11" name="ram" value="<?php echo $equipment['ram']; ?>" required />
                                 </div>
                             </div>
                             <div class="control-group">
@@ -166,6 +169,7 @@ if (isset($_POST["submit1"])) {
 
                             <div class="form-actions">
                                 <button type="submit" name="submit1" class="btn btn-success">Save Changes</button>
+                                <a href="equipment_list.php" class="btn">Cancel</a>
                             </div>
                         </form>
                     </div>
