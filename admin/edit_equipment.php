@@ -36,6 +36,21 @@ if (isset($_POST["submit1"])) {
     $osversion = mysqli_real_escape_string($link, $_POST["osversion"]);
     $msversion = mysqli_real_escape_string($link, $_POST["msversion"]);
 
+    // Fetch previous equipment details for comparison
+    $old_pcname = $equipment['pcname'];
+    $old_cpu = $equipment['cpu'];
+    $old_motherboard = $equipment['motherboard'];
+    $old_ram = $equipment['ram'];
+    $old_hdd = $equipment['hdd'];
+    $old_ssd = $equipment['ssd'];
+    $old_gpu = $equipment['gpu'];
+    $old_psu = $equipment['psu'];
+    $old_pccase = $equipment['pccase'];
+    $old_monitor = $equipment['monitor'];
+    $old_macaddress = $equipment['macaddress'];
+    $old_osversion = $equipment['osversion'];
+    $old_msversion = $equipment['msversion'];
+
     // Update the equipment in the database
     $query = "UPDATE new_equipment SET 
               pcname='$pcname', cpu='$cpu', motherboard='$motherboard', 
@@ -45,9 +60,29 @@ if (isset($_POST["submit1"])) {
               msversion='$msversion' WHERE equipment_id = $equipment_id";
 
     if (mysqli_query($link, $query)) {
-        // Log the action after successful update
-        $log_action = "Updated equipment: $pcname";
-        $log_query = "INSERT INTO logs (pcname, action) VALUES ('$pcname', '$log_action')";
+        // Construct the log action for specific fields updated
+        $log_action = "Updated equipment: ";
+
+        // Compare each field and log the change if it differs
+        if ($old_pcname !== $pcname) $log_action .= "PC Name: $old_pcname → $pcname, ";
+        if ($old_cpu !== $cpu) $log_action .= "CPU: $old_cpu → $cpu, ";
+        if ($old_motherboard !== $motherboard) $log_action .= "Motherboard: $old_motherboard → $motherboard, ";
+        if ($old_ram !== $ram) $log_action .= "RAM: $old_ram → $ram, ";
+        if ($old_hdd !== $hdd) $log_action .= "HDD: $old_hdd → $hdd, ";
+        if ($old_ssd !== $ssd) $log_action .= "SSD: $old_ssd → $ssd, ";
+        if ($old_gpu !== $gpu) $log_action .= "GPU: $old_gpu → $gpu, ";
+        if ($old_psu !== $psu) $log_action .= "PSU: $old_psu → $psu, ";
+        if ($old_pccase !== $pccase) $log_action .= "PC Case: $old_pccase → $pccase, ";
+        if ($old_monitor !== $monitor) $log_action .= "Monitor: $old_monitor → $monitor, ";
+        if ($old_macaddress !== $macaddress) $log_action .= "MAC Address: $old_macaddress → $macaddress, ";
+        if ($old_osversion !== $osversion) $log_action .= "OS Version: $old_osversion → $osversion, ";
+        if ($old_msversion !== $msversion) $log_action .= "MS Version: $old_msversion → $msversion, ";
+
+        // Trim any trailing comma and space
+        $log_action = rtrim($log_action, ", ");
+
+        // Insert log into the database
+        $log_query = "INSERT INTO logs (action) VALUES ('$log_action')";
         mysqli_query($link, $log_query);
 
         $_SESSION["alert"] = "success";
