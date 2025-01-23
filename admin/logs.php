@@ -37,6 +37,7 @@ include "header.php";
 // Query to retrieve logs for display
 $query = "SELECT * FROM logs ORDER BY date_edited DESC";
 $result = mysqli_query($link, $query);
+
 ?>
 
 <!--main-container-part-->
