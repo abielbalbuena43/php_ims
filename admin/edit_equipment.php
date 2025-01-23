@@ -5,11 +5,9 @@ include "../user/connection.php";
 // Start session for alert messages
 session_start();
 
+$equipment_id = $_GET["equipment_id"];
 
-$id = $_GET["id"];
-
-
-$query = "SELECT * FROM new_equipment WHERE id = $id";
+$query = "SELECT * FROM new_equipment WHERE equipment_id = $equipment_id";
 $result = mysqli_query($link, $query);
 $equipment = mysqli_fetch_array($result);
 
@@ -37,22 +35,21 @@ if (isset($_POST["submit1"])) {
     $osversion = $_POST['osversion'];
     $msversion = $_POST['msversion'];
 
-    
     $query = "UPDATE new_equipment SET 
                 pcname='$pcname', cpu='$cpu', motherboard='$motherboard', 
                 ram='$ram', hdd='$hdd', ssd='$ssd', gpu='$gpu', 
                 psu='$psu', pccase='$pccase', monitor='$monitor', 
                 macaddress='$macaddress', osversion='$osversion', 
                 msversion='$msversion' 
-              WHERE id=$id";
+              WHERE equipment_id=$equipment_id";
     
     if (mysqli_query($link, $query)) {
         $_SESSION["alert"] = "success";
-        header("Location: edit_equipment.php?id=$id"); // Redirect to avoid form resubmission
+        header("Location: edit_equipment.php?equipment_id=$equipment_id"); // Redirect to avoid form resubmission
         exit();
     } else {
         $_SESSION["alert"] = "error";
-        header("Location: edit_equipment.php?id=$id");
+        header("Location: edit_equipment.php?equipment_id=$equipment_id");
         exit();
     }
 }
