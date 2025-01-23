@@ -8,11 +8,36 @@ include "../user/connection.php";
 
 // Handling redirection after form submission to prevent resubmission
 if (isset($_POST["submit1"])) {
-    mysqli_query($link, "INSERT INTO new_equipment (pcname, cpu, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, macaddress, osversion, msversion) VALUES ('" . mysqli_real_escape_string($link, $_POST["pcname"]) . "', '" . mysqli_real_escape_string($link, $_POST["cpu"]) . "', '" . mysqli_real_escape_string($link, $_POST["motherboard"]) . "', '" . mysqli_real_escape_string($link, $_POST["ram"]) . "', '" . mysqli_real_escape_string($link, $_POST["hdd"]) . "', '" . mysqli_real_escape_string($link, $_POST["ssd"]) . "', '" . mysqli_real_escape_string($link, $_POST["gpu"]) . "', '" . mysqli_real_escape_string($link, $_POST["psu"]) . "', '" . mysqli_real_escape_string($link, $_POST["pccase"]) . "', '" . mysqli_real_escape_string($link, $_POST["monitor"]) . "', '" . mysqli_real_escape_string($link, $_POST["macaddress"]) . "', '" . mysqli_real_escape_string($link, $_POST["osversion"]) . "', '" . mysqli_real_escape_string($link, $_POST["msversion"]) . "')");
+    // Insert new equipment into the database
+    $query = "INSERT INTO new_equipment (pcname, cpu, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, macaddress, osversion, msversion) 
+              VALUES ('" . mysqli_real_escape_string($link, $_POST["pcname"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["cpu"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["motherboard"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["ram"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["hdd"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["ssd"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["gpu"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["psu"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["pccase"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["monitor"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["macaddress"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["osversion"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["msversion"]) . "')";
 
-    $_SESSION["alert"] = "success";
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit();
+    if (mysqli_query($link, $query)) {
+        // Log the action after the successful insertion
+        $log_action = "Added new equipment: " . $_POST["pcname"];
+        $log_query = "INSERT INTO logs (pcname, action) VALUES ('" . mysqli_real_escape_string($link, $_POST["pcname"]) . "', '$log_action')";
+        mysqli_query($link, $log_query);
+
+        $_SESSION["alert"] = "success";
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
+    } else {
+        $_SESSION["alert"] = "error";
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
+    }
 }
 
 if (isset($_SESSION["alert"])) {
@@ -132,11 +157,15 @@ if (isset($_SESSION["alert"])) {
                 <!-- Alert section -->
                 <?php if ($alert == "error") { ?>
                     <div class="alert alert-danger" style="margin-top: 20px;">
-                        Equipment already exists or an error occurred!
+                        An error occurred while processing your request.
                     </div>
                 <?php } elseif ($alert == "success") { ?>
                     <div class="alert alert-success" style="margin-top: 20px;">
                         Equipment added successfully!
+                    </div>
+                <?php } elseif ($alert == "deleted") { ?>
+                    <div class="alert" style="background-color: gray; color: white; margin-top: 20px;">
+                        Equipment deleted.
                     </div>
                 <?php } ?>
 
@@ -181,12 +210,10 @@ if (isset($_SESSION["alert"])) {
                                         <td><?php echo $row["macaddress"]; ?></td>
                                         <td><?php echo $row["osversion"]; ?></td>
                                         <td><?php echo $row["msversion"]; ?></td>
-                                        <td><a href="edit_equipment.php?equipment_id=<?php echo $row["equipment_id"]; ?>">Edit</a></td>
-                                        <td><a href="delete_equipment.php?equipment_id=<?php echo $row["equipment_id"]; ?>" onclick="return confirm('Are you sure you want to delete this equipment?');">Delete</a></td>
+                                        <td><a href="edit_equipment.php?equipment_id=<?php echo $row['equipment_id']; ?>" class="btn btn-primary">Edit</a></td>
+                                        <td><a href="delete_equipment.php?equipment_id=<?php echo $row['equipment_id']; ?>" class="btn btn-danger">Delete</a></td>
                                     </tr>
-                                <?php
-                                }
-                                ?>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
@@ -196,18 +223,12 @@ if (isset($_SESSION["alert"])) {
     </div>
 </div>
 
+<!--end-main-container-part-->
 <script>
-function toggleForm() {
-    const form = document.getElementById("addEquipmentForm");
-    const button = document.getElementById("toggleFormButton");
-    if (form.style.display === "none") {
-        form.style.display = "block";
-        button.textContent = "Hide Form";
-    } else {
-        form.style.display = "none";
-        button.textContent = "Add New Equipment";
+    function toggleForm() {
+        const form = document.getElementById('addEquipmentForm');
+        form.style.display = (form.style.display === 'none') ? 'block' : 'none';
     }
-}
 </script>
 
 <?php
