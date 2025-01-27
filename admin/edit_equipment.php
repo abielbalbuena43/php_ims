@@ -23,6 +23,7 @@ if (isset($_SESSION["alert"])) {
 if (isset($_POST["submit1"])) {
     // Get the form data and escape special characters
     $pcname = mysqli_real_escape_string($link, $_POST["pcname"]);
+    $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
     $cpu = mysqli_real_escape_string($link, $_POST["cpu"]);
     $motherboard = mysqli_real_escape_string($link, $_POST["motherboard"]);
     $ram = mysqli_real_escape_string($link, $_POST["ram"]);
@@ -35,9 +36,12 @@ if (isset($_POST["submit1"])) {
     $macaddress = mysqli_real_escape_string($link, $_POST["macaddress"]);
     $osversion = mysqli_real_escape_string($link, $_POST["osversion"]);
     $msversion = mysqli_real_escape_string($link, $_POST["msversion"]);
+    $windows_key = mysqli_real_escape_string($link, $_POST["windows_key"]);
+    $ms_key = mysqli_real_escape_string($link, $_POST["ms_key"]);
 
     // Fetch previous equipment details for comparison
     $old_pcname = $equipment['pcname'];
+    $old_assigneduser = $equipment['assigneduser'];
     $old_cpu = $equipment['cpu'];
     $old_motherboard = $equipment['motherboard'];
     $old_ram = $equipment['ram'];
@@ -50,21 +54,31 @@ if (isset($_POST["submit1"])) {
     $old_macaddress = $equipment['macaddress'];
     $old_osversion = $equipment['osversion'];
     $old_msversion = $equipment['msversion'];
+    $old_windows_key = $equipment['windows_key'];
+    $old_ms_key = $equipment['ms_key'];
 
-    // Update the equipment in the database
+    // Prepare the update statement
     $query = "UPDATE new_equipment SET 
-              pcname='$pcname', cpu='$cpu', motherboard='$motherboard', 
-              ram='$ram', hdd='$hdd', ssd='$ssd', gpu='$gpu', 
-              psu='$psu', pccase='$pccase', monitor='$monitor', 
-              macaddress='$macaddress', osversion='$osversion', 
-              msversion='$msversion' WHERE equipment_id = $equipment_id";
+              pcname = ?, assigneduser = ?, cpu = ?, motherboard = ?, 
+              ram = ?, hdd = ?, ssd = ?, gpu = ?, psu = ?, pccase = ?, 
+              monitor = ?, macaddress = ?, osversion = ?, msversion = ?, 
+              windows_key = ?, ms_key = ? 
+              WHERE equipment_id = ?";
 
-    if (mysqli_query($link, $query)) {
+    // Prepare the statement
+    $stmt = mysqli_prepare($link, $query);
+
+    // Bind parameters
+    mysqli_stmt_bind_param($stmt, "ssssssssssssssssi", $pcname, $assigneduser, $cpu, $motherboard, $ram, $hdd, $ssd, $gpu, $psu, $pccase, $monitor, $macaddress, $osversion, $msversion, $windows_key, $ms_key, $equipment_id);
+
+    // Execute the statement
+    if (mysqli_stmt_execute($stmt)) {
         // Construct the log action for specific fields updated
         $log_action = "Updated equipment: ";
 
         // Compare each field and log the change if it differs
         if ($old_pcname !== $pcname) $log_action .= "PC Name: $old_pcname → $pcname, ";
+        if ($old_assigneduser !== $assigneduser) $log_action .= "Assigned User: $old_assigneduser → $assigneduser, ";
         if ($old_cpu !== $cpu) $log_action .= "CPU: $old_cpu → $cpu, ";
         if ($old_motherboard !== $motherboard) $log_action .= "Motherboard: $old_motherboard → $motherboard, ";
         if ($old_ram !== $ram) $log_action .= "RAM: $old_ram → $ram, ";
@@ -77,16 +91,18 @@ if (isset($_POST["submit1"])) {
         if ($old_macaddress !== $macaddress) $log_action .= "MAC Address: $old_macaddress → $macaddress, ";
         if ($old_osversion !== $osversion) $log_action .= "OS Version: $old_osversion → $osversion, ";
         if ($old_msversion !== $msversion) $log_action .= "MS Version: $old_msversion → $msversion, ";
+        if ($old_windows_key !== $windows_key) $log_action .= "Windows Key: $old_windows_key → $windows_key, ";
+        if ($old_ms_key !== $ms_key) $log_action .= "MS Key: $old_ms_key → $ms_key, ";
 
         // Trim any trailing comma and space
         $log_action = rtrim($log_action, ", ");
 
-        // Insert log into the database
-        $log_query = "INSERT INTO logs (action) VALUES ('$log_action')";
+        // Insert log into the database with date/time
+        $log_query = "INSERT INTO logs (action, date_added) VALUES ('$log_action', NOW())";
         mysqli_query($link, $log_query);
 
         $_SESSION["alert"] = "success";
-        header("Location: edit_equipment.php?equipment_id=$equipment_id"); // Redirect to avoid form resubmission
+        header("Location: edit_equipment.php?equipment_id=$equipment_id");
         exit();
     } else {
         $_SESSION["alert"] = "error";
@@ -116,6 +132,12 @@ if (isset($_POST["submit1"])) {
                                 <label class="control-label">PC Name :</label>
                                 <div class="controls">
                                     <input type="text" class="span11" name="pcname" value="<?php echo $equipment['pcname']; ?>" required />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Assigned User :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assigneduser" value="<?php echo $equipment['assigneduser']; ?>" required />
                                 </div>
                             </div>
                             <div class="control-group">
@@ -190,6 +212,18 @@ if (isset($_POST["submit1"])) {
                                     <input type="text" class="span11" name="msversion" value="<?php echo $equipment['msversion']; ?>" />
                                 </div>
                             </div>
+                            <div class="control-group">
+                                <label class="control-label">Windows Product Key :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="windows_key" value="<?php echo $equipment['windows_key']; ?>" />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">MS Product Key :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="ms_key" value="<?php echo $equipment['ms_key']; ?>" />
+                                </div>
+                            </div>
 
                             <!-- Alert Display -->
                             <?php if ($alert == "error") { ?>
@@ -204,7 +238,7 @@ if (isset($_POST["submit1"])) {
 
                             <div class="form-actions">
                                 <button type="submit" name="submit1" class="btn btn-success">Save Changes</button>
-                                <a href="equipment_list.php" class="btn">Cancel</a>
+                                <a href="add_new_equipment.php" class="btn">Cancel</a> <!-- Redirects to add_new_equipment.php -->
                             </div>
                         </form>
                     </div>
