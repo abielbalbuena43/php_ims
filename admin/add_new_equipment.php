@@ -8,9 +8,13 @@ include "../user/connection.php";
 
 // Handling redirection after form submission to prevent resubmission
 if (isset($_POST["submit1"])) {
-    // Insert new equipment into the database
-    $query = "INSERT INTO new_equipment (pcname, cpu, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, macaddress, osversion, msversion) 
-              VALUES ('" . mysqli_real_escape_string($link, $_POST["pcname"]) . "', 
+    // Insert new equipment into the database with default values for Windows and MS Product Keys
+    $windows_key = empty($_POST["windows_key"]) ? '0' : $_POST["windows_key"];
+    $ms_key = empty($_POST["ms_key"]) ? '0' : $_POST["ms_key"];
+
+    $query = "INSERT INTO new_equipment (pcname, assigneduser, cpu, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
+              VALUES ('" . mysqli_real_escape_string($link, $_POST["pcname"]) . "',
+                      '" . mysqli_real_escape_string($link, $_POST["assigneduser"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["cpu"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["motherboard"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["ram"]) . "', 
@@ -22,7 +26,10 @@ if (isset($_POST["submit1"])) {
                       '" . mysqli_real_escape_string($link, $_POST["monitor"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["macaddress"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["osversion"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["msversion"]) . "')";
+                      '" . mysqli_real_escape_string($link, $_POST["msversion"]) . "', 
+                      '" . mysqli_real_escape_string($link, $windows_key) . "', 
+                      '" . mysqli_real_escape_string($link, $ms_key) . "', 
+                      NOW(), NOW())";  // Current time for Date Added and Date Edited
 
     if (mysqli_query($link, $query)) {
         // Log the action after the successful insertion
@@ -72,6 +79,12 @@ if (isset($_SESSION["alert"])) {
                                     <label class="control-label">PC Name :</label>
                                     <div class="controls">
                                         <input type="text" class="span11" placeholder="PC Name" name="pcname" required />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Assigned User :</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11" placeholder="Assigned User" name="assigneduser" required />
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -146,6 +159,19 @@ if (isset($_SESSION["alert"])) {
                                         <input type="text" class="span11" placeholder="MS Version" name="msversion" />
                                     </div>
                                 </div>
+                                <!-- New fields for Windows Product Key and MS Product Key -->
+                                <div class="control-group">
+                                    <label class="control-label">Windows Product Key :</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11" placeholder="Windows Product Key" name="windows_key" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">MS Product Key :</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11" placeholder="MS Product Key" name="ms_key" />
+                                    </div>
+                                </div>
                                 <div class="form-actions">
                                     <button type="submit" name="submit1" class="btn btn-success">Save</button>
                                 </div>
@@ -175,6 +201,7 @@ if (isset($_SESSION["alert"])) {
                             <thead>
                                 <tr>
                                     <th>PC Name</th>
+                                    <th>Assigned User</th>
                                     <th>CPU</th>
                                     <th>Motherboard</th>
                                     <th>RAM</th>
@@ -187,6 +214,10 @@ if (isset($_SESSION["alert"])) {
                                     <th>MAC Address</th>
                                     <th>OS Version</th>
                                     <th>MS Version</th>
+                                    <th>Windows Product Key</th>
+                                    <th>MS Product Key</th>
+                                    <th>Date Added</th>
+                                    <th>Date Edited</th>
                                     <th>EDIT</th>
                                     <th>DELETE</th>
                                 </tr>
@@ -198,20 +229,31 @@ if (isset($_SESSION["alert"])) {
                                 ?>
                                     <tr>
                                         <td><?php echo $row["pcname"]; ?></td>
+                                        <td><?php echo $row["assigneduser"]; ?></td>
                                         <td><?php echo $row["cpu"]; ?></td>
-                                        <td><?php echo $row["motherboard"]; ?></td>
+                                        <td><a href="motherboard.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["motherboard"]; ?></a></td>
                                         <td><?php echo $row["ram"]; ?></td>
                                         <td><?php echo $row["hdd"]; ?></td>
                                         <td><?php echo $row["ssd"]; ?></td>
                                         <td><?php echo $row["gpu"]; ?></td>
                                         <td><?php echo $row["psu"]; ?></td>
                                         <td><?php echo $row["pccase"]; ?></td>
-                                        <td><?php echo $row["monitor"]; ?></td>
+                                        <td><a href="monitor.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["monitor"]; ?></a></td>
                                         <td><?php echo $row["macaddress"]; ?></td>
                                         <td><?php echo $row["osversion"]; ?></td>
                                         <td><?php echo $row["msversion"]; ?></td>
+                                        <td><?php echo $row["windows_key"]; ?></td>
+                                        <td><?php echo $row["ms_key"]; ?></td>
+                                        <td><?php echo $row["date_added"]; ?></td>
+                                        <td><?php echo $row["date_edited"]; ?></td>
                                         <td><a href="edit_equipment.php?equipment_id=<?php echo $row['equipment_id']; ?>" class="btn btn-primary">Edit</a></td>
-                                        <td><a href="delete_equipment.php?equipment_id=<?php echo $row['equipment_id']; ?>" class="btn btn-danger">Delete</a></td>
+                                        <td>
+                                            <a href="delete_equipment.php?equipment_id=<?php echo $row['equipment_id']; ?>" 
+                                            class="btn btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this equipment?');">
+                                                Delete
+                                            </a>
+                                        </td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
