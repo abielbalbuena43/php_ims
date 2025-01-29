@@ -34,5 +34,5 @@ if (isset($_GET['equipment_id'])) {
 }
 
 // Redirect to the equipment list page
-header("Location: add_new_equipment.php");
+header("Location: equipment.php");
 exit();
