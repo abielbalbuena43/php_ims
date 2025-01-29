@@ -24,7 +24,7 @@ if (isset($_POST["submit1"])) {
     // Get the form data and escape special characters
     $pcname = mysqli_real_escape_string($link, $_POST["pcname"]);
     $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
-    $cpu = mysqli_real_escape_string($link, $_POST["cpu"]);
+    $processor = mysqli_real_escape_string($link, $_POST["processor"]);
     $motherboard = mysqli_real_escape_string($link, $_POST["motherboard"]);
     $ram = mysqli_real_escape_string($link, $_POST["ram"]);
     $hdd = mysqli_real_escape_string($link, $_POST["hdd"]);
@@ -33,6 +33,8 @@ if (isset($_POST["submit1"])) {
     $psu = mysqli_real_escape_string($link, $_POST["psu"]);
     $pccase = mysqli_real_escape_string($link, $_POST["pccase"]);
     $monitor = mysqli_real_escape_string($link, $_POST["monitor"]);
+    $lancard = mysqli_real_escape_string($link, $_POST["lancard"]);
+    $wificard = mysqli_real_escape_string($link, $_POST["wificard"]);
     $macaddress = mysqli_real_escape_string($link, $_POST["macaddress"]);
     $osversion = mysqli_real_escape_string($link, $_POST["osversion"]);
     $msversion = mysqli_real_escape_string($link, $_POST["msversion"]);
@@ -42,7 +44,7 @@ if (isset($_POST["submit1"])) {
     // Fetch previous equipment details for comparison
     $old_pcname = $equipment['pcname'];
     $old_assigneduser = $equipment['assigneduser'];
-    $old_cpu = $equipment['cpu'];
+    $old_processor = $equipment['processor'];
     $old_motherboard = $equipment['motherboard'];
     $old_ram = $equipment['ram'];
     $old_hdd = $equipment['hdd'];
@@ -51,6 +53,8 @@ if (isset($_POST["submit1"])) {
     $old_psu = $equipment['psu'];
     $old_pccase = $equipment['pccase'];
     $old_monitor = $equipment['monitor'];
+    $old_lancard = $equipment['lancard'];
+    $old_wificard = $equipment['wificard'];
     $old_macaddress = $equipment['macaddress'];
     $old_osversion = $equipment['osversion'];
     $old_msversion = $equipment['msversion'];
@@ -59,17 +63,22 @@ if (isset($_POST["submit1"])) {
 
     // Prepare the update statement
     $query = "UPDATE new_equipment SET 
-              pcname = ?, assigneduser = ?, cpu = ?, motherboard = ?, 
+              pcname = ?, assigneduser = ?, processor = ?, motherboard = ?, 
               ram = ?, hdd = ?, ssd = ?, gpu = ?, psu = ?, pccase = ?, 
-              monitor = ?, macaddress = ?, osversion = ?, msversion = ?, 
-              windows_key = ?, ms_key = ? 
+              monitor = ?, lancard = ?, wificard = ?, macaddress = ?, osversion = ?, 
+              msversion = ?, windows_key = ?, ms_key = ? 
               WHERE equipment_id = ?";
 
     // Prepare the statement
     $stmt = mysqli_prepare($link, $query);
 
     // Bind parameters
-    mysqli_stmt_bind_param($stmt, "ssssssssssssssssi", $pcname, $assigneduser, $cpu, $motherboard, $ram, $hdd, $ssd, $gpu, $psu, $pccase, $monitor, $macaddress, $osversion, $msversion, $windows_key, $ms_key, $equipment_id);
+    mysqli_stmt_bind_param($stmt, "ssssssssssssssssssi", 
+    $pcname, $assigneduser, $processor, $motherboard, 
+    $ram, $hdd, $ssd, $gpu, $psu, $pccase, 
+    $monitor, $lancard, $wificard, $macaddress, $osversion, 
+    $msversion, $windows_key, $ms_key, $equipment_id);
+
 
     // Execute the statement
     if (mysqli_stmt_execute($stmt)) {
@@ -79,7 +88,7 @@ if (isset($_POST["submit1"])) {
         // Compare each field and log the change if it differs
         if ($old_pcname !== $pcname) $log_action .= "PC Name: $old_pcname → $pcname, ";
         if ($old_assigneduser !== $assigneduser) $log_action .= "Assigned User: $old_assigneduser → $assigneduser, ";
-        if ($old_cpu !== $cpu) $log_action .= "CPU: $old_cpu → $cpu, ";
+        if ($old_processor !== $processor) $log_action .= "Processor: $old_processor → $processor, ";
         if ($old_motherboard !== $motherboard) $log_action .= "Motherboard: $old_motherboard → $motherboard, ";
         if ($old_ram !== $ram) $log_action .= "RAM: $old_ram → $ram, ";
         if ($old_hdd !== $hdd) $log_action .= "HDD: $old_hdd → $hdd, ";
@@ -88,6 +97,8 @@ if (isset($_POST["submit1"])) {
         if ($old_psu !== $psu) $log_action .= "PSU: $old_psu → $psu, ";
         if ($old_pccase !== $pccase) $log_action .= "PC Case: $old_pccase → $pccase, ";
         if ($old_monitor !== $monitor) $log_action .= "Monitor: $old_monitor → $monitor, ";
+        if ($old_lancard !== $lancard) $log_action .= "LAN Card: $old_lancard → $lancard, ";
+        if ($old_wificard !== $wificard) $log_action .= "WIFI Card: $old_wificard → $wificard, ";
         if ($old_macaddress !== $macaddress) $log_action .= "MAC Address: $old_macaddress → $macaddress, ";
         if ($old_osversion !== $osversion) $log_action .= "OS Version: $old_osversion → $osversion, ";
         if ($old_msversion !== $msversion) $log_action .= "MS Version: $old_msversion → $msversion, ";
@@ -141,9 +152,9 @@ if (isset($_POST["submit1"])) {
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">CPU :</label>
+                                <label class="control-label">Processor :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="cpu" value="<?php echo $equipment['cpu']; ?>" required />
+                                    <input type="text" class="span11" name="processor" value="<?php echo $equipment['processor']; ?>" required />
                                 </div>
                             </div>
                             <div class="control-group">
@@ -195,6 +206,18 @@ if (isset($_POST["submit1"])) {
                                 </div>
                             </div>
                             <div class="control-group">
+                                <label class="control-label">LAN Card :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="lancard" value="<?php echo $equipment['lancard']; ?>" />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">WIFI Card :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="wificard" value="<?php echo $equipment['wificard']; ?>" />
+                                </div>
+                            </div>
+                            <div class="control-group">
                                 <label class="control-label">MAC Address :</label>
                                 <div class="controls">
                                     <input type="text" class="span11" name="macaddress" value="<?php echo $equipment['macaddress']; ?>" />
@@ -238,7 +261,7 @@ if (isset($_POST["submit1"])) {
 
                             <div class="form-actions">
                                 <button type="submit" name="submit1" class="btn btn-success">Save Changes</button>
-                                <a href="add_new_equipment.php" class="btn">Cancel</a> <!-- Redirects to add_new_equipment.php -->
+                                <a href="equipment.php" class="btn">Cancel</a> <!-- Redirects to equipment.php -->
                             </div>
                         </form>
                     </div>
