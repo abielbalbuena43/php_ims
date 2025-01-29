@@ -10,12 +10,12 @@ if (isset($_GET['equipment_id'])) {
     $equipment_id = intval($_GET['equipment_id']);
 
     // Fetch the PC name for logging before deletion
-    $result = mysqli_query($link, "SELECT pcname FROM new_equipment WHERE equipment_id = $equipment_id");
+    $result = mysqli_query($link, "SELECT pcname FROM equipment WHERE equipment_id = $equipment_id");
     $row = mysqli_fetch_assoc($result);
     $pcname = $row['pcname'];
 
     // Delete the equipment
-    $query = "DELETE FROM new_equipment WHERE equipment_id = $equipment_id";
+    $query = "DELETE FROM equipment WHERE equipment_id = $equipment_id";
     if (mysqli_query($link, $query)) {
         // Log the deletion action
         $log_action = "Deleted equipment: $pcname";
