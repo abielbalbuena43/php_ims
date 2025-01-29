@@ -12,7 +12,7 @@ if (isset($_POST["submit1"])) {
     $windows_key = empty($_POST["windows_key"]) ? '0' : $_POST["windows_key"];
     $ms_key = empty($_POST["ms_key"]) ? '0' : $_POST["ms_key"];
 
-    $query = "INSERT INTO new_equipment (pcname, assigneduser, processor, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, lancard, wificard, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
+    $query = "INSERT INTO equipment (pcname, assigneduser, processor, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, lancard, wificard, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
               VALUES ('" . mysqli_real_escape_string($link, $_POST["pcname"]) . "',
                       '" . mysqli_real_escape_string($link, $_POST["assigneduser"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["processor"]) . "', 
@@ -239,7 +239,7 @@ if (isset($_SESSION["alert"])) {
                             </thead>
                             <tbody>
                                 <?php
-                                $res = mysqli_query($link, "SELECT * FROM new_equipment");
+                                $res = mysqli_query($link, "SELECT * FROM equipment");
                                 while ($row = mysqli_fetch_array($res)) {
                                 ?>
                                     <tr>
