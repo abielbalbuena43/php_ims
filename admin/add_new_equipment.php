@@ -12,10 +12,10 @@ if (isset($_POST["submit1"])) {
     $windows_key = empty($_POST["windows_key"]) ? '0' : $_POST["windows_key"];
     $ms_key = empty($_POST["ms_key"]) ? '0' : $_POST["ms_key"];
 
-    $query = "INSERT INTO new_equipment (pcname, assigneduser, cpu, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
+    $query = "INSERT INTO new_equipment (pcname, assigneduser, processor, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
               VALUES ('" . mysqli_real_escape_string($link, $_POST["pcname"]) . "',
                       '" . mysqli_real_escape_string($link, $_POST["assigneduser"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["cpu"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["processor"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["motherboard"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["ram"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["hdd"]) . "', 
@@ -88,9 +88,9 @@ if (isset($_SESSION["alert"])) {
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label">CPU :</label>
+                                    <label class="control-label">Processor :</label>
                                     <div class="controls">
-                                        <input type="text" class="span11" placeholder="CPU" name="cpu" required />
+                                        <input type="text" class="span11" placeholder="Processor" name="processor" required />
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -202,7 +202,7 @@ if (isset($_SESSION["alert"])) {
                                 <tr>
                                     <th>PC Name</th>
                                     <th>Assigned User</th>
-                                    <th>CPU</th>
+                                    <th>Processor</th>
                                     <th>Motherboard</th>
                                     <th>RAM</th>
                                     <th>HDD</th>
@@ -230,12 +230,12 @@ if (isset($_SESSION["alert"])) {
                                     <tr>
                                         <td><?php echo $row["pcname"]; ?></td>
                                         <td><?php echo $row["assigneduser"]; ?></td>
-                                        <td><?php echo $row["cpu"]; ?></td>
+                                        <td><a href="processor.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["processor"]; ?></a></td>
                                         <td><a href="motherboard.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["motherboard"]; ?></a></td>
-                                        <td><?php echo $row["ram"]; ?></td>
-                                        <td><?php echo $row["hdd"]; ?></td>
-                                        <td><?php echo $row["ssd"]; ?></td>
-                                        <td><?php echo $row["gpu"]; ?></td>
+                                        <td><a href="ram.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["ram"]; ?></a></td>
+                                        <td><a href="hdd.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["hdd"]; ?></a></td>
+                                        <td><a href="ssd.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["ssd"]; ?></a></td>
+                                        <td><a href="gpu.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["gpu"]; ?></a></td>
                                         <td><?php echo $row["psu"]; ?></td>
                                         <td><?php echo $row["pccase"]; ?></td>
                                         <td><a href="monitor.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["monitor"]; ?></a></td>
