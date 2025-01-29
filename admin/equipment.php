@@ -12,7 +12,7 @@ if (isset($_POST["submit1"])) {
     $windows_key = empty($_POST["windows_key"]) ? '0' : $_POST["windows_key"];
     $ms_key = empty($_POST["ms_key"]) ? '0' : $_POST["ms_key"];
 
-    $query = "INSERT INTO new_equipment (pcname, assigneduser, processor, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
+    $query = "INSERT INTO new_equipment (pcname, assigneduser, processor, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, lancard, wificard, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
               VALUES ('" . mysqli_real_escape_string($link, $_POST["pcname"]) . "',
                       '" . mysqli_real_escape_string($link, $_POST["assigneduser"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["processor"]) . "', 
@@ -24,6 +24,8 @@ if (isset($_POST["submit1"])) {
                       '" . mysqli_real_escape_string($link, $_POST["psu"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["pccase"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["monitor"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["lancard"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["wificard"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["macaddress"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["osversion"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["msversion"]) . "', 
@@ -58,7 +60,7 @@ if (isset($_SESSION["alert"])) {
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
-        <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i> Add New Equipment</a></div>
+        <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i>Equipment</a></div>
     </div>
 
     <div class="container-fluid">
@@ -71,7 +73,7 @@ if (isset($_SESSION["alert"])) {
                     <div class="widget-box">
                         <div class="widget-title"> 
                             <span class="icon"> <i class="icon-align-justify"></i> </span>
-                            <h5>Add New Equipment</h5>
+                            <h5>Equipment</h5>
                         </div>
                         <div class="widget-content nopadding">
                             <form name="form1" action="" method="post" class="form-horizontal">
@@ -97,6 +99,18 @@ if (isset($_SESSION["alert"])) {
                                     <label class="control-label">Motherboard :</label>
                                     <div class="controls">
                                         <input type="text" class="span11" placeholder="Motherboard" name="motherboard" required />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">LAN Card :</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11" placeholder="LAN Card" name="lancard" required />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">WIFI Card :</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11" placeholder="WIFI Card" name="wificard" required />
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -159,7 +173,6 @@ if (isset($_SESSION["alert"])) {
                                         <input type="text" class="span11" placeholder="MS Version" name="msversion" />
                                     </div>
                                 </div>
-                                <!-- New fields for Windows Product Key and MS Product Key -->
                                 <div class="control-group">
                                     <label class="control-label">Windows Product Key :</label>
                                     <div class="controls">
@@ -211,6 +224,8 @@ if (isset($_SESSION["alert"])) {
                                     <th>PSU</th>
                                     <th>PC Case</th>
                                     <th>Monitor</th>
+                                    <th>LAN Card</th>
+                                    <th>WIFI Card</th>
                                     <th>MAC Address</th>
                                     <th>OS Version</th>
                                     <th>MS Version</th>
@@ -239,6 +254,8 @@ if (isset($_SESSION["alert"])) {
                                         <td><?php echo $row["psu"]; ?></td>
                                         <td><?php echo $row["pccase"]; ?></td>
                                         <td><a href="monitor.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["monitor"]; ?></a></td>
+                                        <td><a href="lancard.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["lancard"]; ?></a></td>
+                                        <td><a href="wificard.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["wificard"]; ?></a></td>
                                         <td><?php echo $row["macaddress"]; ?></td>
                                         <td><?php echo $row["osversion"]; ?></td>
                                         <td><?php echo $row["msversion"]; ?></td>
