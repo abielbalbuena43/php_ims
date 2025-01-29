@@ -11,8 +11,8 @@ $query = "SELECT * FROM motherboard WHERE equipment_id = $equipment_id";
 $result = mysqli_query($link, $query);
 $motherboard = mysqli_fetch_array($result);
 
-// Fetch equipment details from the new_equipment table
-$equipmentQuery = "SELECT * FROM new_equipment WHERE equipment_id = $equipment_id";
+// Fetch equipment details from the equipment table
+$equipmentQuery = "SELECT * FROM equipment WHERE equipment_id = $equipment_id";
 $equipmentResult = mysqli_query($link, $equipmentQuery);
 $equipment = mysqli_fetch_array($equipmentResult);
 
