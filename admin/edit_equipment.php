@@ -7,7 +7,7 @@ include "../user/connection.php";
 $equipment_id = $_GET["equipment_id"];
 
 // Fetch the existing equipment details
-$query = "SELECT * FROM new_equipment WHERE equipment_id = $equipment_id";
+$query = "SELECT * FROM equipment WHERE equipment_id = $equipment_id";
 $result = mysqli_query($link, $query);
 $equipment = mysqli_fetch_array($result);
 
@@ -62,7 +62,7 @@ if (isset($_POST["submit1"])) {
     $old_ms_key = $equipment['ms_key'];
 
     // Prepare the update statement
-    $query = "UPDATE new_equipment SET 
+    $query = "UPDATE equipment SET 
               pcname = ?, assigneduser = ?, processor = ?, motherboard = ?, 
               ram = ?, hdd = ?, ssd = ?, gpu = ?, psu = ?, pccase = ?, 
               monitor = ?, lancard = ?, wificard = ?, macaddress = ?, osversion = ?, 
