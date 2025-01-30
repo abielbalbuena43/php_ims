@@ -251,8 +251,8 @@ if (isset($_SESSION["alert"])) {
                                         <td><a href="hdd.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["hdd"]; ?></a></td>
                                         <td><a href="ssd.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["ssd"]; ?></a></td>
                                         <td><a href="gpu.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["gpu"]; ?></a></td>
-                                        <td><?php echo $row["psu"]; ?></td>
-                                        <td><?php echo $row["pccase"]; ?></td>
+                                        <td><a href="psu.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["psu"]; ?></a></td>
+                                        <td><a href="pccase.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["pccase"]; ?></a></td>
                                         <td><a href="monitor.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["monitor"]; ?></a></td>
                                         <td><a href="lancard.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["lancard"]; ?></a></td>
                                         <td><a href="wificard.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["wificard"]; ?></a></td>
