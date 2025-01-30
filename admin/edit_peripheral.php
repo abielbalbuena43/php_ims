@@ -42,11 +42,12 @@ if (isset($_POST["submit1"])) {
     $avr = mysqli_real_escape_string($link, $_POST["avr"]);
 
     // ✅ Validate that equipment_id exists AFTER retrieving it
-    $query = "SELECT equipment_id FROM equipment WHERE equipment_id = ?";
+    $query = "SELECT equipment_id, pcname FROM equipment WHERE equipment_id = ?";
     $stmt = mysqli_prepare($link, $query);
     mysqli_stmt_bind_param($stmt, 'i', $equipment_id);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
+    $equipment = mysqli_fetch_assoc($result);
 
     if (mysqli_num_rows($result) == 0) {
         $_SESSION["alert"] = "error";
@@ -55,6 +56,44 @@ if (isset($_POST["submit1"])) {
         exit();
     }
     mysqli_stmt_close($stmt);
+
+    // Fetch previous peripheral details before updating
+    $query = "SELECT * FROM peripherals WHERE peripheral_id = ?";
+    $stmt = mysqli_prepare($link, $query);
+    mysqli_stmt_bind_param($stmt, "i", $peripheral_id);
+    mysqli_stmt_execute($stmt);
+    $old_data = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+    mysqli_stmt_close($stmt);
+
+    // Prepare log details
+    $log_action = "Updated peripheral ({$equipment['pcname']}): ";
+    $changes = [];
+
+    if ($old_data['keyboard'] !== $keyboard) {
+        $changes[] = "Keyboard: {$old_data['keyboard']} → $keyboard";
+    }
+    if ($old_data['mouse'] !== $mouse) {
+        $changes[] = "Mouse: {$old_data['mouse']} → $mouse";
+    }
+    if ($old_data['printer'] !== $printer) {
+        $changes[] = "Printer: {$old_data['printer']} → $printer";
+    }
+    if ($old_data['avr'] !== $avr) {
+        $changes[] = "AVR: {$old_data['avr']} → $avr";
+    }
+    if ($old_data['equipment_id'] !== $equipment_id) {
+        $changes[] = "Equipment: {$old_data['equipment_id']} → $equipment_id";
+    }
+
+    // If changes exist, log them
+    if (!empty($changes)) {
+        $log_action .= implode(", ", $changes);
+        $log_query = "INSERT INTO logs (action, date_edited) VALUES (?, NOW())";
+        $stmt = mysqli_prepare($link, $log_query);
+        mysqli_stmt_bind_param($stmt, "s", $log_action);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
 
     // Prepare the update statement
     $query = "UPDATE peripherals SET 
@@ -158,4 +197,3 @@ if (isset($_POST["submit1"])) {
 <?php
 include "footer.php";
 ?>
-
