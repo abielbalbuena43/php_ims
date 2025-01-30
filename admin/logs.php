@@ -22,9 +22,12 @@ if (isset($_POST['export_logs'])) {
     header('Content-Type: text/plain');
     header("Content-Disposition: attachment; filename=\"$filename\"");
 
-    // Output only the logs in plain text
+    // Output each log with a newline for better readability
     while ($row = mysqli_fetch_array($result)) {
-        echo htmlspecialchars($row['date_edited']) . " " . htmlspecialchars($row['action']) . PHP_EOL;
+        // Each log entry will be printed on a new line with a separator for clarity
+        echo "Date: " . htmlspecialchars($row['date_edited']) . PHP_EOL;
+        echo "Action: " . htmlspecialchars($row['action']) . PHP_EOL;
+        echo str_repeat("=", 50) . PHP_EOL; // Line separator for clarity
     }
 
     // Stop further execution
