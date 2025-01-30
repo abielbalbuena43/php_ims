@@ -129,10 +129,10 @@ unset($_SESSION["alert"]);
                                 ?>
                                     <tr>
                                         <td><?php echo $row["pcname"]; ?></td> <!-- Display PC Name -->
-                                        <td><?php echo $row["keyboard"]; ?></td>
-                                        <td><?php echo $row["mouse"]; ?></td>
-                                        <td><?php echo $row["printer"]; ?></td>
-                                        <td><?php echo $row["avr"]; ?></td>
+                                        <td><a href="keyboard.php?equipment_id=<?php echo urlencode($row['equipment_id']); ?>"><?php echo $row["keyboard"]; ?></a></td>
+                                        <td><a href="mouse.php?equipment_id=<?php echo urlencode($row['equipment_id']); ?>"><?php echo $row["mouse"]; ?></a></td>
+                                        <td><a href="printer.php?equipment_id=<?php echo urlencode($row['equipment_id']); ?>"><?php echo $row["printer"]; ?></a></td>
+                                        <td><a href="avr.php?equipment_id=<?php echo urlencode($row['equipment_id']); ?>"><?php echo $row["avr"]; ?></a></td>
                                         <td><a href="edit_peripheral.php?peripheral_id=<?php echo $row['peripheral_id']; ?>" class="btn btn-primary">Edit</a></td>
                                         <td>
                                             <a href="delete_peripheral.php?peripheral_id=<?php echo $row['peripheral_id']; ?>" 
