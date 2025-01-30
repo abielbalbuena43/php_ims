@@ -79,11 +79,10 @@ if (isset($_POST["submit1"])) {
     $monitor, $lancard, $wificard, $macaddress, $osversion, 
     $msversion, $windows_key, $ms_key, $equipment_id);
 
-
     // Execute the statement
     if (mysqli_stmt_execute($stmt)) {
         // Construct the log action for specific fields updated
-        $log_action = "Updated equipment: ";
+        $log_action = "Updated equipment ({$pcname}): ";
 
         // Compare each field and log the change if it differs
         if ($old_pcname !== $pcname) $log_action .= "PC Name: $old_pcname → $pcname, ";
