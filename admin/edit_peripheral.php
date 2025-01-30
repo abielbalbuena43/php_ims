@@ -41,7 +41,7 @@ if (isset($_POST["submit1"])) {
     $printer = mysqli_real_escape_string($link, $_POST["printer"]);
     $avr = mysqli_real_escape_string($link, $_POST["avr"]);
 
-    // ✅ Validate that equipment_id exists AFTER retrieving it
+    // Validate that equipment_id exists AFTER retrieving it
     $query = "SELECT equipment_id, pcname FROM equipment WHERE equipment_id = ?";
     $stmt = mysqli_prepare($link, $query);
     mysqli_stmt_bind_param($stmt, 'i', $equipment_id);
@@ -81,9 +81,6 @@ if (isset($_POST["submit1"])) {
     if ($old_data['avr'] !== $avr) {
         $changes[] = "AVR: {$old_data['avr']} → $avr";
     }
-    if ($old_data['equipment_id'] !== $equipment_id) {
-        $changes[] = "Equipment: {$old_data['equipment_id']} → $equipment_id";
-    }
 
     // If changes exist, log them
     if (!empty($changes)) {
@@ -101,7 +98,7 @@ if (isset($_POST["submit1"])) {
               WHERE peripheral_id = ?";
     $stmt = mysqli_prepare($link, $query);
 
-    // ✅ Corrected parameter binding (matching six `?` placeholders)
+    // Corrected parameter binding (matching six `?` placeholders)
     mysqli_stmt_bind_param($stmt, "ssssii", $keyboard, $mouse, $printer, $avr, $equipment_id, $peripheral_id);
 
     // Execute the statement
