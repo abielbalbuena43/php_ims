@@ -41,6 +41,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <a href="equipment.php"><i class="icon icon-user"></i><span>Equipment List</span></a>
         </li>
 
+        <li class="<?php echo ($current_page == 'peripherals.php') ? 'active' : ''; ?>">
+            <a href="peripherals.php"><i class="icon icon-user"></i><span>Peripherals List</span></a>
+        </li>
+
+        <li class="<?php echo ($current_page == 'otherdevices.php') ? 'active' : ''; ?>">
+            <a href="otherdevices.php"><i class="icon icon-user"></i><span>Other Devices</span></a>
+        </li>
+
         <li class="<?php echo ($current_page == 'logs.php') ? 'active' : ''; ?>">
             <a href="logs.php"><i class="icon icon-user"></i><span>Logs</span></a>
         </li>
