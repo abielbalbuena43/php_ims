@@ -128,10 +128,10 @@ if (isset($_POST["submit"])) {
                                     <input type="date" class="span11" name="dateacquired" value="<?php echo isset($ssd['ssd_dateacquired']) ? $ssd['ssd_dateacquired'] : 'None'; ?>" />
                                 </div>
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Device Age :</label>
+                            <div> <label class="control-label">Device Age :</label>
                                 <div class="controls">
-                                    <input type="number" class="span11" name="deviceage" value="<?php echo isset($ssd['ssd_deviceage']) ? $ssd['ssd_deviceage'] : 'None'; ?>" />
+                                    <input type="text" class="span11" name="deviceage" 
+                                        value="<?php echo isset($ssd['ssd_deviceage']) ? $ssd['ssd_deviceage'] : 'None'; ?>" required />
                                 </div>
                             </div>
                             <div class="control-group">
