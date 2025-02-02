@@ -29,8 +29,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <div id="sidebar">
     <ul>
         <!-- Dynamically add "active" class based on the current page -->
-        <li class="<?php echo ($current_page == 'index.html') ? 'active' : ''; ?>">
-            <a href="index.html"><i class="icon icon-home"></i><span>Dashboard</span></a>
+        <li class="<?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
+            <a href="dashboard.php"><i class="icon icon-home"></i><span>Dashboard</span></a>
         </li>
 
         <li class="<?php echo ($current_page == 'add_new_user.php') ? 'active' : ''; ?>">
@@ -68,5 +68,5 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <!-- Logout link -->
 <div id="search">
-    <a href="index.html" style="color:white"><i class="icon icon-share-alt"></i><span>LogOut</span></a>
+    <a href="dashboard.php" style="color:white"><i class="icon icon-share-alt"></i><span>LogOut</span></a>
 </div>
