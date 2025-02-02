@@ -23,6 +23,15 @@ if (isset($_SESSION["alert"])) {
     <div class="container-fluid">
         <div class="row-fluid" style="background-color: white; min-height: 1000px; padding:10px;">
             <div class="span12">
+
+                <!-- Search bar and button integrated -->
+ <!-- Search bar and button -->
+<div style="margin-top: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 11px;">
+    <input type="text" id="searchInput" class="span5" placeholder="Search user...">
+    <button class="btn btn-info" onclick="searchUsers()">Search</button>
+</div>
+
+
                 <!-- Button to toggle the form -->
                 <button id="toggleFormButton" class="btn btn-primary" onclick="toggleForm()">Add New User</button>
 
@@ -139,7 +148,7 @@ if (isset($_SESSION["alert"])) {
                                 <th>DELETE</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="userTableBody">
                             <?php
                             $res = mysqli_query($link, "SELECT * FROM user_registration");
                             while ($row = mysqli_fetch_array($res)) {
@@ -186,6 +195,21 @@ function toggleForm() {
         form.style.display = "none";
         button.textContent = "Add New User";
     }
+}
+
+function searchUsers() {
+    let searchQuery = document.getElementById("searchInput").value;
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "search_user.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById("userTableBody").innerHTML = xhr.responseText;
+        }
+    };
+
+    xhr.send("query=" + searchQuery);
 }
 </script>
 
