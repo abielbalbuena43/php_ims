@@ -92,9 +92,9 @@ if (isset($_POST["submit1"])) {
         mysqli_stmt_close($stmt);
     }
 
-    // Prepare the update statement
+    // Prepare the update statement (do NOT include peripheral_dateadded)
     $query = "UPDATE peripherals SET 
-              keyboard = ?, mouse = ?, printer = ?, avr = ?, equipment_id = ? 
+              keyboard = ?, mouse = ?, printer = ?, avr = ?, equipment_id = ?, peripheral_dateaedited = NOW() 
               WHERE peripheral_id = ?";
     $stmt = mysqli_prepare($link, $query);
 
@@ -179,7 +179,7 @@ if (isset($_POST["submit1"])) {
 
                             <div class="form-actions">
                                 <button type="submit" name="submit1" class="btn btn-success">Save Changes</button>
-                                <a href="peripherals.php" class="btn">Cancel</a> <!-- Redirects to peripheral.php -->
+                                <a href="peripherals.php" class="btn">Cancel</a>
                             </div>
                         </form>
                     </div>
