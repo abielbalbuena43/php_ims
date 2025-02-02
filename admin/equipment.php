@@ -1,5 +1,5 @@
 <?php
-// Start session at the very top
+// Start session
 session_start();
 
 // Include files after the session start
@@ -60,12 +60,19 @@ if (isset($_SESSION["alert"])) {
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
-        <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i>Equipment</a></div>
+        <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i> Equipment</a></div>
     </div>
 
     <div class="container-fluid">
         <div class="row-fluid" style="background-color: white; min-height: 1000px; padding:10px;">
             <div class="span12">
+
+                <!-- Search bar and button -->
+                <div style="margin-top: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 11px;">
+                    <input type="text" id="searchInput" class="span5" placeholder="Search device...">
+                    <button class="btn btn-info" onclick="searchDevices()">Search</button>
+                </div>
+
                 <!-- Button to toggle the form -->
                 <button id="toggleFormButton" class="btn btn-primary" onclick="toggleForm()">Add New Equipment</button>
 
@@ -237,7 +244,7 @@ if (isset($_SESSION["alert"])) {
                                     <th>DELETE</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="deviceTableBody">
                                 <?php
                                 $res = mysqli_query($link, "SELECT * FROM equipment");
                                 while ($row = mysqli_fetch_array($res)) {
@@ -245,17 +252,17 @@ if (isset($_SESSION["alert"])) {
                                     <tr>
                                         <td><?php echo $row["pcname"]; ?></td>
                                         <td><?php echo $row["assigneduser"]; ?></td>
-                                        <td><a href="processor.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["processor"]; ?></a></td>
-                                        <td><a href="motherboard.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["motherboard"]; ?></a></td>
-                                        <td><a href="ram.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["ram"]; ?></a></td>
-                                        <td><a href="hdd.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["hdd"]; ?></a></td>
-                                        <td><a href="ssd.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["ssd"]; ?></a></td>
-                                        <td><a href="gpu.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["gpu"]; ?></a></td>
-                                        <td><a href="psu.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["psu"]; ?></a></td>
-                                        <td><a href="pccase.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["pccase"]; ?></a></td>
-                                        <td><a href="monitor.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["monitor"]; ?></a></td>
-                                        <td><a href="lancard.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["lancard"]; ?></a></td>
-                                        <td><a href="wificard.php?equipment_id=<?php echo urlencode($row["equipment_id"]); ?>"><?php echo $row["wificard"]; ?></a></td>
+                                        <td><?php echo $row["processor"]; ?></td>
+                                        <td><?php echo $row["motherboard"]; ?></td>
+                                        <td><?php echo $row["ram"]; ?></td>
+                                        <td><?php echo $row["hdd"]; ?></td>
+                                        <td><?php echo $row["ssd"]; ?></td>
+                                        <td><?php echo $row["gpu"]; ?></td>
+                                        <td><?php echo $row["psu"]; ?></td>
+                                        <td><?php echo $row["pccase"]; ?></td>
+                                        <td><?php echo $row["monitor"]; ?></td>
+                                        <td><?php echo $row["lancard"]; ?></td>
+                                        <td><?php echo $row["wificard"]; ?></td>
                                         <td><?php echo $row["macaddress"]; ?></td>
                                         <td><?php echo $row["osversion"]; ?></td>
                                         <td><?php echo $row["msversion"]; ?></td>
@@ -287,6 +294,21 @@ if (isset($_SESSION["alert"])) {
     function toggleForm() {
         const form = document.getElementById('addEquipmentForm');
         form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+    }
+
+    function searchDevices() {
+        let searchQuery = document.getElementById("searchInput").value;
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "search_equipment.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById("deviceTableBody").innerHTML = xhr.responseText;
+            }
+        };
+
+        xhr.send("query=" + searchQuery);
     }
 </script>
 
