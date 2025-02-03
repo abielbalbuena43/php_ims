@@ -10,15 +10,15 @@ if (isset($_GET['od_id'])) {
     $od_id = intval($_GET['od_id']);
 
     // Fetch the device name for logging before deletion
-    $result = mysqli_query($link, "SELECT od_name FROM otherdevices WHERE od_id = $od_id");
+    $result = mysqli_query($link, "SELECT device_name FROM otherdevices WHERE device_id = $od_id");
     $row = mysqli_fetch_assoc($result);
-    $od_name = $row['od_name'];
+    $device_name = $row['device_name'];
 
     // Delete the device
-    $query = "DELETE FROM otherdevices WHERE od_id = $od_id";
+    $query = "DELETE FROM otherdevices WHERE device_id = $od_id";
     if (mysqli_query($link, $query)) {
         // Log the deletion action
-        $log_action = "Deleted device: $od_name";
+        $log_action = "Deleted device: $device_name";
         $log_query = "INSERT INTO logs (action) VALUES ('" . mysqli_real_escape_string($link, $log_action) . "')";
         mysqli_query($link, $log_query);
 
@@ -36,4 +36,4 @@ if (isset($_GET['od_id'])) {
 // Redirect to the otherdevices.php page
 header("Location: otherdevices.php");
 exit();
-
+?>
