@@ -1,4 +1,5 @@
 <?php
+
 // Start session
 session_start();
 
@@ -9,16 +10,15 @@ include "../user/connection.php";
 // Handling redirection after form submission to prevent resubmission
 if (isset($_POST["submit1"])) {
     // Insert new device into the database
-    $query = "INSERT INTO otherdevices (od_name, od_pcname, od_assettag, od_brand, od_modelnumber, od_deviceage, od_macaddress, od_dateacquired, od_dateedited, od_remarks) 
-              VALUES ('" . mysqli_real_escape_string($link, $_POST["od_name"]) . "',
-                      '" . mysqli_real_escape_string($link, $_POST["od_pcname"]) . "',
-                      '" . mysqli_real_escape_string($link, $_POST["od_assettag"]) . "',
-                      '" . mysqli_real_escape_string($link, $_POST["od_brand"]) . "',
-                      '" . mysqli_real_escape_string($link, $_POST["od_modelnumber"]) . "',
-                      '" . mysqli_real_escape_string($link, $_POST["od_deviceage"]) . "',
-                      '" . mysqli_real_escape_string($link, $_POST["od_macaddress"]) . "',
-                      NOW(), NOW(), 
-                      '" . mysqli_real_escape_string($link, $_POST["od_remarks"]) . "')";
+    $query = "INSERT INTO otherdevices (device_type, device_name, device_assettag, device_brand, device_modelnumber, device_deviceage, device_pcname, device_macaddress) 
+              VALUES ('" . mysqli_real_escape_string($link, $_POST["device_type"]) . "',
+                      '" . mysqli_real_escape_string($link, $_POST["device_name"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["device_assettag"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["device_brand"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["device_modelnumber"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["device_deviceage"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["device_pcname"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["device_macaddress"]) . "')";
 
     if (mysqli_query($link, $query)) {
         $_SESSION["alert"] = "success";
@@ -50,7 +50,7 @@ if (isset($_SESSION["alert"])) {
             <div class="span12">
 
                 <!-- Search bar and button -->
-                <div style="margin-bottom: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 11px;">
+                <div style="margin-top: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 11px;">
                     <input type="text" id="searchInput" class="span5" placeholder="Search device...">
                     <button class="btn btn-info" onclick="searchDevices()">Search</button>
                 </div>
@@ -67,51 +67,60 @@ if (isset($_SESSION["alert"])) {
                         <div class="widget-content nopadding">
                             <form name="form1" action="" method="post" class="form-horizontal">
                                 <div class="control-group">
-                                    <label class="control-label">Device Name :</label>
+                                    <label class="control-label">Device Type :</label>
                                     <div class="controls">
-                                        <input type="text" class="span11" placeholder="Device Name" name="od_name" required />
+                                        <select name="device_type" class="span11" required>
+                                            <option value="">Select Device Type</option>
+                                            <option value="NAS">NAS</option>
+                                            <option value="External Storage & HDDs">External Storage & HDDs</option>
+                                            <option value="Server">Server</option>
+                                            <option value="Router">Router</option>
+                                            <option value="Network Switches">Network Switches</option>
+                                            <option value="Network Tester">Network Tester</option>
+                                            <option value="Tone Tracer">Tone Tracer</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label">PC Name :</label>
+                                    <label class="control-label">Device Name :</label>
                                     <div class="controls">
-                                        <input type="text" class="span11" placeholder="PC Name " name="od_pcname" required />
+                                        <input type="text" class="span11" placeholder="Device Name" name="device_name" required />
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label">Asset Tag :</label>
                                     <div class="controls">
-                                        <input type="text" class="span11" placeholder="Asset Tag" name="od_assettag" required />
+                                        <input type="text" class="span11" placeholder="Asset Tag" name="device_assettag" />
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label">Brand :</label>
                                     <div class="controls">
-                                        <input type="text" class="span11" placeholder="Brand" name="od_brand" required />
+                                        <input type="text" class="span11" placeholder="Brand" name="device_brand" />
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label">Model Number :</label>
                                     <div class="controls">
-                                        <input type="text" class="span11" placeholder="Model Number" name="od_modelnumber" required />
+                                        <input type="text" class="span11" placeholder="Model Number" name="device_modelnumber" />
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label">Device Age :</label>
                                     <div class="controls">
-                                        <input type="text" class="span11" placeholder="Device Age" name="od_deviceage" required />
+                                        <input type="text" class="span11" placeholder="Device Age" name="device_deviceage" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">PC Name :</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11" placeholder="PC Name" name="device_pcname" />
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label">MAC Address :</label>
                                     <div class="controls">
-                                        <input type="text" class="span11" placeholder="MAC Address" name="od_macaddress" required />
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label">Remarks :</label>
-                                    <div class="controls">
-                                        <textarea class="span11" placeholder="Remarks" name="od_remarks"></textarea>
+                                        <input type="text" class="span11" placeholder="MAC Address" name="device_macaddress" />
                                     </div>
                                 </div>
                                 <div class="form-actions">
@@ -138,16 +147,16 @@ if (isset($_SESSION["alert"])) {
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
+                                    <th>Device Type</th>
                                     <th>Device Name</th>
-                                    <th>PC Name</th>
                                     <th>Asset Tag</th>
                                     <th>Brand</th>
                                     <th>Model Number</th>
                                     <th>Device Age</th>
+                                    <th>PC Name</th>
                                     <th>MAC Address</th>
                                     <th>Date Acquired</th>
                                     <th>Date Edited</th>
-                                    <th>Remarks</th>
                                     <th>EDIT</th>
                                     <th>DELETE</th>
                                 </tr>
@@ -158,19 +167,19 @@ if (isset($_SESSION["alert"])) {
                                 while ($row = mysqli_fetch_array($res)) {
                                 ?>
                                     <tr>
-                                        <td><?php echo $row["od_name"]; ?></td>
-                                        <td><?php echo $row["od_pcname"]; ?></td>
-                                        <td><?php echo $row["od_assettag"]; ?></td>
-                                        <td><?php echo $row["od_brand"]; ?></td>
-                                        <td><?php echo $row["od_modelnumber"]; ?></td>
-                                        <td><?php echo $row["od_deviceage"]; ?></td>
-                                        <td><?php echo $row["od_macaddress"]; ?></td>
-                                        <td><?php echo $row["od_dateacquired"]; ?></td>
-                                        <td><?php echo $row["od_dateedited"] ? $row["od_dateedited"] : 'N/A'; ?></td>
-                                        <td><?php echo $row["od_remarks"]; ?></td>
-                                        <td><a href="edit_otherdevices.php?od_id=<?php echo $row['od_id']; ?>" class="btn btn-primary">Edit</a></td>
+                                        <td><?php echo $row["device_type"]; ?></td>
+                                        <td><?php echo $row["device_name"]; ?></td>
+                                        <td><?php echo $row["device_assettag"]; ?></td>
+                                        <td><?php echo $row["device_brand"]; ?></td>
+                                        <td><?php echo $row["device_modelnumber"]; ?></td>
+                                        <td><?php echo $row["device_deviceage"]; ?></td>
+                                        <td><?php echo $row["device_pcname"]; ?></td>
+                                        <td><?php echo $row["device_macaddress"]; ?></td>
+                                        <td><?php echo $row["device_dateacquired"]; ?></td>
+                                        <td><?php echo $row["device_dateedited"] ? $row["device_dateedited"] : 'N/A'; ?></td>
+                                        <td><a href="edit_otherdevices.php?od_id=<?php echo $row['device_id']; ?>" class="btn btn-primary">Edit</a></td>
                                         <td>
-                                            <a href="delete_otherdevices.php?od_id=<?php echo $row['od_id']; ?>" class="btn btn-danger"
+                                            <a href="delete_otherdevices.php?od_id=<?php echo $row['device_id']; ?>" class="btn btn-danger"
                                                onclick="return confirm('Are you sure you want to delete this device?');">
                                                 Delete
                                             </a>
