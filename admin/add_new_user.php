@@ -1,6 +1,6 @@
 <?php
 
-// Include required files and start session
+// 123123123
 include "header.php";
 include "../user/connection.php";
 session_start();
