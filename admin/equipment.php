@@ -3,6 +3,7 @@
 session_start();
 // Check if the user is logged in
 
+
 // Include files after the session start
 include "header.php";
 include "../user/connection.php";

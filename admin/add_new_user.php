@@ -1,11 +1,11 @@
 <?php
 
-
+// Include required files and start session
 include "header.php";
 include "../user/connection.php";
 session_start();
 
-
+// Handle alert management
 if (isset($_SESSION["alert"])) {
     $alert = $_SESSION["alert"];
     unset($_SESSION["alert"]);

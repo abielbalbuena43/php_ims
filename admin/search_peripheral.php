@@ -42,3 +42,4 @@ if (mysqli_num_rows($res) > 0) {
     echo "<tr><td colspan='9' class='text-center'><strong>No matching peripherals found.</strong></td></tr>";
 }
 ?>
+
