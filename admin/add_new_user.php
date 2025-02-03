@@ -1,4 +1,5 @@
 <?php
+
 // Include required files and start session
 include "header.php";
 include "../user/connection.php";
