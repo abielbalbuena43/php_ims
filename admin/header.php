@@ -29,17 +29,31 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <div id="sidebar">
     <ul>
         <!-- Dynamically add "active" class based on the current page -->
-        <li class="<?php echo ($current_page == 'index.html') ? 'active' : ''; ?>">
-            <a href="index.html"><i class="icon icon-home"></i><span>Dashboard</span></a>
+        <li class="<?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
+            <a href="dashboard.php"><i class="icon icon-home"></i><span>Dashboard</span></a>
         </li>
 
         <li class="<?php echo ($current_page == 'add_new_user.php') ? 'active' : ''; ?>">
             <a href="add_new_user.php"><i class="icon icon-user"></i><span>User List</span></a>
         </li>
 
-        <li class="<?php echo ($current_page == 'add_new_equipment.php') ? 'active' : ''; ?>">
-            <a href="add_new_equipment.php"><i class="icon icon-user"></i><span>Equipment List</span></a>
+        <li class="<?php echo ($current_page == 'equipment.php') ? 'active' : ''; ?>">
+            <a href="equipment.php"><i class="icon icon-user"></i><span>Equipment List</span></a>
         </li>
+
+        <li class="<?php echo ($current_page == 'peripherals.php') ? 'active' : ''; ?>">
+            <a href="peripherals.php"><i class="icon icon-user"></i><span>Peripherals List</span></a>
+        </li>
+
+        <li class="<?php echo ($current_page == 'otherdevices.php') ? 'active' : ''; ?>">
+            <a href="otherdevices.php"><i class="icon icon-user"></i><span>Other Devices</span></a>
+        </li>
+
+        <li class="<?php echo ($current_page == 'logs.php') ? 'active' : ''; ?>">
+            <a href="logs.php"><i class="icon icon-user"></i><span>Logs</span></a>
+        </li>
+
+        
 
         <li class="submenu <?php echo ($current_page == 'form-common.html' || $current_page == 'form-validation.html' || $current_page == 'form-wizard.html') ? 'active' : ''; ?>">
             <a href="#"><i class="icon icon-th-list"></i> <span>Forms</span> <span class="label label-important">3</span></a>
@@ -54,5 +68,5 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <!-- Logout link -->
 <div id="search">
-    <a href="index.html" style="color:white"><i class="icon icon-share-alt"></i><span>LogOut</span></a>
+    <a href="dashboard.php" style="color:white"><i class="icon icon-share-alt"></i><span>LogOut</span></a>
 </div>

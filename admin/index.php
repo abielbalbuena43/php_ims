@@ -61,8 +61,7 @@ include "../user/connection.php";
             $count = mysqli_num_rows($res);
 
             if ($count > 0) {
-                // Redirect to demo.php on successful login
-                echo '<script type="text/javascript">window.location="demo.php";</script>';
+                echo '<script type="text/javascript">window.location="dashboard.php";</script>';
             } else {
                 // Display error message on failed login
                 echo '<div class="alert alert-danger">Invalid credentials</div>';

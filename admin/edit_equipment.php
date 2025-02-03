@@ -1,58 +1,122 @@
 <?php
+session_start();
 include "header.php";
 include "../user/connection.php";
 
-// Start session for alert messages
-session_start();
+// Get the equipment ID from the URL
+$equipment_id = $_GET["equipment_id"];
 
-
-$id = $_GET["id"];
-
-
-$query = "SELECT * FROM new_equipment WHERE id = $id";
+// Fetch the existing equipment details
+$query = "SELECT * FROM equipment WHERE equipment_id = $equipment_id";
 $result = mysqli_query($link, $query);
 $equipment = mysqli_fetch_array($result);
 
-// Alert logic for success/error messages
+// Handling alert messages for success or error
 if (isset($_SESSION["alert"])) {
     $alert = $_SESSION["alert"];
-    unset($_SESSION["alert"]); // Clear alert after page load
+    unset($_SESSION["alert"]);
 } else {
     $alert = null;
 }
 
+// Handle form submission to update the equipment
 if (isset($_POST["submit1"])) {
-    // Get the form data
-    $pcname = $_POST['pcname'];
-    $cpu = $_POST['cpu'];
-    $motherboard = $_POST['motherboard'];
-    $ram = $_POST['ram'];
-    $hdd = $_POST['hdd'];
-    $ssd = $_POST['ssd'];
-    $gpu = $_POST['gpu'];
-    $psu = $_POST['psu'];
-    $pccase = $_POST['pccase'];
-    $monitor = $_POST['monitor'];
-    $macaddress = $_POST['macaddress'];
-    $osversion = $_POST['osversion'];
-    $msversion = $_POST['msversion'];
+    // Get the form data and escape special characters
+    $pcname = mysqli_real_escape_string($link, $_POST["pcname"]);
+    $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
+    $processor = mysqli_real_escape_string($link, $_POST["processor"]);
+    $motherboard = mysqli_real_escape_string($link, $_POST["motherboard"]);
+    $ram = mysqli_real_escape_string($link, $_POST["ram"]);
+    $hdd = mysqli_real_escape_string($link, $_POST["hdd"]);
+    $ssd = mysqli_real_escape_string($link, $_POST["ssd"]);
+    $gpu = mysqli_real_escape_string($link, $_POST["gpu"]);
+    $psu = mysqli_real_escape_string($link, $_POST["psu"]);
+    $pccase = mysqli_real_escape_string($link, $_POST["pccase"]);
+    $monitor = mysqli_real_escape_string($link, $_POST["monitor"]);
+    $lancard = mysqli_real_escape_string($link, $_POST["lancard"]);
+    $wificard = mysqli_real_escape_string($link, $_POST["wificard"]);
+    $macaddress = mysqli_real_escape_string($link, $_POST["macaddress"]);
+    $osversion = mysqli_real_escape_string($link, $_POST["osversion"]);
+    $msversion = mysqli_real_escape_string($link, $_POST["msversion"]);
+    $windows_key = mysqli_real_escape_string($link, $_POST["windows_key"]);
+    $ms_key = mysqli_real_escape_string($link, $_POST["ms_key"]);
 
-    
-    $query = "UPDATE new_equipment SET 
-                pcname='$pcname', cpu='$cpu', motherboard='$motherboard', 
-                ram='$ram', hdd='$hdd', ssd='$ssd', gpu='$gpu', 
-                psu='$psu', pccase='$pccase', monitor='$monitor', 
-                macaddress='$macaddress', osversion='$osversion', 
-                msversion='$msversion' 
-              WHERE id=$id";
-    
-    if (mysqli_query($link, $query)) {
+    // Fetch previous equipment details for comparison
+    $old_pcname = $equipment['pcname'];
+    $old_assigneduser = $equipment['assigneduser'];
+    $old_processor = $equipment['processor'];
+    $old_motherboard = $equipment['motherboard'];
+    $old_ram = $equipment['ram'];
+    $old_hdd = $equipment['hdd'];
+    $old_ssd = $equipment['ssd'];
+    $old_gpu = $equipment['gpu'];
+    $old_psu = $equipment['psu'];
+    $old_pccase = $equipment['pccase'];
+    $old_monitor = $equipment['monitor'];
+    $old_lancard = $equipment['lancard'];
+    $old_wificard = $equipment['wificard'];
+    $old_macaddress = $equipment['macaddress'];
+    $old_osversion = $equipment['osversion'];
+    $old_msversion = $equipment['msversion'];
+    $old_windows_key = $equipment['windows_key'];
+    $old_ms_key = $equipment['ms_key'];
+
+    // Prepare the update statement
+    $query = "UPDATE equipment SET 
+              pcname = ?, assigneduser = ?, processor = ?, motherboard = ?, 
+              ram = ?, hdd = ?, ssd = ?, gpu = ?, psu = ?, pccase = ?, 
+              monitor = ?, lancard = ?, wificard = ?, macaddress = ?, osversion = ?, 
+              msversion = ?, windows_key = ?, ms_key = ? 
+              WHERE equipment_id = ?";
+
+    // Prepare the statement
+    $stmt = mysqli_prepare($link, $query);
+
+    // Bind parameters
+    mysqli_stmt_bind_param($stmt, "ssssssssssssssssssi", 
+    $pcname, $assigneduser, $processor, $motherboard, 
+    $ram, $hdd, $ssd, $gpu, $psu, $pccase, 
+    $monitor, $lancard, $wificard, $macaddress, $osversion, 
+    $msversion, $windows_key, $ms_key, $equipment_id);
+
+    // Execute the statement
+    if (mysqli_stmt_execute($stmt)) {
+        // Construct the log action for specific fields updated
+        $log_action = "Updated equipment ({$pcname}): ";
+
+        // Compare each field and log the change if it differs
+        if ($old_pcname !== $pcname) $log_action .= "PC Name: $old_pcname → $pcname, ";
+        if ($old_assigneduser !== $assigneduser) $log_action .= "Assigned User: $old_assigneduser → $assigneduser, ";
+        if ($old_processor !== $processor) $log_action .= "Processor: $old_processor → $processor, ";
+        if ($old_motherboard !== $motherboard) $log_action .= "Motherboard: $old_motherboard → $motherboard, ";
+        if ($old_ram !== $ram) $log_action .= "RAM: $old_ram → $ram, ";
+        if ($old_hdd !== $hdd) $log_action .= "HDD: $old_hdd → $hdd, ";
+        if ($old_ssd !== $ssd) $log_action .= "SSD: $old_ssd → $ssd, ";
+        if ($old_gpu !== $gpu) $log_action .= "GPU: $old_gpu → $gpu, ";
+        if ($old_psu !== $psu) $log_action .= "PSU: $old_psu → $psu, ";
+        if ($old_pccase !== $pccase) $log_action .= "PC Case: $old_pccase → $pccase, ";
+        if ($old_monitor !== $monitor) $log_action .= "Monitor: $old_monitor → $monitor, ";
+        if ($old_lancard !== $lancard) $log_action .= "LAN Card: $old_lancard → $lancard, ";
+        if ($old_wificard !== $wificard) $log_action .= "WIFI Card: $old_wificard → $wificard, ";
+        if ($old_macaddress !== $macaddress) $log_action .= "MAC Address: $old_macaddress → $macaddress, ";
+        if ($old_osversion !== $osversion) $log_action .= "OS Version: $old_osversion → $osversion, ";
+        if ($old_msversion !== $msversion) $log_action .= "MS Version: $old_msversion → $msversion, ";
+        if ($old_windows_key !== $windows_key) $log_action .= "Windows Key: $old_windows_key → $windows_key, ";
+        if ($old_ms_key !== $ms_key) $log_action .= "MS Key: $old_ms_key → $ms_key, ";
+
+        // Trim any trailing comma and space
+        $log_action = rtrim($log_action, ", ");
+
+        // Insert log into the database with date/time
+        $log_query = "INSERT INTO logs (action, date_added) VALUES ('$log_action', NOW())";
+        mysqli_query($link, $log_query);
+
         $_SESSION["alert"] = "success";
-        header("Location: edit_equipment.php?id=$id"); // Redirect to avoid form resubmission
+        header("Location: edit_equipment.php?equipment_id=$equipment_id");
         exit();
     } else {
         $_SESSION["alert"] = "error";
-        header("Location: edit_equipment.php?id=$id");
+        header("Location: edit_equipment.php?equipment_id=$equipment_id");
         exit();
     }
 }
@@ -60,13 +124,10 @@ if (isset($_POST["submit1"])) {
 
 <!--main-container-part-->
 <div id="content">
-    <!--breadcrumbs-->
     <div id="content-header">
         <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i> Edit Equipment</a></div>
     </div>
-    <!--End-breadcrumbs-->
 
-    <!--Action boxes-->
     <div class="container-fluid">
         <div class="row-fluid" style="background-color: white; min-height: 1000px; padding:10px;">
             <div class="span12">
@@ -80,25 +141,31 @@ if (isset($_POST["submit1"])) {
                             <div class="control-group">
                                 <label class="control-label">PC Name :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="pcname" value="<?php echo $equipment['pcname']; ?>" />
+                                    <input type="text" class="span11" name="pcname" value="<?php echo $equipment['pcname']; ?>" required />
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">CPU :</label>
+                                <label class="control-label">Assigned User :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="cpu" value="<?php echo $equipment['cpu']; ?>" />
+                                    <input type="text" class="span11" name="assigneduser" value="<?php echo $equipment['assigneduser']; ?>" required />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Processor :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="processor" value="<?php echo $equipment['processor']; ?>" required />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Motherboard :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="motherboard" value="<?php echo $equipment['motherboard']; ?>" />
+                                    <input type="text" class="span11" name="motherboard" value="<?php echo $equipment['motherboard']; ?>" required />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">RAM :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="ram" value="<?php echo $equipment['ram']; ?>" />
+                                    <input type="text" class="span11" name="ram" value="<?php echo $equipment['ram']; ?>" required />
                                 </div>
                             </div>
                             <div class="control-group">
@@ -138,6 +205,18 @@ if (isset($_POST["submit1"])) {
                                 </div>
                             </div>
                             <div class="control-group">
+                                <label class="control-label">LAN Card :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="lancard" value="<?php echo $equipment['lancard']; ?>" />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">WIFI Card :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="wificard" value="<?php echo $equipment['wificard']; ?>" />
+                                </div>
+                            </div>
+                            <div class="control-group">
                                 <label class="control-label">MAC Address :</label>
                                 <div class="controls">
                                     <input type="text" class="span11" name="macaddress" value="<?php echo $equipment['macaddress']; ?>" />
@@ -155,6 +234,18 @@ if (isset($_POST["submit1"])) {
                                     <input type="text" class="span11" name="msversion" value="<?php echo $equipment['msversion']; ?>" />
                                 </div>
                             </div>
+                            <div class="control-group">
+                                <label class="control-label">Windows Product Key :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="windows_key" value="<?php echo $equipment['windows_key']; ?>" />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">MS Product Key :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="ms_key" value="<?php echo $equipment['ms_key']; ?>" />
+                                </div>
+                            </div>
 
                             <!-- Alert Display -->
                             <?php if ($alert == "error") { ?>
@@ -169,6 +260,7 @@ if (isset($_POST["submit1"])) {
 
                             <div class="form-actions">
                                 <button type="submit" name="submit1" class="btn btn-success">Save Changes</button>
+                                <a href="equipment.php" class="btn">Cancel</a> <!-- Redirects to equipment.php -->
                             </div>
                         </form>
                     </div>
