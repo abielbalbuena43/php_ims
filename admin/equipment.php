@@ -1,6 +1,8 @@
 <?php
 // Start session
 session_start();
+// Check if the user is logged in
+
 
 // Include files after the session start
 include "header.php";
@@ -252,17 +254,17 @@ if (isset($_SESSION["alert"])) {
                                     <tr>
                                         <td><?php echo $row["pcname"]; ?></td>
                                         <td><?php echo $row["assigneduser"]; ?></td>
-                                        <td><?php echo $row["processor"]; ?></td>
-                                        <td><?php echo $row["motherboard"]; ?></td>
-                                        <td><?php echo $row["ram"]; ?></td>
-                                        <td><?php echo $row["hdd"]; ?></td>
-                                        <td><?php echo $row["ssd"]; ?></td>
-                                        <td><?php echo $row["gpu"]; ?></td>
-                                        <td><?php echo $row["psu"]; ?></td>
-                                        <td><?php echo $row["pccase"]; ?></td>
-                                        <td><?php echo $row["monitor"]; ?></td>
-                                        <td><?php echo $row["lancard"]; ?></td>
-                                        <td><?php echo $row["wificard"]; ?></td>
+                                        <td><a href="processor.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["processor"]; ?></a></td>
+                                        <td><a href="motherboard.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["motherboard"]; ?></a></td>
+                                        <td><a href="ram.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["ram"]; ?></a></td>
+                                        <td><a href="hdd.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["hdd"]; ?></a></td>
+                                        <td><a href="ssd.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["ssd"]; ?></a></td>
+                                        <td><a href="gpu.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["gpu"]; ?></a></td>
+                                        <td><a href="psu.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["psu"]; ?></a></td>
+                                        <td><a href="pccase.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["pccase"]; ?></a></td>
+                                        <td><a href="monitor.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["monitor"]; ?></a></td>
+                                        <td><a href="lancard.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["lancard"]; ?></a></td>
+                                        <td><a href="wificard.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["wificard"]; ?></a></td>
                                         <td><?php echo $row["macaddress"]; ?></td>
                                         <td><?php echo $row["osversion"]; ?></td>
                                         <td><?php echo $row["msversion"]; ?></td>
