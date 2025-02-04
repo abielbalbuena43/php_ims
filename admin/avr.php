@@ -79,7 +79,7 @@ if (isset($_POST["submit"])) {
 <div id="content">
     <div id="content-header">
         <div id="breadcrumb">
-            <a href="index.html" class="tip-bottom">
+            <a href="peripherals.php" class="tip-bottom">
                 <i class="icon-home"></i> AVR Details
             </a>
         </div>

@@ -82,7 +82,7 @@ if (isset($_POST["submit1"])) {
 <div id="content">
     <!--breadcrumbs-->
     <div id="content-header">
-        <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i> Edit User</a></div>
+        <div id="breadcrumb"><a href="add_new_user.php" class="tip-bottom"><i class="icon-home"></i> Edit User</a></div>
     </div>
     <!--End-breadcrumbs-->
 

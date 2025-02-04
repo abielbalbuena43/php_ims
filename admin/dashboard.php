@@ -1,4 +1,5 @@
 <?php
+include "verify_admin_session.php";
 include "../user/connection.php";
 $current_page = basename($_SERVER['PHP_SELF']); // Get the current page name
 
@@ -53,7 +54,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     <div id="header">
         <h2 style="color: white; position: absolute">
-            <a href="index.php" style="color:white; margin-left: 30px; margin-top: 40px">PHP IMS</a>
+            <a href="dashboard.php" style="color:white; margin-left: 30px; margin-top: 40px">PHP IMS</a>
         </h2>
     </div>
 
@@ -95,7 +96,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     <div id="content">
         <!-- Breadcrumbs -->
         <div id="content-header">
-            <div id="breadcrumb"><a href="index.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
+            <div id="breadcrumb"><a href="dashboard.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
         </div>
 
         <!-- Action Boxes -->

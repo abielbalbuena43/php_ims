@@ -125,7 +125,7 @@ if (isset($_POST["submit1"])) {
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
-        <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i> Edit Equipment</a></div>
+        <div id="breadcrumb"><a href="equipment.php" class="tip-bottom"><i class="icon-home"></i> Edit Equipment</a></div>
     </div>
 
     <div class="container-fluid">

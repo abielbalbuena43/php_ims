@@ -107,7 +107,7 @@ if (isset($_SESSION["alert"])) {
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
-        <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i> Edit Device</a></div>
+        <div id="breadcrumb"><a href="otherdevices.php" class="tip-bottom"><i class="icon-home"></i> Edit Device</a></div>
     </div>
 
     <div class="container-fluid">

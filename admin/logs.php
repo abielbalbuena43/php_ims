@@ -61,7 +61,7 @@ $result = mysqli_query($link, $query);
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
-        <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i> Logs</a></div>
+        <div id="breadcrumb"><a href="logs.php" class="tip-bottom"><i class="icon-home"></i> Logs</a></div>
     </div>
 
     <div class="container-fluid">
