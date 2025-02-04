@@ -153,23 +153,63 @@ unset($_SESSION["alert"]);
                                                             JOIN equipment e ON p.equipment_id = e.equipment_id");
                                 while ($row = mysqli_fetch_array($res)) {
                                 ?>
-                                    <tr>
-                                        <td><?php echo $row["pcname"]; ?></td>
-                                        <td><a href="keyboard.php?equipment_id=<?php echo urlencode($row['equipment_id']); ?>"><?php echo $row["keyboard"]; ?></a></td>
-                                        <td><a href="mouse.php?equipment_id=<?php echo urlencode($row['equipment_id']); ?>"><?php echo $row["mouse"]; ?></a></td>
-                                        <td><a href="printer.php?equipment_id=<?php echo urlencode($row['equipment_id']); ?>"><?php echo $row["printer"]; ?></a></td>
-                                        <td><a href="avr.php?equipment_id=<?php echo urlencode($row['equipment_id']); ?>"><?php echo $row["avr"]; ?></a></td>
-                                        <td><?php echo $row["peripheral_dateadded"]; ?></td>
-                                        <td><?php echo $row["peripheral_dateaedited"] ? $row["peripheral_dateaedited"] : 'N/A'; ?></td> <!-- Display N/A if not yet edited -->
-                                        <td><a href="edit_peripheral.php?peripheral_id=<?php echo $row['peripheral_id']; ?>" class="btn btn-primary">Edit</a></td>
-                                        <td>
-                                            <a href="delete_peripheral.php?peripheral_id=<?php echo $row['peripheral_id']; ?>" 
-                                            class="btn btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this peripheral?');">
-                                                Delete
-                                            </a>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td><?php echo $row["pcname"]; ?></td>
+                                    <td>
+                                        <?php 
+                                        if ($row["keyboard"] == "None") {
+                                            echo $row["keyboard"]; 
+                                        } else { 
+                                            echo "<a href='keyboard.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["keyboard"] . "</a>"; 
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        if ($row["mouse"] == "None") {
+                                            echo $row["mouse"]; 
+                                        } else { 
+                                            echo "<a href='mouse.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["mouse"] . "</a>"; 
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        if ($row["printer"] == "None") {
+                                            echo $row["printer"]; 
+                                        } else { 
+                                            echo "<a href='printer.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["printer"] . "</a>"; 
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        if ($row["avr"] == "None") {
+                                            echo $row["avr"]; 
+                                        } else { 
+                                            echo "<a href='avr.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["avr"] . "</a>"; 
+                                        }
+                                        ?>
+                                    </td>
+                                    <td><?php echo $row["peripheral_dateadded"]; ?></td>
+                                    <td><?php echo $row["peripheral_dateaedited"] ? $row["peripheral_dateaedited"] : 'N/A'; ?></td> <!-- Display N/A if not yet edited -->
+                                    <td>
+                                        <?php 
+                                        if ($row["keyboard"] == "None" && $row["mouse"] == "None" && $row["printer"] == "None" && $row["avr"] == "None") {
+                                            echo "Not editable"; 
+                                        } else {
+                                            echo "<a href='edit_peripheral.php?peripheral_id=" . $row['peripheral_id'] . "' class='btn btn-primary'>Edit</a>";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <a href="delete_peripheral.php?peripheral_id=<?php echo $row['peripheral_id']; ?>" 
+                                        class="btn btn-danger"
+                                        onclick="return confirm('Are you sure you want to delete this peripheral?');">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
                                 <?php } ?>
                             </tbody>
                         </table>

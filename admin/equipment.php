@@ -250,17 +250,115 @@ if (isset($_SESSION["alert"])) {
                                     <tr>
                                         <td><?php echo $row["pcname"]; ?></td>
                                         <td><?php echo $row["assigneduser"]; ?></td>
-                                        <td><a href="processor.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["processor"]; ?></a></td>
-                                        <td><a href="motherboard.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["motherboard"]; ?></a></td>
-                                        <td><a href="ram.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["ram"]; ?></a></td>
-                                        <td><a href="hdd.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["hdd"]; ?></a></td>
-                                        <td><a href="ssd.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["ssd"]; ?></a></td>
-                                        <td><a href="gpu.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["gpu"]; ?></a></td>
-                                        <td><a href="psu.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["psu"]; ?></a></td>
-                                        <td><a href="pccase.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["pccase"]; ?></a></td>
-                                        <td><a href="monitor.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["monitor"]; ?></a></td>
-                                        <td><a href="lancard.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["lancard"]; ?></a></td>
-                                        <td><a href="wificard.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["wificard"]; ?></a></td>
+                                        <td>
+                                            <?php 
+                                            if ($row["processor"] == "None") {
+                                                echo $row["processor"];
+                                            } else {
+                                                echo "<a href='processor.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["processor"] . "</a>";
+                                            }
+                                            ?>
+                                        </td>
+
+                                        <td>
+                                            <?php 
+                                            if ($row["motherboard"] == "None") {
+                                                echo $row["motherboard"];
+                                            } else {
+                                                echo "<a href='motherboard.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["motherboard"] . "</a>";
+                                            }
+                                            ?>
+                                        </td>
+
+                                        <td>
+                                            <?php 
+                                            if ($row["ram"] == "None") {
+                                                echo $row["ram"];
+                                            } else {
+                                                echo "<a href='ram.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["ram"] . "</a>";
+                                            }
+                                            ?>
+                                        </td>
+
+                                        <td>
+                                            <?php 
+                                            if ($row["hdd"] == "None") {
+                                                echo $row["hdd"];
+                                            } else {
+                                                echo "<a href='hdd.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["hdd"] . "</a>";
+                                            }
+                                            ?>
+                                        </td>
+
+                                        <td>
+                                            <?php 
+                                            if ($row["ssd"] == "None") {
+                                                echo $row["ssd"];
+                                            } else {
+                                                echo "<a href='ssd.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["ssd"] . "</a>";
+                                            }
+                                            ?>
+                                        </td>
+
+                                        <td>
+                                            <?php 
+                                            if ($row["gpu"] == "None") {
+                                                echo $row["gpu"];
+                                            } else {
+                                                echo "<a href='gpu.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["gpu"] . "</a>";
+                                            }
+                                            ?>
+                                        </td>
+
+                                        <td>
+                                            <?php 
+                                            if ($row["psu"] == "None") {
+                                                echo $row["psu"];
+                                            } else {
+                                                echo "<a href='psu.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["psu"] . "</a>";
+                                            }
+                                            ?>
+                                        </td>
+
+                                        <td>
+                                            <?php 
+                                            if ($row["pccase"] == "None") {
+                                                echo $row["pccase"];
+                                            } else {
+                                                echo "<a href='pccase.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["pccase"] . "</a>";
+                                            }
+                                            ?>
+                                        </td>
+
+                                        <td>
+                                            <?php 
+                                            if ($row["monitor"] == "None") {
+                                                echo $row["monitor"];
+                                            } else {
+                                                echo "<a href='monitor.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["monitor"] . "</a>";
+                                            }
+                                            ?>
+                                        </td>
+
+                                        <td>
+                                            <?php 
+                                            if ($row["lancard"] == "None") {
+                                                echo $row["lancard"];
+                                            } else {
+                                                echo "<a href='lancard.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["lancard"] . "</a>";
+                                            }
+                                            ?>
+                                        </td>
+
+                                        <td>
+                                            <?php 
+                                            if ($row["wificard"] == "None") {
+                                                echo $row["wificard"];
+                                            } else {
+                                                echo "<a href='wificard.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["wificard"] . "</a>";
+                                            }
+                                            ?>
+                                        </td>
                                         <td><?php echo $row["macaddress"]; ?></td>
                                         <td><?php echo $row["osversion"]; ?></td>
                                         <td><?php echo $row["msversion"]; ?></td>
