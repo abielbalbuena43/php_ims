@@ -123,14 +123,18 @@ if (isset($_SESSION["alert"])) {
                     </div>
                 </div>
 
-                <!-- Alert Section -->
+                <!-- Alert section -->
                 <?php if ($alert == "error") { ?>
                     <div class="alert alert-danger" style="margin-top: 20px;">
-                        Username already exists!
+                        An error occurred while processing your request.
                     </div>
                 <?php } elseif ($alert == "success") { ?>
                     <div class="alert alert-success" style="margin-top: 20px;">
                         User added successfully!
+                    </div>
+                <?php } elseif ($alert == "deleted") { ?>
+                    <div class="alert" style="background-color: gray; color: white; margin-top: 20px;">
+                        User deleted.
                     </div>
                 <?php } ?>
 

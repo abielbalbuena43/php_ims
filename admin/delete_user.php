@@ -1,23 +1,41 @@
 <?php
+// Start session
+session_start();
+
+// Include connection file
 include "../user/connection.php";
-$user_id = $_GET["user_id"];
 
-// Fetch the user details before deletion for logging purposes
-$query = "SELECT * FROM user_registration WHERE user_id = $user_id";
-$result = mysqli_query($link, $query);
-$user = mysqli_fetch_array($result);
+// Check if the user ID is provided
+if (isset($_GET['user_id'])) {
+    $user_id = intval($_GET['user_id']);
 
-if ($user) {
-    // Log the deletion action
-    $log_action = "Deleted user: {$user['firstname']} {$user['lastname']}, Username: {$user['username']}, Department: {$user['department']}, Role: {$user['role']}";
-    $log_query = "INSERT INTO logs (action) VALUES ('$log_action')";
-    mysqli_query($link, $log_query);
+    // Fetch the user details for logging before deletion
+    $result = mysqli_query($link, "SELECT username, firstname, lastname FROM user_registration WHERE user_id = $user_id");
+    $row = mysqli_fetch_assoc($result);
+    $username = $row['username'];
+    $firstname = $row['firstname'];
+    $lastname = $row['lastname'];
 
-    // Proceed to delete the user
-    mysqli_query($link, "DELETE FROM user_registration WHERE user_id = $user_id");
+    // Delete the user
+    $query = "DELETE FROM user_registration WHERE user_id = $user_id";
+    if (mysqli_query($link, $query)) {
+        // Log the deletion action with relevant details
+        $log_action = "Deleted user: $firstname $lastname ($username)";
+        $log_query = "INSERT INTO logs (action) VALUES ('" . mysqli_real_escape_string($link, $log_action) . "')";
+        mysqli_query($link, $log_query);
+
+        // Set a gray alert for successful deletion
+        $_SESSION['alert'] = 'deleted';
+    } else {
+        // Set an error alert if the deletion fails
+        $_SESSION['alert'] = 'error';
+    }
+} else {
+    // Redirect to the user list if no ID is provided
+    $_SESSION['alert'] = 'error';
 }
-?>
 
-<script type="text/javascript">
-    window.location = "add_new_user.php";
-</script>
+// Redirect to the user list page
+header("Location: add_new_user.php");
+exit();
+?>

@@ -140,6 +140,10 @@ if (isset($_SESSION["alert"])) {
                     <div class="alert alert-success" style="margin-top: 20px;">
                         Device added successfully!
                     </div>
+                <?php } elseif ($alert == "deleted") { ?>
+                    <div class="alert" style="background-color: gray; color: white; margin-top: 20px;">
+                        Device deleted.
+                    </div>
                 <?php } ?>
 
                 <div class="widget-content nopadding" style="margin-top: 20px;">

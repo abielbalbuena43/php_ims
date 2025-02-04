@@ -82,6 +82,9 @@ while ($row = mysqli_fetch_assoc($result)) {
             <li class="<?php echo ($current_page == 'otherdevices.php') ? 'active' : ''; ?>">
                 <a href="otherdevices.php"><i class="icon icon-user"></i><span>Other Devices</span></a>
             </li>
+            <li class="<?php echo ($current_page == 'software.php') ? 'active' : ''; ?>">
+                <a href="software.php"><i class="icon icon-user"></i><span>Software</span></a>
+            </li>
             <li class="<?php echo ($current_page == 'logs.php') ? 'active' : ''; ?>">
                 <a href="logs.php"><i class="icon icon-user"></i><span>Logs</span></a>
             </li>
