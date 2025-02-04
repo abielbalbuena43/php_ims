@@ -71,8 +71,8 @@ if (isset($_SESSION["alert"])) {
 
                 <!-- Search bar and button -->
                 <div style="margin-top: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 11px;">
-                    <input type="text" id="searchInput" class="span5" placeholder="Search device...">
-                    <button class="btn btn-info" onclick="searchDevices()">Search</button>
+                    <input type="text" id="searchInput" class="span5" placeholder="Search equipment...">
+                    <button class="btn btn-info" onclick="searchEquipment()">Search</button>
                 </div>
 
                 <!-- Button to toggle the form -->
@@ -246,7 +246,7 @@ if (isset($_SESSION["alert"])) {
                                     <th>DELETE</th>
                                 </tr>
                             </thead>
-                            <tbody id="deviceTableBody">
+                            <tbody id="equipmentTableBody">
                                 <?php
                                 $res = mysqli_query($link, "SELECT * FROM equipment");
                                 while ($row = mysqli_fetch_array($res)) {
@@ -298,7 +298,7 @@ if (isset($_SESSION["alert"])) {
         form.style.display = (form.style.display === 'none') ? 'block' : 'none';
     }
 
-    function searchDevices() {
+    function searchEquipment() {
         let searchQuery = document.getElementById("searchInput").value;
         let xhr = new XMLHttpRequest();
         xhr.open("POST", "search_equipment.php", true);
@@ -306,7 +306,7 @@ if (isset($_SESSION["alert"])) {
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                document.getElementById("deviceTableBody").innerHTML = xhr.responseText;
+                document.getElementById("equipmentTableBody").innerHTML = xhr.responseText;
             }
         };
 
