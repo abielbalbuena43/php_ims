@@ -1,5 +1,4 @@
 <?php
-include "verify_admin_session.php";
 include "../user/connection.php";
 $current_page = basename($_SERVER['PHP_SELF']); // Get the current page name
 
