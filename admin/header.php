@@ -62,5 +62,5 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <!-- Logout link -->
 <div id="search">
-    <a href="dashboard.php" style="color:white"><i class="icon icon-share-alt"></i><span>LogOut</span></a>
+    <a href="logout.php" style="color:white"><i class="icon icon-share-alt"></i><span>LogOut</span></a>
 </div>

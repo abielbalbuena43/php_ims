@@ -1,8 +1,7 @@
 <?php
 // Start session
 session_start();
-
-// Include connection file
+include "session_verification.php";
 include "../user/connection.php";
 
 // Check if the software ID is provided

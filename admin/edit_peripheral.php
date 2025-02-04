@@ -1,5 +1,6 @@
 <?php
 session_start();
+include "session_verification.php";
 include "header.php";
 include "../user/connection.php";
 

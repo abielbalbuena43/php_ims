@@ -1,5 +1,4 @@
 <?php
-// Include the database connection
 include "../user/connection.php";
 
 // Check if the search query is set

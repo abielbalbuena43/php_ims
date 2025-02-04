@@ -1,8 +1,6 @@
 <?php
-// Start session
 session_start();
-
-// Include files after the session start
+include "session_verification.php";
 include "header.php";
 include "../user/connection.php";
 
@@ -53,7 +51,7 @@ unset($_SESSION["alert"]);
 
 <div id="content">
     <div id="content-header">
-        <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i> Peripherals</a></div>
+        <div id="breadcrumb"><a href="peripherals.php" class="tip-bottom"><i class="icon-home"></i> Peripherals</a></div>
     </div>
 
     <div class="container-fluid">

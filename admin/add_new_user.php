@@ -1,9 +1,8 @@
 <?php
-
-// Include required files and start session
+session_start();
+include "session_verification.php";
 include "header.php";
 include "../user/connection.php";
-session_start();
 
 // Handle alert management
 if (isset($_SESSION["alert"])) {

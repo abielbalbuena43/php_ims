@@ -1,8 +1,7 @@
 <?php
-include "../user/connection.php";
-
-// Start session to capture alerts
 session_start();
+include "session_verification.php";
+include "../user/connection.php";
 
 // Check if the "Export Logs" button is clicked
 if (isset($_POST['export_logs'])) {

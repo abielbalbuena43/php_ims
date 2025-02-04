@@ -1,4 +1,6 @@
 <?php
+session_start();
+include "session_verification.php";
 include "../user/connection.php";
 $current_page = basename($_SERVER['PHP_SELF']); // Get the current page name
 
@@ -91,6 +93,10 @@ while ($row = mysqli_fetch_assoc($result)) {
         </ul>
     </div>
 
+    <div id="search">
+    <a href="logout.php" style="color:white"><i class="icon icon-share-alt"></i><span>LogOut</span></a>
+    </div>
+
     <!-- Main Container Part -->
     <div id="content">
         <!-- Breadcrumbs -->
@@ -115,6 +121,8 @@ while ($row = mysqli_fetch_assoc($result)) {
             </div>
         </div>
     </div>
+
+
 
     <!-- End Main Container Part -->
 

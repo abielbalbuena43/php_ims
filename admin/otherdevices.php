@@ -1,8 +1,6 @@
 <?php
-// Start session
 session_start();
-
-// Include files after the session start
+include "session_verification.php";
 include "header.php";
 include "../user/connection.php";
 

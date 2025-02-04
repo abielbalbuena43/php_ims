@@ -1,20 +1,18 @@
 <?php
+session_start();
+include "session_verification.php";
 include "header.php";
 include "../user/connection.php";
 
-$user_id = $_GET["user_id"]; // Get the user ID from the URL
+$user_id = $_GET["user_id"]; 
 
-// Fetch the user details from the database
 $query = "SELECT * FROM user_registration WHERE user_id = $user_id";
 $result = mysqli_query($link, $query);
 $user = mysqli_fetch_array($result);
 
-// Start a session to manage alert visibility
-session_start();
-
 if (isset($_SESSION["alert"])) {
     $alert = $_SESSION["alert"];
-    unset($_SESSION["alert"]); // Clear the alert after the page is loaded
+    unset($_SESSION["alert"]); 
 } else {
     $alert = null;
 }
@@ -145,6 +143,16 @@ if (isset($_POST["submit1"])) {
                                         <option value="" disabled>Select Role</option>
                                         <option value="user" <?php echo ($user['role'] == 'user') ? 'selected' : ''; ?>>User</option>
                                         <option value="admin" <?php echo ($user['role'] == 'admin') ? 'selected' : ''; ?>>Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Update Status</label>
+                                <div class="controls">
+                                    <select name="status" class="span11">
+                                        <option value="" disabled>Select Role</option>
+                                        <option value="active" <?php echo ($user['status'] == 'active') ? 'selected' : ''; ?>>Active</option>
+                                        <option value="inactive" <?php echo ($user['role'] == 'inactive') ? 'selected' : ''; ?>>Inactive</option>
                                     </select>
                                 </div>
                             </div>

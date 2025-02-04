@@ -1,10 +1,6 @@
 <?php
-// Start session
 session_start();
-// Check if the user is logged in
-
-
-// Include files after the session start
+include "session_verification.php";
 include "header.php";
 include "../user/connection.php";
 
