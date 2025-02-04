@@ -133,7 +133,7 @@ if (isset($_POST["submit"])) {
                                     <input type="text" class="span11" name="deviceage" 
                                         value="<?php echo isset($ram['ram_deviceage']) ? $ram['ram_deviceage'] : 'None'; ?>" required />
                                 </div>
-                            </div>>
+                            </div>
                             <div class="control-group">
                                 <label class="control-label">Assigned User :</label>
                                 <div class="controls">

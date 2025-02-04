@@ -144,7 +144,7 @@ unset($_SESSION["alert"]);
                                 ?>
                                     <tr>
                                         <td><?php echo $row["pcname"]; ?></td>
-                                        <td><?php echo $row["software_msos"]; ?></td>
+                                        <td><a href="msos.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["software_msos"]; ?></a></td>
                                         <td><?php echo $row["software_msoffice"]; ?></td>
                                         <td><?php echo $row["software_adobe"]; ?></td>
                                         <td><?php echo $row["software_dateadded"]; ?></td>
