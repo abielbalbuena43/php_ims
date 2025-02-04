@@ -74,27 +74,19 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <a href="add_new_user.php"><i class="icon icon-user"></i><span>User List</span></a>
             </li>
             <li class="<?php echo ($current_page == 'equipment.php') ? 'active' : ''; ?>">
-                <a href="equipment.php"><i class="icon icon-user"></i><span>Equipment List</span></a>
+                <a href="equipment.php"><i class="icon icon-inbox"></i><span>Equipment List</span></a>
             </li>
             <li class="<?php echo ($current_page == 'peripherals.php') ? 'active' : ''; ?>">
-                <a href="peripherals.php"><i class="icon icon-user"></i><span>Peripherals List</span></a>
+                <a href="peripherals.php"><i class="icon icon-headphones"></i><span>Peripherals List</span></a>
             </li>
             <li class="<?php echo ($current_page == 'otherdevices.php') ? 'active' : ''; ?>">
-                <a href="otherdevices.php"><i class="icon icon-user"></i><span>Other Devices</span></a>
+                <a href="otherdevices.php"><i class="icon icon-laptop"></i><span>Other Devices</span></a>
             </li>
             <li class="<?php echo ($current_page == 'software.php') ? 'active' : ''; ?>">
-                <a href="software.php"><i class="icon icon-user"></i><span>Software</span></a>
+                <a href="software.php"><i class="icon icon-google-plus-sign"></i><span>Software</span></a>
             </li>
             <li class="<?php echo ($current_page == 'logs.php') ? 'active' : ''; ?>">
-                <a href="logs.php"><i class="icon icon-user"></i><span>Logs</span></a>
-            </li>
-            <li class="submenu">
-                <a href="#"><i class="icon icon-th-list"></i> <span>Forms</span> <span class="label label-important">3</span></a>
-                <ul>
-                    <li><a href="form-common.php">Basic Form</a></li>
-                    <li><a href="form-validation.php">Form with Validation</a></li>
-                    <li><a href="form-wizard.php">Form with Wizard</a></li>
-                </ul>
+                <a href="logs.php"><i class="icon icon-cloud"></i><span>Logs</span></a>
             </li>
         </ul>
     </div>

@@ -38,35 +38,25 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </li>
 
         <li class="<?php echo ($current_page == 'equipment.php') ? 'active' : ''; ?>">
-            <a href="equipment.php"><i class="icon icon-user"></i><span>Equipment List</span></a>
+            <a href="equipment.php"><i class="icon icon-inbox"></i><span>Equipment List</span></a>
         </li>
 
         <li class="<?php echo ($current_page == 'peripherals.php') ? 'active' : ''; ?>">
-            <a href="peripherals.php"><i class="icon icon-user"></i><span>Peripherals List</span></a>
+            <a href="peripherals.php"><i class="icon icon-headphones"></i><span>Peripherals List</span></a>
         </li>
 
         <li class="<?php echo ($current_page == 'otherdevices.php') ? 'active' : ''; ?>">
-            <a href="otherdevices.php"><i class="icon icon-user"></i><span>Other Devices</span></a>
+            <a href="otherdevices.php"><i class="icon icon-laptop"></i><span>Other Devices</span></a>
         </li>
 
         <li class="<?php echo ($current_page == 'software.php') ? 'active' : ''; ?>">
-            <a href="software.php"><i class="icon icon-user"></i><span>Software</span></a>
+            <a href="software.php"><i class="icon icon-google-plus-sign"></i><span>Software</span></a>
         </li>
 
         <li class="<?php echo ($current_page == 'logs.php') ? 'active' : ''; ?>">
-            <a href="logs.php"><i class="icon icon-user"></i><span>Logs</span></a>
+            <a href="logs.php"><i class="icon icon-cloud"></i><span>Logs</span></a>
         </li>
 
-        
-
-        <li class="submenu <?php echo ($current_page == 'form-common.html' || $current_page == 'form-validation.html' || $current_page == 'form-wizard.html') ? 'active' : ''; ?>">
-            <a href="#"><i class="icon icon-th-list"></i> <span>Forms</span> <span class="label label-important">3</span></a>
-            <ul>
-                <li class="<?php echo ($current_page == 'form-common.html') ? 'active' : ''; ?>"><a href="form-common.html">Basic Form</a></li>
-                <li class="<?php echo ($current_page == 'form-validation.html') ? 'active' : ''; ?>"><a href="form-validation.html">Form with Validation</a></li>
-                <li class="<?php echo ($current_page == 'form-wizard.html') ? 'active' : ''; ?>"><a href="form-wizard.html">Form with Wizard</a></li>
-            </ul>
-        </li>
     </ul>
 </div>
 

@@ -17,7 +17,7 @@ if (isset($_SESSION["alert"])) {
 <div id="content">
     <!--breadcrumbs-->
     <div id="content-header">
-        <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i> Add New User</a></div>
+        <div id="breadcrumb"><a href="index.html" class="tip-bottom"><i class="icon-home"></i> User List</a></div>
     </div>
     <!--End-breadcrumbs-->
 
