@@ -1,5 +1,5 @@
 <?php
-// Start session at the very top
+// Start session
 session_start();
 
 // Include files after the session start
@@ -23,6 +23,18 @@ if (isset($_POST["submit1"])) {
     mysqli_stmt_bind_param($stmt, "issss", $_POST["equipment_id"], $_POST["software_msos"], $_POST["software_msoffice"], $_POST["software_adobe"], $_POST["software_remarks"]);
 
     if (mysqli_stmt_execute($stmt)) {
+        // Fetch the pcname associated with the selected equipment_id
+        $equipment_id = $_POST["equipment_id"];
+        $pcname_query = "SELECT pcname FROM equipment WHERE equipment_id = $equipment_id";
+        $pcname_result = mysqli_query($link, $pcname_query);
+        $pcname_data = mysqli_fetch_assoc($pcname_result);
+        $pcname = $pcname_data['pcname'];
+
+        // Log the action after the successful insertion
+        $log_action = "Added new software for equipment: " . $pcname;
+        $log_query = "INSERT INTO logs (pcname, action) VALUES ('" . mysqli_real_escape_string($link, $pcname) . "', '$log_action')";
+        mysqli_query($link, $log_query);
+
         $_SESSION["alert"] = "success";
         header("Location: " . $_SERVER['PHP_SELF']);
         exit();
@@ -145,8 +157,8 @@ unset($_SESSION["alert"]);
                                     <tr>
                                         <td><?php echo $row["pcname"]; ?></td>
                                         <td><a href="msos.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["software_msos"]; ?></a></td>
-                                        <td><?php echo $row["software_msoffice"]; ?></td>
-                                        <td><?php echo $row["software_adobe"]; ?></td>
+                                        <td><a href="msoffice.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["software_msoffice"]; ?></a></td>
+                                        <td><a href="adobe.php?equipment_id=<?php echo $row['equipment_id']; ?>"><?php echo $row["software_adobe"]; ?></a></td>
                                         <td><?php echo $row["software_dateadded"]; ?></td>
                                         <td><?php echo $row["software_dateedited"]; ?></td>
                                         <td><?php echo $row["software_remarks"]; ?></td>
@@ -193,4 +205,4 @@ unset($_SESSION["alert"]);
 
 <?php
 include "footer.php";
-?>
+?> 

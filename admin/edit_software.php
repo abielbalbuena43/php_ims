@@ -23,7 +23,6 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
-
 // Fetch equipment details for reference
 $equipment_query = "SELECT equipment_id, pcname FROM equipment WHERE equipment_id = ?";
 $stmt = mysqli_prepare($link, $equipment_query);
@@ -48,6 +47,36 @@ if (isset($_POST["submit"])) {
     $software_msoffice = mysqli_real_escape_string($link, $_POST["software_msoffice"]);
     $software_adobe = mysqli_real_escape_string($link, $_POST["software_adobe"]);
     $software_remarks = mysqli_real_escape_string($link, $_POST["software_remarks"]);
+
+    // Fetch previous software data before updating
+    $old_data = $software;
+
+    // Prepare log details
+    $log_action = "Updated software for equipment ({$equipment['pcname']}): ";
+    $changes = [];
+
+    if ($old_data['software_msos'] !== $software_msos) {
+        $changes[] = "MS OS: {$old_data['software_msos']} → $software_msos";
+    }
+    if ($old_data['software_msoffice'] !== $software_msoffice) {
+        $changes[] = "MS Office: {$old_data['software_msoffice']} → $software_msoffice";
+    }
+    if ($old_data['software_adobe'] !== $software_adobe) {
+        $changes[] = "Adobe: {$old_data['software_adobe']} → $software_adobe";
+    }
+    if ($old_data['software_remarks'] !== $software_remarks) {
+        $changes[] = "Remarks: {$old_data['software_remarks']} → $software_remarks";
+    }
+
+    // If changes exist, log them
+    if (!empty($changes)) {
+        $log_action .= implode(", ", $changes);
+        $log_query = "INSERT INTO logs (action, date_edited) VALUES (?, NOW())";
+        $stmt = mysqli_prepare($link, $log_query);
+        mysqli_stmt_bind_param($stmt, "s", $log_action);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
 
     // Check if a software entry exists for this equipment
     if ($software) {

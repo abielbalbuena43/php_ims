@@ -1,9 +1,5 @@
 <?php
-
-// Start session
 session_start();
-
-// Include files after the session start
 include "header.php";
 include "../user/connection.php";
 
@@ -33,6 +29,9 @@ if (isset($_POST["submit1"])) {
     $device_pcname = mysqli_real_escape_string($link, $_POST["device_pcname"]);
     $device_macaddress = mysqli_real_escape_string($link, $_POST["device_macaddress"]);
 
+    // Fetch old device data before update for logging changes
+    $old_device_data = $device; // Already fetched above
+
     // Update the device details in the database
     $update_query = "UPDATE otherdevices SET 
                         device_type = '$device_type', 
@@ -47,6 +46,45 @@ if (isset($_POST["submit1"])) {
                     WHERE device_id = '$device_id'";
 
     if (mysqli_query($link, $update_query)) {
+        // Log the changes made to the device
+        $log_action = "Updated Device: $device_type - $device_name";
+
+        // Prepare to track changes
+        $changes = [];
+
+        // Compare old and new data, log changes
+        if ($old_device_data['device_type'] !== $device_type) {
+            $changes[] = "Device Type: {$old_device_data['device_type']} → $device_type";
+        }
+        if ($old_device_data['device_name'] !== $device_name) {
+            $changes[] = "Device Name: {$old_device_data['device_name']} → $device_name";
+        }
+        if ($old_device_data['device_assettag'] !== $device_assettag) {
+            $changes[] = "Asset Tag: {$old_device_data['device_assettag']} → $device_assettag";
+        }
+        if ($old_device_data['device_brand'] !== $device_brand) {
+            $changes[] = "Brand: {$old_device_data['device_brand']} → $device_brand";
+        }
+        if ($old_device_data['device_modelnumber'] !== $device_modelnumber) {
+            $changes[] = "Model Number: {$old_device_data['device_modelnumber']} → $device_modelnumber";
+        }
+        if ($old_device_data['device_deviceage'] !== $device_deviceage) {
+            $changes[] = "Device Age: {$old_device_data['device_deviceage']} → $device_deviceage";
+        }
+        if ($old_device_data['device_pcname'] !== $device_pcname) {
+            $changes[] = "PC Name: {$old_device_data['device_pcname']} → $device_pcname";
+        }
+        if ($old_device_data['device_macaddress'] !== $device_macaddress) {
+            $changes[] = "MAC Address: {$old_device_data['device_macaddress']} → $device_macaddress";
+        }
+
+        // If there are changes, log them
+        if (!empty($changes)) {
+            $log_action .= ": " . implode(", ", $changes);
+            $log_query = "INSERT INTO logs (action, date_edited) VALUES ('$log_action', NOW())";
+            mysqli_query($link, $log_query);
+        }
+
         $_SESSION["alert"] = "success";
         header("Location: edit_otherdevices.php?od_id=$device_id");
         exit();
@@ -64,7 +102,6 @@ if (isset($_SESSION["alert"])) {
 } else {
     $alert = null;
 }
-
 ?>
 
 <!--main-container-part-->

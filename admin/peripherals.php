@@ -1,7 +1,5 @@
 <?php
-
-
-// Start session at the very top
+// Start session
 session_start();
 
 // Include files after the session start
@@ -27,6 +25,18 @@ if (isset($_POST["submit1"])) {
                       NOW(), 'N/A')"; // Date Edited is N/A for new records
 
     if (mysqli_query($link, $query)) {
+        // Fetch the pcname associated with the selected equipment_id
+        $equipment_id = $_POST["equipment_id"];
+        $pcname_query = "SELECT pcname FROM equipment WHERE equipment_id = $equipment_id";
+        $pcname_result = mysqli_query($link, $pcname_query);
+        $pcname_data = mysqli_fetch_assoc($pcname_result);
+        $pcname = $pcname_data['pcname'];
+
+        // Log the action after the successful insertion
+        $log_action = "Added new Peripheral for equipment: " . $pcname;
+        $log_query = "INSERT INTO logs (pcname, action) VALUES ('" . mysqli_real_escape_string($link, $pcname) . "', '$log_action')";
+        mysqli_query($link, $log_query);
+
         $_SESSION["alert"] = "success";
         header("Location: " . $_SERVER['PHP_SELF']);
         exit();

@@ -1,5 +1,4 @@
 <?php
-
 // Start session
 session_start();
 
@@ -21,6 +20,11 @@ if (isset($_POST["submit1"])) {
                       '" . mysqli_real_escape_string($link, $_POST["device_macaddress"]) . "')";
 
     if (mysqli_query($link, $query)) {
+        // Log the action after the successful insertion
+        $log_action = "Added new Device: " . $_POST["device_type"] . " - " . $_POST["device_name"];
+        $log_query = "INSERT INTO logs (action) VALUES ('$log_action')";
+        mysqli_query($link, $log_query);
+
         $_SESSION["alert"] = "success";
         header("Location: " . $_SERVER['PHP_SELF']);
         exit();
