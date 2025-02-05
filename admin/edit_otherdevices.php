@@ -29,6 +29,8 @@ if (isset($_POST["submit1"])) {
     $device_deviceage = mysqli_real_escape_string($link, $_POST["device_deviceage"]);
     $device_pcname = mysqli_real_escape_string($link, $_POST["device_pcname"]);
     $device_macaddress = mysqli_real_escape_string($link, $_POST["device_macaddress"]);
+    $device_remarks = mysqli_real_escape_string($link, $_POST["device_remarks"]);
+
 
     // Fetch old device data before update for logging changes
     $old_device_data = $device; // Already fetched above
@@ -43,6 +45,7 @@ if (isset($_POST["submit1"])) {
                         device_deviceage = '$device_deviceage', 
                         device_pcname = '$device_pcname',
                         device_macaddress = '$device_macaddress', 
+                        device_remarks = '$device_remarks', 
                         device_dateedited = NOW() 
                     WHERE device_id = '$device_id'";
 
@@ -77,6 +80,9 @@ if (isset($_POST["submit1"])) {
         }
         if ($old_device_data['device_macaddress'] !== $device_macaddress) {
             $changes[] = "MAC Address: {$old_device_data['device_macaddress']} → $device_macaddress";
+        }
+        if ($old_device_data['device_remarks'] !== $device_remarks) {
+            $changes[] = "Remarks: {$old_device_data['device_remarks']} → $device_remarks";
         }
 
         // If there are changes, log them
@@ -191,6 +197,13 @@ if (isset($_SESSION["alert"])) {
                                 <label class="control-label">MAC Address :</label>
                                 <div class="controls">
                                     <input type="text" class="span11" placeholder="MAC Address" name="device_macaddress" value="<?php echo $device['device_macaddress']; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Remarks :</label>
+                                <div class="controls">
+                                    <textarea class="span11" name="device_remarks"><?php echo isset($keyboard['device_remarks']) ? $keyboard['device_remarks'] : 'None'; ?></textarea>
                                 </div>
                             </div>
 

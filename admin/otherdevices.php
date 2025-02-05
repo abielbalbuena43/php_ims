@@ -7,7 +7,7 @@ include "../user/connection.php";
 // Handling redirection after form submission to prevent resubmission
 if (isset($_POST["submit1"])) {
     // Insert new device into the database
-    $query = "INSERT INTO otherdevices (device_type, device_name, device_assettag, device_brand, device_modelnumber, device_deviceage, device_pcname, device_macaddress) 
+    $query = "INSERT INTO otherdevices (device_type, device_name, device_assettag, device_brand, device_modelnumber, device_deviceage, device_pcname, device_macaddress, device_remarks) 
               VALUES ('" . mysqli_real_escape_string($link, $_POST["device_type"]) . "',
                       '" . mysqli_real_escape_string($link, $_POST["device_name"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["device_assettag"]) . "', 
@@ -15,7 +15,8 @@ if (isset($_POST["submit1"])) {
                       '" . mysqli_real_escape_string($link, $_POST["device_modelnumber"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["device_deviceage"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["device_pcname"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["device_macaddress"]) . "')";
+                      '" . mysqli_real_escape_string($link, $_POST["device_macaddress"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["device_remarks"]) . "')";
 
     if (mysqli_query($link, $query)) {
         // Log the action after the successful insertion
@@ -125,6 +126,12 @@ if (isset($_SESSION["alert"])) {
                                         <input type="text" class="span11" placeholder="MAC Address" name="device_macaddress" />
                                     </div>
                                 </div>
+                                <div class="control-group">
+                                     <label class="control-label">Remarks :</label>
+                                        <div class="controls">
+                                    <textarea class="span11" name="device_remarks"><?php echo isset($keyboard['device_remarks']) ? $keyboard['device_remarks'] : 'None'; ?></textarea>
+                                </div>
+                                </div>
                                 <div class="form-actions">
                                     <button type="submit" name="submit1" class="btn btn-success">Save</button>
                                 </div>
@@ -163,6 +170,7 @@ if (isset($_SESSION["alert"])) {
                                     <th>MAC Address</th>
                                     <th>Date Acquired</th>
                                     <th>Date Edited</th>
+                                    <th>Remarks</th>
                                     <th>EDIT</th>
                                     <th>DELETE</th>
                                 </tr>
@@ -183,6 +191,7 @@ if (isset($_SESSION["alert"])) {
                                         <td><?php echo $row["device_macaddress"]; ?></td>
                                         <td><?php echo $row["device_dateacquired"]; ?></td>
                                         <td><?php echo $row["device_dateedited"] ? $row["device_dateedited"] : 'N/A'; ?></td>
+                                        <td><?php echo $row["device_remarks"]; ?></td>
                                         <td><a href="edit_otherdevices.php?od_id=<?php echo $row['device_id']; ?>" class="btn btn-primary">Edit</a></td>
                                         <td>
                                             <a href="delete_otherdevices.php?od_id=<?php echo $row['device_id']; ?>" class="btn btn-danger"

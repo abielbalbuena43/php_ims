@@ -9,11 +9,11 @@ html, body{height:100%}
 
 body {
 	overflow-x: hidden;
-	margin-top: -10px; font-family: 'Open Sans', sans-serif; font-size:15px; color:#666;
+	margin-top: -10px; font-family: 'Open Sans', sans-serif; font-size:15px; color:#000000;
 }
-a{color:#666;}
+a{color:#000000;}
 a:hover, a:focus {
-	text-decoration: none; color:#28b779;
+	text-decoration: none; color:#00d0ff;
 }
 .dropdown-menu .divider{ margin:4px 0px;}
 .dropdown-menu{ min-width:180px;}
@@ -1037,7 +1037,7 @@ div.dataTables_wrapper .ui-widget-header {
 	padding: 5px 10px 2px;
 	border-bottom: 0;
 	text-align: center;
-	color: #666666;
+	color: #000000;
 }
 .table.with-check tr th:first-child, .table.with-check tr td:first-child {
 	width: 10px;

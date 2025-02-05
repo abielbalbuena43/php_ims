@@ -238,6 +238,7 @@ if (isset($_SESSION["alert"])) {
                                     <th>MS Product Key</th>
                                     <th>Date Added</th>
                                     <th>Date Edited</th>
+                                    <th>Remarks</th>
                                     <th>EDIT</th>
                                     <th>DELETE</th>
                                 </tr>
@@ -366,6 +367,7 @@ if (isset($_SESSION["alert"])) {
                                         <td><?php echo $row["ms_key"]; ?></td>
                                         <td><?php echo $row["date_added"]; ?></td>
                                         <td><?php echo $row["date_edited"]; ?></td>
+                                        <td><?php echo $row["equipment_remarks"]; ?></td>
                                         <td><a href="edit_equipment.php?equipment_id=<?php echo $row['equipment_id']; ?>" class="btn btn-primary">Edit</a></td>
                                         <td>
                                             <a href="delete_equipment.php?equipment_id=<?php echo $row['equipment_id']; ?>" 

@@ -41,6 +41,8 @@ if (isset($_POST["submit1"])) {
     $msversion = mysqli_real_escape_string($link, $_POST["msversion"]);
     $windows_key = mysqli_real_escape_string($link, $_POST["windows_key"]);
     $ms_key = mysqli_real_escape_string($link, $_POST["ms_key"]);
+    $equipment_remarks = mysqli_real_escape_string($link, $_POST["equipment_remarks"]);
+
 
     // Fetch previous equipment details for comparison
     $old_pcname = $equipment['pcname'];
@@ -61,24 +63,25 @@ if (isset($_POST["submit1"])) {
     $old_msversion = $equipment['msversion'];
     $old_windows_key = $equipment['windows_key'];
     $old_ms_key = $equipment['ms_key'];
+    
 
     // Prepare the update statement
     $query = "UPDATE equipment SET 
-              pcname = ?, assigneduser = ?, processor = ?, motherboard = ?, 
-              ram = ?, hdd = ?, ssd = ?, gpu = ?, psu = ?, pccase = ?, 
-              monitor = ?, lancard = ?, wificard = ?, macaddress = ?, osversion = ?, 
-              msversion = ?, windows_key = ?, ms_key = ? 
-              WHERE equipment_id = ?";
+                pcname = ?, assigneduser = ?, processor = ?, motherboard = ?, 
+                ram = ?, hdd = ?, ssd = ?, gpu = ?, psu = ?, pccase = ?, 
+                monitor = ?, lancard = ?, wificard = ?, macaddress = ?, osversion = ?, 
+                msversion = ?, windows_key = ?, ms_key = ?, equipment_remarks = ?, date_edited = NOW()
+                WHERE equipment_id = ?";
 
     // Prepare the statement
     $stmt = mysqli_prepare($link, $query);
 
     // Bind parameters
-    mysqli_stmt_bind_param($stmt, "ssssssssssssssssssi", 
+    mysqli_stmt_bind_param($stmt, "sssssssssssssssssssi", 
     $pcname, $assigneduser, $processor, $motherboard, 
     $ram, $hdd, $ssd, $gpu, $psu, $pccase, 
     $monitor, $lancard, $wificard, $macaddress, $osversion, 
-    $msversion, $windows_key, $ms_key, $equipment_id);
+    $msversion, $windows_key, $ms_key, $equipment_remarks, $equipment_id);    
 
     // Execute the statement
     if (mysqli_stmt_execute($stmt)) {
@@ -104,6 +107,10 @@ if (isset($_POST["submit1"])) {
         if ($old_msversion !== $msversion) $log_action .= "MS Version: $old_msversion → $msversion, ";
         if ($old_windows_key !== $windows_key) $log_action .= "Windows Key: $old_windows_key → $windows_key, ";
         if ($old_ms_key !== $ms_key) $log_action .= "MS Key: $old_ms_key → $ms_key, ";
+        if ($old_equipment_remarks !== $equipment_remarks) {
+            $log_action .= "Remarks: $old_equipment_remarks → $equipment_remarks, ";
+        }
+        
 
         // Trim any trailing comma and space
         $log_action = rtrim($log_action, ", ");
@@ -246,6 +253,12 @@ if (isset($_POST["submit1"])) {
                                 <div class="controls">
                                     <input type="text" class="span11" name="ms_key" value="<?php echo $equipment['ms_key']; ?>" />
                                 </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Remarks :</label>
+                                <div class="controls">
+                                <textarea class="span11" name="equipment_remarks"><?php echo isset($equipment['equipment_remarks']) ? $equipment['equipment_remarks'] : ''; ?></textarea>
+                            </div>
                             </div>
 
                             <!-- Alert Display -->

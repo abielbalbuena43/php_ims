@@ -18,7 +18,7 @@ if (isset($_POST['login'])) {
         $_SESSION['role'] = $user['role'];
 
         // Redirect to the admin dashboard or equipment page
-        header("Location: equipment.php");
+        header("Location: dashboard.php");
         exit();
     } else {
         $error = "Invalid login credentials or you're not an admin.";
