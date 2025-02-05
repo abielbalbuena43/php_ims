@@ -63,13 +63,6 @@ while ($row = mysqli_fetch_assoc($result)) {
         </ul>
     </div>
 
-    <!-- Sidebar Menu -->
-    
-
-    <div id="search">
-    <a href="logout.php" style="color:white"><i class="icon icon-share-alt"></i><span>LogOut</span></a>
-    </div>
-
     <!-- Main Container Part -->
     <div id="content">
         <!-- Breadcrumbs -->

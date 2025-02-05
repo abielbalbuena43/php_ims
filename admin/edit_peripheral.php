@@ -41,6 +41,7 @@ if (isset($_POST["submit1"])) {
     $mouse = mysqli_real_escape_string($link, $_POST["mouse"]);
     $printer = mysqli_real_escape_string($link, $_POST["printer"]);
     $avr = mysqli_real_escape_string($link, $_POST["avr"]);
+    $peripheral_remarks = mysqli_real_escape_string($link, $_POST["peripheral_remarks"]);
 
     // Validate that equipment_id exists AFTER retrieving it
     $query = "SELECT equipment_id, pcname FROM equipment WHERE equipment_id = ?";
@@ -82,6 +83,9 @@ if (isset($_POST["submit1"])) {
     if ($old_data['avr'] !== $avr) {
         $changes[] = "AVR: {$old_data['avr']} → $avr";
     }
+    if ($old_data['peripheral_remarks'] !== $peripheral_remarks) {
+        $changes[] = "Remarks: {$old_data['peripheral_remarks']} → $peripheral_remarks";
+    }
 
     // If changes exist, log them
     if (!empty($changes)) {
@@ -95,12 +99,12 @@ if (isset($_POST["submit1"])) {
 
     // Prepare the update statement (do NOT include peripheral_dateadded)
     $query = "UPDATE peripherals SET 
-              keyboard = ?, mouse = ?, printer = ?, avr = ?, equipment_id = ?, peripheral_dateaedited = NOW() 
+              keyboard = ?, mouse = ?, printer = ?, avr = ?, peripheral_remarks = ?, equipment_id = ?, peripheral_dateaedited = NOW() 
               WHERE peripheral_id = ?";
     $stmt = mysqli_prepare($link, $query);
 
-    // Corrected parameter binding (matching six `?` placeholders)
-    mysqli_stmt_bind_param($stmt, "ssssii", $keyboard, $mouse, $printer, $avr, $equipment_id, $peripheral_id);
+    // Corrected parameter binding (matching seven `?` placeholders)
+    mysqli_stmt_bind_param($stmt, "sssssii", $keyboard, $mouse, $printer, $avr, $peripheral_remarks, $equipment_id, $peripheral_id);
 
     // Execute the statement
     if (mysqli_stmt_execute($stmt)) {
@@ -164,6 +168,12 @@ if (isset($_POST["submit1"])) {
                                 <label class="control-label">AVR :</label>
                                 <div class="controls">
                                     <input type="text" class="span11" placeholder="AVR" name="avr" value="<?php echo $peripheral['avr']; ?>" required />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">Remarks :</label>
+                                <div class="controls">
+                                    <textarea class="span11" placeholder="Peripheral Remarks" name="peripheral_remarks" required><?php echo $peripheral['peripheral_remarks']; ?></textarea>
                                 </div>
                             </div>
 

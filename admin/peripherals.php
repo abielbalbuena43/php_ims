@@ -14,13 +14,14 @@ while ($row = mysqli_fetch_assoc($equipment_result)) {
 // Handling form submission
 if (isset($_POST["submit1"])) {
     // Insert a new peripheral with peripheral_dateaedited as 'N/A' when new
-    $query = "INSERT INTO peripherals (equipment_id, keyboard, mouse, printer, avr, peripheral_dateadded, peripheral_dateaedited) 
+    $query = "INSERT INTO peripherals (equipment_id, keyboard, mouse, printer, avr, peripheral_dateadded, peripheral_dateaedited, peripheral_remarks) 
               VALUES ('" . mysqli_real_escape_string($link, $_POST["equipment_id"]) . "',
                       '" . mysqli_real_escape_string($link, $_POST["keyboard"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["mouse"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["printer"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["avr"]) . "', 
-                      NOW(), 'N/A')"; // Date Edited is N/A for new records
+                      '" . mysqli_real_escape_string($link, $_POST["avr"]) . "',
+                      NOW(), 'N/A', 
+                      '" . mysqli_real_escape_string($link, $_POST["peripheral_remarks"]) . "')"; // Date Edited is N/A for new records
 
     if (mysqli_query($link, $query)) {
         // Fetch the pcname associated with the selected equipment_id
@@ -107,6 +108,12 @@ unset($_SESSION["alert"]);
                                         <input type="text" class="span11" placeholder="AVR" name="avr" required />
                                     </div>
                                 </div>
+                                <div class="control-group">
+                                    <label class="control-label">Remarks :</label>
+                                    <div class="controls">
+                                        <textarea class="span11" placeholder="Peripheral Remarks" name="peripheral_remarks" required></textarea>
+                                    </div>
+                                </div>
                                 <div class="form-actions">
                                     <button type="submit" name="submit1" class="btn btn-success">Save</button>
                                 </div>
@@ -142,6 +149,7 @@ unset($_SESSION["alert"]);
                                     <th>AVR</th>
                                     <th>Date Added</th>
                                     <th>Date Edited</th>
+                                    <th>Remarks</th> <!-- Added Remarks Column -->
                                     <th>EDIT</th>
                                     <th>DELETE</th>
                                 </tr>
@@ -193,6 +201,7 @@ unset($_SESSION["alert"]);
                                     </td>
                                     <td><?php echo $row["peripheral_dateadded"]; ?></td>
                                     <td><?php echo $row["peripheral_dateaedited"] ? $row["peripheral_dateaedited"] : 'N/A'; ?></td> <!-- Display N/A if not yet edited -->
+                                    <td><?php echo $row["peripheral_remarks"]; ?></td> <!-- Added Remarks in the table -->
                                     <td>
                                         <?php 
                                         if ($row["keyboard"] == "None" && $row["mouse"] == "None" && $row["printer"] == "None" && $row["avr"] == "None") {

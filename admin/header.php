@@ -62,7 +62,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </ul>
 </div>
 
-<!-- Logout link -->
-<div id="search">
-    <a href="logout.php" style="color:white"><i class="icon icon-share-alt"></i><span>LogOut</span></a>
+<!-- Logout button -->
+<div id="search" style="margin-bottom: 5555px;">
+    <form action="logout.php" method="post">
+        <button type="submit" class="btn btn-danger">
+            <i class="icon icon-share-alt"></i> LogOut
+        </button>
+    </form>
 </div>
