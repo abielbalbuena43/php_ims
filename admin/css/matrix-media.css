@@ -1,5 +1,5 @@
 body {
-	background:#2E363F;
+	background:#28282B;
 }
 
 #header {
@@ -17,7 +17,7 @@ body {
 	border-top: 1px solid #37414b; border-bottom: 1px solid #1f262d;
 }
 #sidebar > ul > li.active {
-    background-color: #27a9e3; border-bottom: 1px solid #27a9e3;  border-top: 1px solid #27a9e3;
+    background-color: #000000; border-bottom: 1px solid #27a9e3;  border-top: 1px solid #27a9e3;
 }
 #sidebar > ul > li.active a{ color:#fff; text-decoration:none;}
 
@@ -25,7 +25,7 @@ body {
 	background-color:#F66;
 }
 #sidebar > ul > li > a:hover {
-	background-color: #27a9e3; color:#fff;
+	background-color: #000000; color:#fff;
 }
 #sidebar > ul li ul {
 	background-color: #1e242b;

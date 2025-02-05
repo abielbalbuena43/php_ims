@@ -19,14 +19,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </head>
 <body>
 
-<div id="header">
-    <h2 style="color: white; position: absolute">
-        <a href="dashboard.html" style="color:white; margin-left: 30px; margin-top: 40px">PHP IMS</a>
-    </h2>
+<div id="header" style="background-color: #28282B;">
+    <a href="dashboard.html" style="position: absolute; margin-left: 10px; margin-top: -30px;">
+        <img src="img/malaya_logo.png" alt="Malaya Logo" style="height: 180px;">
+    </a>
 </div>
 
+
+
 <!--sidebar-menu-->
-<div id="sidebar">
+<div id="sidebar" style="margin-top: 40px;">
     <ul>
         <!-- Dynamically add "active" class based on the current page -->
         <li class="<?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "session_verification.php";
+include "header.php";   
 include "../user/connection.php";
 $current_page = basename($_SERVER['PHP_SELF']); // Get the current page name
 
@@ -53,11 +54,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 <body>
 
-    <div id="header">
-        <h2 style="color: white; position: absolute">
-            <a href="dashboard.php" style="color:white; margin-left: 30px; margin-top: 40px">PHP IMS</a>
-        </h2>
-    </div>
+    
 
     <!-- Top Header Menu -->
     <div id="user-nav" class="navbar navbar-inverse">
@@ -67,31 +64,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     </div>
 
     <!-- Sidebar Menu -->
-    <div id="sidebar">
-        <ul>
-            <li class="active">
-                <a href="dashboard.php"><i class="icon icon-home"></i><span>Dashboard</span></a>
-            </li>
-            <li class="<?php echo ($current_page == 'add_new_user.php') ? 'active' : ''; ?>">
-                <a href="add_new_user.php"><i class="icon icon-user"></i><span>User List</span></a>
-            </li>
-            <li class="<?php echo ($current_page == 'equipment.php') ? 'active' : ''; ?>">
-                <a href="equipment.php"><i class="icon icon-inbox"></i><span>Equipment List</span></a>
-            </li>
-            <li class="<?php echo ($current_page == 'peripherals.php') ? 'active' : ''; ?>">
-                <a href="peripherals.php"><i class="icon icon-headphones"></i><span>Peripherals List</span></a>
-            </li>
-            <li class="<?php echo ($current_page == 'otherdevices.php') ? 'active' : ''; ?>">
-                <a href="otherdevices.php"><i class="icon icon-laptop"></i><span>Other Devices</span></a>
-            </li>
-            <li class="<?php echo ($current_page == 'software.php') ? 'active' : ''; ?>">
-                <a href="software.php"><i class="icon icon-google-plus-sign"></i><span>Software</span></a>
-            </li>
-            <li class="<?php echo ($current_page == 'logs.php') ? 'active' : ''; ?>">
-                <a href="logs.php"><i class="icon icon-cloud"></i><span>Logs</span></a>
-            </li>
-        </ul>
-    </div>
+    
 
     <div id="search">
     <a href="logout.php" style="color:white"><i class="icon icon-share-alt"></i><span>LogOut</span></a>
@@ -126,12 +99,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     <!-- End Main Container Part -->
 
-    <!-- Footer Part -->
-    <div class="row-fluid">
-        <div id="footer" class="span12" style="color:white"> Designed And Developed By: Your Name</div>
-    </div>
-    <!-- End Footer Part -->
-
+    
     <!-- JS Scripts -->
     <script>
         var ctx = document.getElementById('idPieChart').getContext('2d');
@@ -202,3 +170,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 </body>
 
 </html>
+
+<?php
+include "footer.php";
+?>
