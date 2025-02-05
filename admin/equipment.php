@@ -4,6 +4,9 @@ include "session_verification.php";
 include "header.php";
 include "../user/connection.php";
 
+// Add the link to your CSS file in the head section
+echo '<link rel="stylesheet" href="css/table_style.css">';
+
 // Handling redirection after form submission to prevent resubmission
 if (isset($_POST["submit1"])) {
     // Insert new equipment into the database with default values for Windows and MS Product Keys

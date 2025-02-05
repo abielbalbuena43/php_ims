@@ -9,7 +9,7 @@ html, body{height:100%}
 
 body {
 	overflow-x: hidden;
-	margin-top: -10px; font-family: 'Open Sans', sans-serif; font-size:15px; color:#000000;
+	margin-top: -10px; font-family: 'Open Sans', sans-serif; font-size:13px; color:#000000;
 }
 a{color:#000000;}
 a:hover, a:focus {
