@@ -494,6 +494,17 @@ hr{ border-top-color:#dadada;}
 	height: 300px;
 	max-width: 100%;
 }
+
+.chart-container {
+    width: 48%;
+    height: 400px; /* Fixed height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
 #choices{ border-top:1px solid #dcdcdc; margin:10px 0; padding:10px;}
 #choices br{ display:none;}
 #choices input{ margin:-5px 5px 0 0;}
@@ -534,7 +545,7 @@ hr{ border-top-color:#dadada;}
 	margin-top: 0;
 	margin-bottom: 0;
 }
-.widget-title, .modal-header, .table th, div.dataTables_wrapper .ui-widget-header {
+.widget-title, .modal-header, div.dataTables_wrapper .ui-widget-header {
 	 background:#efefef;
 	border-bottom: 1px solid #CDCDCD;
 	height: 36px;  
@@ -1037,7 +1048,7 @@ div.dataTables_wrapper .ui-widget-header {
 	padding: 5px 10px 2px;
 	border-bottom: 0;
 	text-align: center;
-	color: #000000;
+	color: #ffffff;
 }
 .table.with-check tr th:first-child, .table.with-check tr td:first-child {
 	width: 10px;

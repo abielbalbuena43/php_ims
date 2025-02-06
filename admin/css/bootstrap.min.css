@@ -1627,61 +1627,80 @@ legend+.control-group {
 
 .form-horizontal .form-actions {
     padding-left: 180px
-}
-/* General Table Styling */
+}/* General Table Styling */
 table {
-    max-width: 100%;
+    width: 100%;
     background-color: #ffffff; /* Add a background color (white as example) */
     border-collapse: collapse; /* Ensures that borders collapse into a single line */
     border-spacing: 0; /* Removes space between table cells */
     border: 1px solid #ddd; /* Add a border around the table */
     border-radius: 8px; /* Softer, rounded corners */
+    overflow: hidden; /* Prevents the content from spilling out of rounded corners */
+}
+/* General Table Styling */
+table {
+    width: 100%;
+    border: 2px solid #ccc; /* Light gray border around the table */
+    border-radius: 12px; /* Softer, rounded corners */
+    border-collapse: separate; /* Ensure border-radius applies properly */
+    border-spacing: 0; /* Prevents unwanted gaps between cells */
+    background-color: #ffffff; /* White background for the table */
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+    overflow: hidden; /* Ensures rounded corners are properly clipped */
 }
 
 /* Table Header Styling */
 table th {
-    padding: 12px;
+    padding: 14px;
     text-align: left;
-    background-color: #f4f4f4; /* Light gray header background */
-    color: #333; /* Darker text for contrast */
+    background-color: #115486; /* Dark blue header background */
+    color: #ffffff; /* White text for contrast */
     font-size: 14px;
-    border-bottom: 2px solid #ddd; /* Adds a subtle border at the bottom of the header */
-    border-top-left-radius: 8px; /* Rounded top-left corner */
-    border-top-right-radius: 8px; /* Rounded top-right corner */
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+    text-transform: uppercase;
 }
 
 /* Table Cell Styling */
 table td {
-    padding: 10px;
+    padding: 12px;
     text-align: left;
-    color: #555; /* Slightly lighter color than headers */
+    color: #000000;
     font-size: 13px;
-    border-bottom: 1px solid #ddd; /* Subtle line between rows */
+    border-bottom: 1px solid #ddd;
+    vertical-align: middle;
 }
 
 /* Table Row Hover Effect */
 table tr:hover {
-    background-color: #f9f9f9; /* Light hover effect for rows */
+    background-color: #d6d6d6;
 }
 
-/* First and Last Row Cell Styling */
-table tr:first-child td {
-    border-top-left-radius: 8px; /* Rounded top-left corner for first row */
-    border-top-right-radius: 8px; /* Rounded top-right corner for first row */
+/* Cell Borders */
+table td, table th {
+    border-right: 1px solid #ddd;
 }
 
-table tr:last-child td {
-    border-bottom-left-radius: 8px; /* Rounded bottom-left corner for last row */
-    border-bottom-right-radius: 8px; /* Rounded bottom-right corner for last row */
+table td:last-child, table th:last-child {
+    border-right: none;
 }
 
-/* Optional: Striped Rows for Better Readability */
+/* Apply rounded corners properly */
+table tr:first-child th:first-child {
+    border-top-left-radius: 12px;
+}
+
+table tr:first-child th:last-child {
+    border-top-right-radius: 12px;
+}
+
+/* Alternating Row Colors for Better Readability */
 table tr:nth-child(odd) {
-    background-color: #f9f9f9; /* Alternate background for odd rows */
+    background-color: #f0f0f0;
 }
 
 table tr:nth-child(even) {
-    background-color: #ffffff; /* Even rows with white background */
+    background-color: #ffffff;
 }
 
 /* Styling the Table Caption (if any) */
@@ -1692,6 +1711,7 @@ table caption {
     color: #333;
     text-align: left;
 }
+
 
 [class^="icon-"], [class*=" icon-"] {
     display: inline-block;
