@@ -1,0 +1,19 @@
+.dashboard-summary {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    padding: 20px;
+    background: #f4f4f4;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    gap: 20px; /* Adds spacing between boxes */
+}
+
+.summary-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    flex: 1; /* Ensures equal sizing */
+}

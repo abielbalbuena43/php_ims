@@ -3,6 +3,9 @@ session_start();
 include "session_verification.php";
 include "header.php";   
 include "../user/connection.php";
+
+echo '<link rel="stylesheet" href="css/dashboard.css">';
+
 $current_page = basename($_SERVER['PHP_SELF']); // Get the current page name
 
 // Query to get count of each equipment category
@@ -28,74 +31,119 @@ $result = mysqli_query($link, $query);
 
 $labels = [];
 $values = [];
+$totalCount = 0;
+$maxCategory = "";
+$minCategory = "";
+$maxValue = 0;
+$minValue = PHP_INT_MAX;
 
 while ($row = mysqli_fetch_assoc($result)) {
     $labels[] = $row['category'];
     $values[] = $row['count'];
+    $totalCount += $row['count'];
+
+    // Find most common category
+    if ($row['count'] > $maxValue) {
+        $maxValue = $row['count'];
+        $maxCategory = $row['category'];
+    }
+
+    // Find least common category
+    if ($row['count'] < $minValue && $row['count'] > 0) {
+        $minValue = $row['count'];
+        $minCategory = $row['category'];
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>PHP IMS</title>
+    <title>PHP IMS - Dashboard</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" href="css/fullcalendar.css" />
     <link rel="stylesheet" href="css/matrix-style.css" />
     <link rel="stylesheet" href="css/matrix-media.css" />
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/jquery.gritter.css" />
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js -->
+    <style>
+        .dashboard-summary {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            padding: 20px;
+            background: #f4f4f4;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .summary-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            width: 30%;
+        }
+        .summary-box h4 {
+            margin: 10px 0;
+            color: #333;
+        }
+        .summary-box p {
+            font-size: 20px;
+            font-weight: bold;
+            color: #115486;
+        }
+    </style>
 </head>
 
 <body>
 
-    
-
-    <!-- Top Header Menu -->
-    <div id="user-nav" class="navbar navbar-inverse">
-        <ul class="nav">
-            <!-- Removed user profile dropdown -->
-        </ul>
-    </div>
-
-    <!-- Main Container Part -->
     <div id="content">
-        <!-- Breadcrumbs -->
         <div id="content-header">
-            <div id="breadcrumb"><a href="dashboard.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
+            <div id="breadcrumb"><a href="dashboard.php" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
         </div>
 
-        <!-- Action Boxes -->
         <div class="container-fluid">
-            <div class="row-fluid" style="background-color: white; min-height: 1000px; padding:10px;">
-                <h3>Equipment   Distribution</h3>
-                <div style="display: flex; justify-content: space-between;">
-                    <!-- Pie chart container -->
-                    <div style="width: 50%; height: 500px;">
-                        <canvas id="idPieChart"></canvas>
-                    </div>
-                    <!-- Legend container -->
-                    <div style="width: 40%; margin-left: 20px;">
-                        <div id="pieChartLegend"></div>
-                    </div>
+            <h3>Equipment Overview</h3>
+
+            <!-- Dashboard Summary -->
+            <div class="dashboard-summary">
+                <div class="summary-box">
+                    <h4>Total Equipment</h4>
+                    <p><?php echo number_format($totalCount); ?></p>
+                </div>
+                <div class="summary-box">
+                    <h4>Most Common</h4>
+                    <p><?php echo $maxCategory . " (" . $maxValue . ")"; ?></p>
+                </div>
+                <div class="summary-box">
+                    <h4>Least Common</h4>
+                    <p><?php echo $minCategory . " (" . $minValue . ")"; ?></p>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div style="display: flex; justify-content: space-between;">
+                <!-- Pie Chart -->
+                <div style="width: 48%;">
+                    <h4>Equipment Distribution</h4>
+                    <canvas id="idPieChart"></canvas>
+                </div>
+                
+                <!-- Bar Chart -->
+                <div style="width: 48%;">
+                    <h4>Equipment Count Comparison</h4>
+                    <canvas id="idBarChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
-
-
-    <!-- End Main Container Part -->
-
-    
-    <!-- JS Scripts -->
+    <!-- JavaScript for Charts -->
     <script>
-        var ctx = document.getElementById('idPieChart').getContext('2d');
+        var ctxPie = document.getElementById('idPieChart').getContext('2d');
+        var ctxBar = document.getElementById('idBarChart').getContext('2d');
 
         var chartData = {
             labels: <?php echo json_encode($labels); ?>,
@@ -107,58 +155,53 @@ while ($row = mysqli_fetch_assoc($result)) {
             }]
         };
 
-        var options = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false // Disable default legend
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            return tooltipItem.label + ': ' + tooltipItem.raw + ' items';
-                        }
+        var myPieChart = new Chart(ctxPie, {
+    type: 'pie',
+    data: chartData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,  // Keeps a proper size
+        aspectRatio: 2,  // Ensures a reasonable width-to-height ratio
+        layout: {
+            padding: 20 // Adds padding to prevent overflow
+        },
+        plugins: {
+            legend: { display: true },
+            tooltip: {
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return tooltipItem.label + ': ' + tooltipItem.raw + ' items';
                     }
                 }
             }
-        };
+        }
+    }
+});
 
-        var myPieChart = new Chart(ctx, {
-            type: 'pie', // Pie chart type
-            data: chartData,
-            options: options
-        });
 
-        // Custom legend display
-        var legendHtml = '';
-        chartData.labels.forEach(function(label, index) {
-            legendHtml += '<div><span style="background-color:' + chartData.datasets[0].backgroundColor[index] + '; width: 20px; height: 20px; display: inline-block;"></span> ' + label + '</div>';
-        });
-        document.getElementById('pieChartLegend').innerHTML = legendHtml;
+        var myBarChart = new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+        labels: <?php echo json_encode($labels); ?>,
+        datasets: [{
+            label: 'Equipment Count',
+            data: <?php echo json_encode($values); ?>,
+            backgroundColor: '#115486',
+            borderColor: '#115486',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true, /* Ensures the chart does not stretch */
+        aspectRatio: 2, /* Adjusts the width-to-height ratio */
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+
     </script>
-
-    <script src="js/excanvas.min.js"></script>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/jquery.ui.custom.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.flot.min.js"></script>
-    <script src="js/jquery.flot.resize.min.js"></script>
-    <script src="js/jquery.peity.min.js"></script>
-    <script src="js/fullcalendar.min.js"></script>
-    <script src="js/matrix.js"></script>
-    <script src="js/matrix.dashboard.js"></script>
-    <script src="js/jquery.gritter.min.js"></script>
-    <script src="js/matrix.interface.js"></script>
-    <script src="js/matrix.chat.js"></script>
-    <script src="js/jquery.validate.js"></script>
-    <script src="js/matrix.form_validation.js"></script>
-    <script src="js/jquery.wizard.js"></script>
-    <script src="js/jquery.uniform.js"></script>
-    <script src="js/select2.min.js"></script>
-    <script src="js/matrix.popover.js"></script>
-    <script src="js/jquery.dataTables.min.js"></script>
-    <script src="js/matrix.tables.js"></script>
 
 </body>
 
