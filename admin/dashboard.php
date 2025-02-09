@@ -216,7 +216,7 @@ $totalCount = $totalEquipment + $totalPeripherals;
             <table style="width: 100%; border-collapse: collapse;">
                 <tbody>
                     <?php
-                    $logQuery = "SELECT * FROM logs ORDER BY date_edited DESC";
+                    $logQuery = "SELECT * FROM logs ORDER BY date_edited DESC LIMIT 5";
                     $logResult = mysqli_query($link, $logQuery);
                     while ($logRow = mysqli_fetch_array($logResult)) {
                         echo "<tr style='border: none;'>";
