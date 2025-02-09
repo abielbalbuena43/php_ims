@@ -6,8 +6,6 @@ include "../user/connection.php";
 
 echo '<link rel="stylesheet" href="css/dashboard.css">';
 
-$current_page = basename($_SERVER['PHP_SELF']);
-
 $query = "
 SELECT 'AVR' AS category, COUNT(avr_id) AS count FROM avr UNION ALL
 SELECT 'GPU', COUNT(gpu_id) FROM gpu UNION ALL
@@ -24,10 +22,25 @@ SELECT 'PSU', COUNT(psu_id) FROM psu UNION ALL
 SELECT 'RAM', COUNT(ram_id) FROM ram UNION ALL
 SELECT 'SSD', COUNT(ssd_id) FROM ssd UNION ALL
 SELECT 'Wi-Fi Card', COUNT(wificard_id) FROM wificard UNION ALL
-SELECT 'Total Peripherals', COUNT(peripheral_id) FROM peripherals UNION ALL
+SELECT 'Total Peripherals', 
+    (SELECT COUNT(keyboard_id) FROM keyboard) + 
+    (SELECT COUNT(mouse_id) FROM mouse) + 
+    (SELECT COUNT(printer_id) FROM printer) + 
+    (SELECT COUNT(avr_id) FROM avr) AS count UNION ALL
+SELECT 'Total Equipment', 
+    (SELECT COUNT(processor_id) FROM processor) + 
+    (SELECT COUNT(mobo_id) FROM motherboard) + 
+    (SELECT COUNT(ram_id) FROM ram) + 
+    (SELECT COUNT(hdd_id) FROM hdd) + 
+    (SELECT COUNT(ssd_id) FROM ssd) + 
+    (SELECT COUNT(gpu_id) FROM gpu) + 
+    (SELECT COUNT(psu_id) FROM psu) + 
+    (SELECT COUNT(pccase_id) FROM pccase) + 
+    (SELECT COUNT(monitor_id) FROM monitor) + 
+    (SELECT COUNT(lancard_id) FROM lancard) + 
+    (SELECT COUNT(wificard_id) FROM wificard) AS count UNION ALL
 SELECT 'Total Other Devices', COUNT(device_id) FROM otherdevices
 ";
-
 
 $result = mysqli_query($link, $query);
 
@@ -35,17 +48,27 @@ $totalPeripherals = 0;
 $totalOtherDevices = 0;
 
 
+$totalPeripherals = 0;
+$totalEquipment = 0;
+$totalOtherDevices = 0;
+$labels = [];
+$values = [];
+
 while ($row = mysqli_fetch_assoc($result)) {
     $labels[] = $row['category'];
     $values[] = $row['count'];
-    $totalCount += $row['count'];
 
     if ($row['category'] === 'Total Peripherals') {
-        $totalPeripherals = $row['count'];
+        $totalPeripherals = (int) $row['count'];
+    } elseif ($row['category'] === 'Total Equipment') {
+        $totalEquipment = (int) $row['count'];
     } elseif ($row['category'] === 'Total Other Devices') {
-        $totalOtherDevices = $row['count'];
+        $totalOtherDevices = (int) $row['count'];
     }
 }
+
+// Make sure we exclude Total Other Devices from final total
+$totalCount = $totalEquipment + $totalPeripherals;
 ?>
 
 <!DOCTYPE html>
