@@ -101,53 +101,74 @@ if (isset($_POST["submit"])) {
                         <form name="form1" action="" method="post" class="form-horizontal">
                             <!-- Form to edit monitor details -->
                             <div class="control-group">
-                                <label class="control-label">Asset Tag :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="assettag" value="<?php echo isset($monitor['monitor_assettag']) ? $monitor['monitor_assettag'] : 'None'; ?>" required />
-                                </div>
+                            <label class="control-label">Asset Tag :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="assettag" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($monitor['monitor_assettag']) ? $monitor['monitor_assettag'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Brand :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="brand" value="<?php echo isset($monitor['monitor_brand']) ? $monitor['monitor_brand'] : 'None'; ?>" required />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Brand :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="brand" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($monitor['monitor_brand']) ? $monitor['monitor_brand'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Model Number :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="modelnumber" value="<?php echo isset($monitor['monitor_modelnumber']) ? $monitor['monitor_modelnumber'] : 'None'; ?>" required />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Model Number :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="modelnumber" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($monitor['monitor_modelnumber']) ? $monitor['monitor_modelnumber'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Monitor Size :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="size" value="<?php echo isset($monitor['monitor_size']) ? $monitor['monitor_size'] : 'None'; ?>" required />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Monitor Size :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="size" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($monitor['monitor_size']) ? $monitor['monitor_size'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Date Acquired :</label>
-                                <div class="controls">
-                                    <input type="date" class="span11" name="dateacquired" value="<?php echo isset($monitor['monitor_dateacquired']) ? $monitor['monitor_dateacquired'] : 'None'; ?>" />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Date Acquired :</label>
+                            <div class="controls">
+                                <input type="date" class="span11" name="dateacquired" 
+                                    value="<?php echo isset($monitor['monitor_dateacquired']) ? $monitor['monitor_dateacquired'] : ''; ?>" />
                             </div>
-                            <div> <label class="control-label">Device Age :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="deviceage" 
-                                        value="<?php echo isset($monitor['monitor_deviceage']) ? $monitor['monitor_deviceage'] : 'None'; ?>" required />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Device Age :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="deviceage" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($monitor['monitor_deviceage']) ? $monitor['monitor_deviceage'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Assigned User :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="assigneduser" value="<?php echo isset($monitor['monitor_assigneduser']) ? $monitor['monitor_assigneduser'] : 'None'; ?>" />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Assigned User :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="assigneduser" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($monitor['monitor_assigneduser']) ? $monitor['monitor_assigneduser'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Remarks :</label>
-                                <div class="controls">
-                                    <textarea class="span11" name="remarks"><?php echo isset($monitor['monitor_remarks']) ? $monitor['monitor_remarks'] : 'None'; ?></textarea>
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Remarks :</label>
+                            <div class="controls">
+                                <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($monitor['monitor_remarks']) ? $monitor['monitor_remarks'] : ''; ?></textarea>
                             </div>
+                        </div>
+
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
                                 <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">

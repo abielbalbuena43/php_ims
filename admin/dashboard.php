@@ -96,11 +96,8 @@ $totalCount = $totalEquipment + $totalPeripherals;
         <div id="breadcrumb"><a href="dashboard.php" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
     </div>
 
-    <form method="post" action="#">
     <div class="container-fluid">
-        <h3>Equipment Overview</h3>
-
-        <div class="dashboard-summary">
+    <div class="dashboard-summary">
         <div class="summary-box">
             <h4>Total Equipment</h4>
             <p><?php echo number_format($totalCount); ?></p>
@@ -114,6 +111,7 @@ $totalCount = $totalEquipment + $totalPeripherals;
             <p><?php echo $totalOtherDevices; ?></p>
         </div>
     </div>
+</div>
 
 
         <!-- Charts -->
@@ -155,7 +153,6 @@ $totalCount = $totalEquipment + $totalPeripherals;
         </div>
     </div>
     </div>
-    </form>
 </div>
 
 

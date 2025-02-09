@@ -107,63 +107,91 @@ if (isset($_POST["submit"])) {
                             <div class="control-group">
                                 <label class="control-label">Asset Tag :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="assettag" value="<?php echo isset($motherboard['mobo_assettag']) ? $motherboard['mobo_assettag'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="assettag" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($motherboard['mobo_assettag']) ? $motherboard['mobo_assettag'] : ''; ?>" />
                                 </div>
                             </div>
+
                             <div class="control-group">
                                 <label class="control-label">Brand :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="brand" value="<?php echo isset($motherboard['mobo_brand']) ? $motherboard['mobo_brand'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="brand" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($motherboard['mobo_brand']) ? $motherboard['mobo_brand'] : ''; ?>" />
                                 </div>
                             </div>
+
                             <div class="control-group">
                                 <label class="control-label">Model Number :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="modelnumber" value="<?php echo isset($motherboard['mobo_modelnumber']) ? $motherboard['mobo_modelnumber'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="modelnumber" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($motherboard['mobo_modelnumber']) ? $motherboard['mobo_modelnumber'] : ''; ?>" />
                                 </div>
                             </div>
+
                             <div class="control-group">
                                 <label class="control-label">RAM Slot :</label>
                                 <div class="controls">
-                                    <input type="number" class="span11" name="ramslot" value="<?php echo isset($motherboard['mobo_ramslot']) ? $motherboard['mobo_ramslot'] : 'None'; ?>" required />
+                                    <input type="number" class="span11" name="ramslot" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($motherboard['mobo_ramslot']) ? $motherboard['mobo_ramslot'] : ''; ?>" />
                                 </div>
                             </div>
+
                             <div class="control-group">
                                 <label class="control-label">Date Acquired :</label>
                                 <div class="controls">
-                                    <input type="date" class="span11" name="dateacquired" value="<?php echo isset($motherboard['mobo_dateacquired']) ? $motherboard['mobo_dateacquired'] : 'None'; ?>" />
+                                    <input type="date" class="span11" name="dateacquired" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($motherboard['mobo_dateacquired']) ? $motherboard['mobo_dateacquired'] : ''; ?>" />
                                 </div>
                             </div>
-                            <div> <label class="control-label">Device Age :</label>
+
+                            <div class="control-group">
+                                <label class="control-label">Device Age :</label>
                                 <div class="controls">
                                     <input type="text" class="span11" name="deviceage" 
-                                        value="<?php echo isset($mobo['mobo_deviceage']) ? $mobo['mobo_deviceage'] : 'None'; ?>" required />
+                                        placeholder="None" 
+                                        value="<?php echo isset($motherboard['mobo_deviceage']) ? $motherboard['mobo_deviceage'] : ''; ?>" />
                                 </div>
                             </div>
+
                             <div class="control-group">
                                 <label class="control-label">Assigned User :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="assigneduser" value="<?php echo isset($motherboard['mobo_assigneduser']) ? $motherboard['mobo_assigneduser'] : 'None'; ?>" />
+                                    <input type="text" class="span11" name="assigneduser" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($motherboard['mobo_assigneduser']) ? $motherboard['mobo_assigneduser'] : ''; ?>" />
                                 </div>
                             </div>
+
                             <div class="control-group">
                                 <label class="control-label">Computer Name :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="computername" value="<?php echo isset($motherboard['mobo_computername']) ? $motherboard['mobo_computername'] : 'None'; ?>" />
+                                    <input type="text" class="span11" name="computername" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($motherboard['mobo_computername']) ? $motherboard['mobo_computername'] : ''; ?>" />
                                 </div>
                             </div>
+
                             <div class="control-group">
                                 <label class="control-label">MAC Address :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="macaddress" value="<?php echo isset($motherboard['mobo_macaddress']) ? $motherboard['mobo_macaddress'] : 'None'; ?>" />
+                                    <input type="text" class="span11" name="macaddress" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($motherboard['mobo_macaddress']) ? $motherboard['mobo_macaddress'] : ''; ?>" />
                                 </div>
                             </div>
+
                             <div class="control-group">
                                 <label class="control-label">Remarks :</label>
                                 <div class="controls">
-                                    <textarea class="span11" name="remarks"><?php echo isset($motherboard['mobo_remarks']) ? $motherboard['mobo_remarks'] : 'None'; ?></textarea>
+                                    <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($motherboard['mobo_remarks']) ? $motherboard['mobo_remarks'] : ''; ?></textarea>
                                 </div>
                             </div>
+
                             <!-- Success/Failure Alert -->
                                 <?php if (isset($alert)) { ?>
                                     <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">

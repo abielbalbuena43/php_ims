@@ -96,49 +96,73 @@ if (isset($_POST["submit"])) {
                     </div>
                     <div class="widget-content nopadding">
 
-                        <form name="form1" action="" method="post" class="form-horizontal">
-                            <div class="control-group">
-                                <label class="control-label">Asset Tag :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="assettag" value="<?php echo isset($wificard['wificard_assettag']) ? $wificard['wificard_assettag'] : 'None'; ?>" required />
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">Brand :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="brand" value="<?php echo isset($wificard['wificard_brand']) ? $wificard['wificard_brand'] : 'None'; ?>" required />
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">Model Number :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="modelnumber" value="<?php echo isset($wificard['wificard_modelnumber']) ? $wificard['wificard_modelnumber'] : 'None'; ?>" required />
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">Date Acquired :</label>
-                                <div class="controls">
-                                    <input type="date" class="span11" name="dateacquired" value="<?php echo isset($wificard['wificard_dateacquired']) ? $wificard['wificard_dateacquired'] : 'None'; ?>" />
-                                </div>
-                            </div>
-                            <div> <label class="control-label">Device Age :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="deviceage" 
-                                        value="<?php echo isset($wificard['wificard_deviceage']) ? $wificard['wificard_deviceage'] : 'None'; ?>" required />
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">Assigned User :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="assigneduser" value="<?php echo isset($wificard['wificard_assigneduser']) ? $wificard['wificard_assigneduser'] : 'None'; ?>" />
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">Remarks :</label>
-                                <div class="controls">
-                                    <textarea class="span11" name="remarks"><?php echo isset($wificard['wificard_remarks']) ? $wificard['wificard_remarks'] : 'None'; ?></textarea>
-                                </div>
-                            </div>
+                    <form name="form1" action="" method="post" class="form-horizontal">
+                    <div class="control-group">
+                        <label class="control-label">Asset Tag :</label>
+                        <div class="controls">
+                            <input type="text" class="span11" name="assettag" 
+                                placeholder="None" 
+                                value="<?php echo isset($wificard['wificard_assettag']) ? $wificard['wificard_assettag'] : ''; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Brand :</label>
+                        <div class="controls">
+                            <input type="text" class="span11" name="brand" 
+                                placeholder="None" 
+                                value="<?php echo isset($wificard['wificard_brand']) ? $wificard['wificard_brand'] : ''; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Model Number :</label>
+                        <div class="controls">
+                            <input type="text" class="span11" name="modelnumber" 
+                                placeholder="None" 
+                                value="<?php echo isset($wificard['wificard_modelnumber']) ? $wificard['wificard_modelnumber'] : ''; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Date Acquired :</label>
+                        <div class="controls">
+                            <input type="date" class="span11" name="dateacquired" 
+                                value="<?php echo isset($wificard['wificard_dateacquired']) ? $wificard['wificard_dateacquired'] : ''; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Device Age :</label>
+                        <div class="controls">
+                            <input type="text" class="span11" name="deviceage" 
+                                placeholder="None" 
+                                value="<?php echo isset($wificard['wificard_deviceage']) ? $wificard['wificard_deviceage'] : ''; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Assigned User :</label>
+                        <div class="controls">
+                            <input type="text" class="span11" name="assigneduser" 
+                                placeholder="None" 
+                                value="<?php echo isset($wificard['wificard_assigneduser']) ? $wificard['wificard_assigneduser'] : ''; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Remarks :</label>
+                        <div class="controls">
+                            <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($wificard['wificard_remarks']) ? $wificard['wificard_remarks'] : ''; ?></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" name="submit" class="btn btn-success">Save Changes</button>
+                        <a href="equipment.php" class="btn">Cancel</a>
+                    </div>
+                </form>
+
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
                                 <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
