@@ -87,83 +87,6 @@ $totalCount = $totalEquipment + $totalPeripherals;
     <link rel="stylesheet" href="font-awesome/css/font-awesome.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
-        .dashboard-summary {
-            display: flex;
-            justify-content: space-around;
-            text-align: center;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .summary-box {
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            width: 30%;
-        }
-
-        .summary-box h4 {
-            margin: 10px 0;
-            color: #333;
-        }
-
-        .summary-box p {
-            font-size: 20px;
-            font-weight: bold;
-            color: #115486;
-        }
-
-        .chart-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 40px; /* 👈 Increase space between charts */
-        padding: 10px;
-        }
-
-
-
-        .chart-box {
-        width: 75%;
-        min-height: 300px;
-        padding: 70px;
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 300px;
-        }
-
-        @media (max-width: 768px) {
-            .dashboard-summary {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .logs-box {
-            width: 35%; /* Half the size of charts */
-            min-height: 50px; /* Reduce height */
-            padding: 35px; /* Reduce padding */
-            background: #fff; /* White background like charts */
-            border-radius: 8px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            }
-
-}
-            .summary-box {
-                width: 80%;
-                margin-bottom: 15px;
-            }
-
-            
-    </style>
 </head>
 
 <body>
@@ -205,6 +128,7 @@ $totalCount = $totalEquipment + $totalPeripherals;
                 <canvas id="idBarChart"></canvas>
             </div>
     </div>
+    <div class="logs-container">
     <div class="logs-box">
     <h4>Recent Logs</h4>
     <div class="widget-box">
@@ -229,6 +153,7 @@ $totalCount = $totalEquipment + $totalPeripherals;
                 </tbody>
             </table>
         </div>
+    </div>
     </div>
     </form>
 </div>
