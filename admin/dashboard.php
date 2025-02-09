@@ -55,8 +55,11 @@ $labels = [];
 $values = [];
 
 while ($row = mysqli_fetch_assoc($result)) {
-    $labels[] = $row['category'];
-    $values[] = $row['count'];
+    // Exclude "Total Peripherals," "Total Equipment," and "Total Other Devices" from Pie Chart
+    if (!in_array($row['category'], ['Total Peripherals', 'Total Equipment', 'Total Other Devices'])) {
+        $labels[] = $row['category'];
+        $values[] = $row['count'];
+    }
 
     if ($row['category'] === 'Total Peripherals') {
         $totalPeripherals = (int) $row['count'];
@@ -66,6 +69,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         $totalOtherDevices = (int) $row['count'];
     }
 }
+
 
 // Make sure we exclude Total Other Devices from final total
 $totalCount = $totalEquipment + $totalPeripherals;
@@ -96,7 +100,7 @@ $totalCount = $totalEquipment + $totalPeripherals;
 
         .summary-box {
             background: #fff;
-            padding: 20px;
+            padding: 30px;
             border-radius: 8px;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
             width: 30%;
@@ -114,21 +118,23 @@ $totalCount = $totalEquipment + $totalPeripherals;
         }
 
         .chart-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 20px; /* Adds space between the two charts */
-    padding: 20px; /* Adds space around the whole section */
-}
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 40px; /* 👈 Increase space between charts */
+        padding: 10px;
+        }
+
 
 
         .chart-box {
-            width: 70%;
-            min-height: 300px;
-            padding: 70px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        width: 75%;
+        min-height: 300px;
+        padding: 70px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 300px;
         }
 
         @media (max-width: 768px) {
@@ -137,16 +143,26 @@ $totalCount = $totalEquipment + $totalPeripherals;
                 align-items: center;
             }
 
+            .logs-box {
+            width: 35%; /* Half the size of charts */
+            min-height: 50px; /* Reduce height */
+            padding: 35px; /* Reduce padding */
+            background: #fff; /* White background like charts */
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            }
+
+}
             .summary-box {
                 width: 80%;
                 margin-bottom: 15px;
             }
 
-            .chart-box {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-        }
+            
     </style>
 </head>
 
@@ -157,6 +173,7 @@ $totalCount = $totalEquipment + $totalPeripherals;
         <div id="breadcrumb"><a href="dashboard.php" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
     </div>
 
+    <form method="post" action="#">
     <div class="container-fluid">
         <h3>Equipment Overview</h3>
 
@@ -187,9 +204,35 @@ $totalCount = $totalEquipment + $totalPeripherals;
                 <h4>Equipment Count Comparison</h4>
                 <canvas id="idBarChart"></canvas>
             </div>
+    </div>
+    <div class="logs-box">
+    <h4>Recent Logs</h4>
+    <div class="widget-box">
+        <div class="widget-title">
+            <span class="icon"><i class="icon-align-justify"></i></span>
+            <h5>Action Logs</h5>
+        </div>
+        <div class="widget-content nopadding">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tbody>
+                    <?php
+                    $logQuery = "SELECT * FROM logs ORDER BY date_edited DESC";
+                    $logResult = mysqli_query($link, $logQuery);
+                    while ($logRow = mysqli_fetch_array($logResult)) {
+                        echo "<tr style='border: none;'>";
+                        echo "<td style='padding: 10px; border: none;'>";
+                        echo htmlspecialchars($logRow['date_edited']) . " " . htmlspecialchars($logRow['action']);
+                        echo "</td>";
+                        echo "</tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
         </div>
     </div>
+    </form>
 </div>
+
 
 <!-- JavaScript for Charts -->
 <script>
