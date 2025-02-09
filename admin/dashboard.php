@@ -1,14 +1,13 @@
 <?php
 session_start();
 include "session_verification.php";
-include "header.php";   
+include "header.php";
 include "../user/connection.php";
 
 echo '<link rel="stylesheet" href="css/dashboard.css">';
 
-$current_page = basename($_SERVER['PHP_SELF']); // Get the current page name
+$current_page = basename($_SERVER['PHP_SELF']);
 
-// Query to get count of each equipment category
 $query = "
 SELECT 'AVR' AS category, COUNT(avr_id) AS count FROM avr UNION ALL
 SELECT 'GPU', COUNT(gpu_id) FROM gpu UNION ALL
@@ -24,34 +23,27 @@ SELECT 'Processor', COUNT(processor_id) FROM processor UNION ALL
 SELECT 'PSU', COUNT(psu_id) FROM psu UNION ALL
 SELECT 'RAM', COUNT(ram_id) FROM ram UNION ALL
 SELECT 'SSD', COUNT(ssd_id) FROM ssd UNION ALL
-SELECT 'Wi-Fi Card', COUNT(wificard_id) FROM wificard
+SELECT 'Wi-Fi Card', COUNT(wificard_id) FROM wificard UNION ALL
+SELECT 'Total Peripherals', COUNT(peripheral_id) FROM peripherals UNION ALL
+SELECT 'Total Other Devices', COUNT(device_id) FROM otherdevices
 ";
+
 
 $result = mysqli_query($link, $query);
 
-$labels = [];
-$values = [];
-$totalCount = 0;
-$maxCategory = "";
-$minCategory = "";
-$maxValue = 0;
-$minValue = PHP_INT_MAX;
+$totalPeripherals = 0;
+$totalOtherDevices = 0;
+
 
 while ($row = mysqli_fetch_assoc($result)) {
     $labels[] = $row['category'];
     $values[] = $row['count'];
     $totalCount += $row['count'];
 
-    // Find most common category
-    if ($row['count'] > $maxValue) {
-        $maxValue = $row['count'];
-        $maxCategory = $row['category'];
-    }
-
-    // Find least common category
-    if ($row['count'] < $minValue && $row['count'] > 0) {
-        $minValue = $row['count'];
-        $minCategory = $row['category'];
+    if ($row['category'] === 'Total Peripherals') {
+        $totalPeripherals = $row['count'];
+    } elseif ($row['category'] === 'Total Other Devices') {
+        $totalOtherDevices = $row['count'];
     }
 }
 ?>
@@ -60,24 +52,25 @@ while ($row = mysqli_fetch_assoc($result)) {
 <html lang="en">
 
 <head>
-    <title>PHP IMS - Dashboard</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/matrix-style.css" />
     <link rel="stylesheet" href="css/matrix-media.css" />
     <link rel="stylesheet" href="font-awesome/css/font-awesome.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         .dashboard-summary {
             display: flex;
             justify-content: space-around;
             text-align: center;
             padding: 20px;
-            background: #f4f4f4;
+            background: #f8f9fa;
             border-radius: 8px;
             margin-bottom: 20px;
         }
+
         .summary-box {
             background: #fff;
             padding: 20px;
@@ -85,128 +78,173 @@ while ($row = mysqli_fetch_assoc($result)) {
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
             width: 30%;
         }
+
         .summary-box h4 {
             margin: 10px 0;
             color: #333;
         }
+
         .summary-box p {
             font-size: 20px;
             font-weight: bold;
             color: #115486;
+        }
+
+        .chart-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px; /* Adds space between the two charts */
+    padding: 20px; /* Adds space around the whole section */
+}
+
+
+        .chart-box {
+            width: 70%;
+            min-height: 300px;
+            padding: 70px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-summary {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .summary-box {
+                width: 80%;
+                margin-bottom: 15px;
+            }
+
+            .chart-box {
+                width: 100%;
+                margin-bottom: 20px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div id="content">
-        <div id="content-header">
-            <div id="breadcrumb"><a href="dashboard.php" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
+<div id="content">
+    <div id="content-header">
+        <div id="breadcrumb"><a href="dashboard.php" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
+    </div>
+
+    <div class="container-fluid">
+        <h3>Equipment Overview</h3>
+
+        <div class="dashboard-summary">
+        <div class="summary-box">
+            <h4>Total Equipment</h4>
+            <p><?php echo number_format($totalCount); ?></p>
         </div>
-
-        <div class="container-fluid">
-            <h3>Equipment Overview</h3>
-
-            <!-- Dashboard Summary -->
-            <div class="dashboard-summary">
-                <div class="summary-box">
-                    <h4>Total Equipment</h4>
-                    <p><?php echo number_format($totalCount); ?></p>
-                </div>
-                <div class="summary-box">
-                    <h4>Most Common</h4>
-                    <p><?php echo $maxCategory . " (" . $maxValue . ")"; ?></p>
-                </div>
-                <div class="summary-box">
-                    <h4>Least Common</h4>
-                    <p><?php echo $minCategory . " (" . $minValue . ")"; ?></p>
-                </div>
-            </div>
-
-            <!-- Charts -->
-            <div style="display: flex; justify-content: space-between;">
-                <!-- Pie Chart -->
-                <div style="width: 48%;">
-                    <h4>Equipment Distribution</h4>
-                    <canvas id="idPieChart"></canvas>
-                </div>
-                
-                <!-- Bar Chart -->
-                <div style="width: 48%;">
-                    <h4>Equipment Count Comparison</h4>
-                    <canvas id="idBarChart"></canvas>
-                </div>
-            </div>
+        <div class="summary-box">
+            <h4>Total Peripherals</h4>
+            <p><?php echo $totalPeripherals; ?></p>
+        </div>
+        <div class="summary-box">
+            <h4>Total Other Devices</h4>
+            <p><?php echo $totalOtherDevices; ?></p>
         </div>
     </div>
 
-    <!-- JavaScript for Charts -->
-    <script>
-        var ctxPie = document.getElementById('idPieChart').getContext('2d');
-        var ctxBar = document.getElementById('idBarChart').getContext('2d');
 
-        var chartData = {
-            labels: <?php echo json_encode($labels); ?>,
-            datasets: [{
-                data: <?php echo json_encode($values); ?>,
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#E7E9ED', '#C9CBCF', '#FF5733', '#C70039', '#900C3F', '#581845', '#2ECC71', '#1ABC9C', '#3498DB'],
-                borderColor: "#fff",
-                borderWidth: 2
-            }]
-        };
+        <!-- Charts -->
+        <div class="chart-container">
+            <div class="chart-box">
+                <h4>Equipment Distribution</h4>
+                <canvas id="idPieChart"></canvas>
+            </div>
 
-        var myPieChart = new Chart(ctxPie, {
+            <div class="chart-box">
+                <h4>Equipment Count Comparison</h4>
+                <canvas id="idBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Charts -->
+<script>
+    var ctxPie = document.getElementById('idPieChart').getContext('2d');
+    var ctxBar = document.getElementById('idBarChart').getContext('2d');
+
+    var chartData = {
+        labels: <?php echo json_encode($labels); ?>,
+        datasets: [{
+            data: <?php echo json_encode($values); ?>,
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#E7E9ED', '#C9CBCF', '#FF5733', '#C70039', '#900C3F', '#581845', '#2ECC71', '#1ABC9C', '#3498DB'],
+            borderColor: "#fff",
+            borderWidth: 2
+        }]
+    };
+
+    new Chart(ctxPie, {
     type: 'pie',
     data: chartData,
     options: {
         responsive: true,
-        maintainAspectRatio: true,  // Keeps a proper size
-        aspectRatio: 2,  // Ensures a reasonable width-to-height ratio
-        layout: {
-            padding: 20 // Adds padding to prevent overflow
-        },
+        maintainAspectRatio: false,
         plugins: {
-            legend: { display: true },
-            tooltip: {
-                callbacks: {
-                    label: function(tooltipItem) {
-                        return tooltipItem.label + ': ' + tooltipItem.raw + ' items';
-                    }
-                }
+            legend: { 
+                display: true, 
+                position: 'right' // Moves legend to the right for better readability
+            },
+            tooltip: { 
+                callbacks: { 
+                    label: function(tooltipItem) { 
+                        return tooltipItem.label + ": " + tooltipItem.raw + " items"; 
+                    } 
+                } 
             }
         }
     }
 });
 
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: <?php echo json_encode($labels); ?>,
+                datasets: [{
+                    label: 'Equipment Count',
+                    data: <?php echo json_encode($values); ?>,
+                    backgroundColor: '#115486',
+                    borderColor: '#115486',
+                    borderWidth: 1
+                }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                scales: { 
+                    y: { 
+                        beginAtZero: true, 
+                        ticks: { 
+                            stepSize: 1 // Ensures only whole numbers appear in Y-axis
+                        } 
+                    } 
+                },
+                plugins: {
+                    legend: { 
+                        display: true 
+                    },
+                    tooltip: { 
+                        callbacks: { 
+                            label: function(tooltipItem) { 
+                                return tooltipItem.label + ": " + tooltipItem.raw + " items"; 
+                            } 
+                        } 
+                    }
+                }
+            }
+        });
 
-        var myBarChart = new Chart(ctxBar, {
-    type: 'bar',
-    data: {
-        labels: <?php echo json_encode($labels); ?>,
-        datasets: [{
-            label: 'Equipment Count',
-            data: <?php echo json_encode($values); ?>,
-            backgroundColor: '#115486',
-            borderColor: '#115486',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: true, /* Ensures the chart does not stretch */
-        aspectRatio: 2, /* Adjusts the width-to-height ratio */
-        scales: {
-            y: { beginAtZero: true }
-        }
-    }
-});
+</script>
 
-    </script>
-
+<?php include "footer.php"; ?>
 </body>
-
 </html>
-
-<?php
-include "footer.php";
-?>
