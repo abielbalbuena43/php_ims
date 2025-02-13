@@ -24,13 +24,11 @@ if (isset($_SESSION["alert"])) {
         <div class="row-fluid" style="background-color: white; min-height: 1000px; padding:10px;">
             <div class="span12">
 
-                <!-- Search bar and button integrated -->
- <!-- Search bar and button -->
-<div style="margin-top: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 11px;">
-    <input type="text" id="searchInput" class="span5" placeholder="Search user...">
-    <button class="btn btn-info" onclick="searchUsers()">Search</button>
-</div>
-
+                <!-- Search bar and button -->
+                <div id="searchContainer">
+                    <input type="text" id="searchInput" placeholder="Search user...">
+                    <button class="btn-info" id="searchButton" onclick="searchUsers()">Search</button>
+                </div>
 
                 <!-- Button to toggle the form -->
                 <button id="toggleFormButton" class="btn btn-primary" onclick="toggleForm()">Add New User</button>

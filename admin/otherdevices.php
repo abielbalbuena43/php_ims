@@ -53,9 +53,9 @@ if (isset($_SESSION["alert"])) {
             <div class="span12">
 
                 <!-- Search bar and button -->
-                <div style="margin-top: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 11px;">
-                    <input type="text" id="searchInput" class="span5" placeholder="Search device...">
-                    <button class="btn btn-info" onclick="searchDevices()">Search</button>
+                <div id="searchContainer">
+                    <input type="text" id="searchInput" placeholder="Search user...">
+                    <button class="btn-info" id="searchButton" onclick="searchDevices()">Search</button>
                 </div>
 
                 <!-- Button to toggle the form -->

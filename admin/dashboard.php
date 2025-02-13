@@ -92,15 +92,15 @@ $totalCount = $totalEquipment + $totalPeripherals;
     <div class="container-fluid">
         <div class="dashboard-summary">
             <div class="summary-box">
-                <h4>Total Equipment</h4>
+                <h4>TOTAL EQUIPMENT</h4>
                 <p><?php echo number_format($totalCount); ?></p>
             </div>
             <div class="summary-box">
-                <h4>Total Peripherals</h4>
+                <h4>TOTAL PERIPHERALS</h4>
                 <p><?php echo $totalPeripherals; ?></p>
             </div>
             <div class="summary-box">
-                <h4>Total Other Devices</h4>
+                <h4>TOTAL OTHER DEVICES</h4>
                 <p><?php echo $totalOtherDevices; ?></p>
             </div>
         </div>
@@ -150,16 +150,39 @@ $totalCount = $totalEquipment + $totalPeripherals;
 </form>
 <!-- End Form -->
 
-<!-- JavaScript for Charts -->
 <script>
+    var totalEquipment = <?php echo $totalEquipment; ?>;
+    var totalPeripherals = <?php echo $totalPeripherals; ?>;
+    var totalOtherDevices = <?php echo $totalOtherDevices; ?>;
+
     var ctxPie = document.getElementById('idPieChart').getContext('2d');
     var ctxBar = document.getElementById('idBarChart').getContext('2d');
+
+    const chartColors = [
+    '#FF0000', // Red (Primary)
+    '#0000FF', // Blue (Primary)
+    '#FFFF00', // Yellow (Primary)
+    '#008000', // Green (Secondary)
+    '#FFA500', // Orange (Secondary)
+    '#800080', // Purple (Secondary)
+    '#00CED1', // Dark Turquoise (Extra)
+    '#FF4500', // Orange-Red (Extra)
+    '#1E90FF', // Dodger Blue (Extra)
+    '#32CD32', // Lime Green (Extra)
+    '#FFD700', // Gold (Extra)
+    '#8A2BE2', // Blue Violet (Extra)
+    '#DC143C', // Crimson (Extra)
+    '#4682B4', // Steel Blue (Extra)
+    '#DA70D6'  // Orchid (Extra)
+];
+
+
 
     var chartData = {
         labels: <?php echo json_encode($labels); ?>,
         datasets: [{
             data: <?php echo json_encode($values); ?>,
-            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#E7E9ED', '#C9CBCF', '#FF5733', '#C70039', '#900C3F', '#581845', '#2ECC71', '#1ABC9C', '#3498DB'],
+            backgroundColor: chartColors.slice(0, <?php echo count($labels); ?>),
             borderColor: "#fff",
             borderWidth: 2
         }]
@@ -172,7 +195,7 @@ $totalCount = $totalEquipment + $totalPeripherals;
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { display: true, position: 'right' },
+                legend: { display: false }, // Hides legend in Pie Chart
                 tooltip: { 
                     callbacks: { 
                         label: function(tooltipItem) { 
@@ -191,8 +214,8 @@ $totalCount = $totalEquipment + $totalPeripherals;
             datasets: [{
                 label: 'Equipment Count',
                 data: <?php echo json_encode($values); ?>,
-                backgroundColor: '#115486',
-                borderColor: '#115486',
+                backgroundColor: chartColors.slice(0, <?php echo count($labels); ?>),
+                borderColor: chartColors.slice(0, <?php echo count($labels); ?>),
                 borderWidth: 1
             }]
         },
@@ -203,7 +226,7 @@ $totalCount = $totalEquipment + $totalPeripherals;
                 y: { beginAtZero: true, ticks: { stepSize: 1 } } 
             },
             plugins: {
-                legend: { display: true },
+                legend: { display: true }, // Keeps legend in Bar Chart
                 tooltip: { 
                     callbacks: { 
                         label: function(tooltipItem) { 
@@ -215,6 +238,8 @@ $totalCount = $totalEquipment + $totalPeripherals;
         }
     });
 </script>
+
+
 
 <?php include "footer.php"; ?>
 

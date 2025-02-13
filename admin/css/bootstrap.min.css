@@ -1627,23 +1627,11 @@ legend+.control-group {
 
 .form-horizontal .form-actions {
     padding-left: 180px
-}/* General Table Styling */
-table {
-    width: 100%;
-    background-color: #ffffff; /* Add a background color (white as example) */
-    border-collapse: collapse; /* Ensures that borders collapse into a single line */
-    border-spacing: 0; /* Removes space between table cells */
-    border: 1px solid #ddd; /* Add a border around the table */
-    border-radius: 8px; /* Softer, rounded corners */
-    overflow: hidden; /* Prevents the content from spilling out of rounded corners */
 }
+
 /* General Table Styling */
 table {
     width: 100%;
-    border: 2px solid #ccc; /* Light gray border around the table */
-    border-radius: 12px; /* Softer, rounded corners */
-    border-collapse: separate; /* Ensure border-radius applies properly */
-    border-spacing: 0; /* Prevents unwanted gaps between cells */
     background-color: #ffffff; /* White background for the table */
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
     overflow: hidden; /* Ensures rounded corners are properly clipped */
@@ -1711,7 +1699,6 @@ table caption {
     color: #333;
     text-align: left;
 }
-
 
 [class^="icon-"], [class*=" icon-"] {
     display: inline-block;

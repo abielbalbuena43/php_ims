@@ -239,6 +239,7 @@ hr{ border-top-color:#dadada;}
 #breadcrumb {
 	background-color: #fff;
 	border-bottom: 1px solid #e3ebed;
+	margin-bottom:5px;
 }
 #breadcrumb a {
 	padding: 8px 20px 8px 10px;

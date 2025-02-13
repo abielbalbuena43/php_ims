@@ -2,7 +2,7 @@
 <!--Footer-part-->
 
 <div class="row-fluid">
-    <div id="footer" class="span12" style="color:white"> Developed and Designed by: Balbuena & Azores (CSJL)</div>
+    <div id="footer" class="span12" style="color:white"> Developed and Designed by: Gabriel Balbuena & Mark Azores</div>
 </div>
 
 <!--end-Footer-part-->

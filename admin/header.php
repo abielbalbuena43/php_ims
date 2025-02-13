@@ -16,13 +16,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet"/>
     <link rel="stylesheet" href="css/jquery.gritter.css"/>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+
+    
 </head>
 <body>
 
 <div id="header" style="background-color: #28282B;">
-    <a href="dashboard.html" style="position: absolute; margin-left: 10px; margin-top: -30px;">
-        <img src="img/malaya_logo.png" alt="Malaya Logo" style="height: 180px;">
-    </a>
+
+
 </div>
 
 
@@ -62,11 +63,62 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </ul>
 </div>
 
+
 <!-- Logout button -->
 <div id="search" style="margin-bottom: 5555px;">
     <form action="logout.php" method="post">
         <button type="submit" class="btn btn-danger">
-            <i class="icon icon-share-alt"></i> LogOut
+            <i class="icon icon-share-alt"></i> Log Out
         </button>
     </form>
 </div>
+
+<style>
+/* Search Input */
+/* Container for manual positioning */
+#searchContainer {
+    position: relative;
+    width: 100%; /* Adjust as needed */
+}
+
+/* Search Input */
+#searchInput {
+    width: 250px;
+    padding: 2x;
+    border: 2px solid rgb(120, 120, 120);
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    position: absolute;
+    right: 105px; /* Adjust manually */
+    bottom: -57px;  /* Adjust manually */
+}
+
+/* Search Button */
+#searchButton {
+    background-color: #17a2b8;
+    color: white;
+    padding: 5px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    position: absolute;
+    right: 35px; /* Adjust manually */
+    bottom: -46px;   /* Adjust manually */
+}
+
+#toggleFormButton {
+    background-color: #17a2b8;
+    color: white;
+    padding: 5px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+
+</style>
