@@ -45,17 +45,12 @@ SELECT 'Total Other Devices', COUNT(device_id) FROM otherdevices
 $result = mysqli_query($link, $query);
 
 $totalPeripherals = 0;
-$totalOtherDevices = 0;
-
-
-$totalPeripherals = 0;
 $totalEquipment = 0;
 $totalOtherDevices = 0;
 $labels = [];
 $values = [];
 
 while ($row = mysqli_fetch_assoc($result)) {
-    // Exclude "Total Peripherals," "Total Equipment," and "Total Other Devices" from Pie Chart
     if (!in_array($row['category'], ['Total Peripherals', 'Total Equipment', 'Total Other Devices'])) {
         $labels[] = $row['category'];
         $values[] = $row['count'];
@@ -70,11 +65,11 @@ while ($row = mysqli_fetch_assoc($result)) {
     }
 }
 
-
-// Make sure we exclude Total Other Devices from final total
 $totalCount = $totalEquipment + $totalPeripherals;
 ?>
 
+<!-- Start Form -->
+<form method="post">
 <!DOCTYPE html>
 <html lang="en">
 
@@ -86,33 +81,29 @@ $totalCount = $totalEquipment + $totalPeripherals;
     <link rel="stylesheet" href="css/matrix-media.css" />
     <link rel="stylesheet" href="font-awesome/css/font-awesome.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 
 <body>
-
 <div id="content">
     <div id="content-header">
         <div id="breadcrumb"><a href="dashboard.php" class="tip-bottom"><i class="icon-home"></i> Home</a></div>
     </div>
 
     <div class="container-fluid">
-    <div class="dashboard-summary">
-        <div class="summary-box">
-            <h4>Total Equipment</h4>
-            <p><?php echo number_format($totalCount); ?></p>
+        <div class="dashboard-summary">
+            <div class="summary-box">
+                <h4>Total Equipment</h4>
+                <p><?php echo number_format($totalCount); ?></p>
+            </div>
+            <div class="summary-box">
+                <h4>Total Peripherals</h4>
+                <p><?php echo $totalPeripherals; ?></p>
+            </div>
+            <div class="summary-box">
+                <h4>Total Other Devices</h4>
+                <p><?php echo $totalOtherDevices; ?></p>
+            </div>
         </div>
-        <div class="summary-box">
-            <h4>Total Peripherals</h4>
-            <p><?php echo $totalPeripherals; ?></p>
-        </div>
-        <div class="summary-box">
-            <h4>Total Other Devices</h4>
-            <p><?php echo $totalOtherDevices; ?></p>
-        </div>
-    </div>
-</div>
-
 
         <!-- Charts -->
         <div class="chart-container">
@@ -125,36 +116,39 @@ $totalCount = $totalEquipment + $totalPeripherals;
                 <h4>Equipment Count Comparison</h4>
                 <canvas id="idBarChart"></canvas>
             </div>
-    </div>
-    <div class="logs-container">
-    <div class="logs-box">
-    <h4>Recent Logs</h4>
-    <div class="widget-box">
-        <div class="widget-title">
-            <span class="icon"><i class="icon-align-justify"></i></span>
-            <h5>Action Logs</h5>
         </div>
-        <div class="widget-content nopadding">
-            <table style="width: 100%; border-collapse: collapse;">
-                <tbody>
-                    <?php
-                    $logQuery = "SELECT * FROM logs ORDER BY date_edited DESC LIMIT 5";
-                    $logResult = mysqli_query($link, $logQuery);
-                    while ($logRow = mysqli_fetch_array($logResult)) {
-                        echo "<tr style='border: none;'>";
-                        echo "<td style='padding: 10px; border: none;'>";
-                        echo htmlspecialchars($logRow['date_edited']) . " " . htmlspecialchars($logRow['action']);
-                        echo "</td>";
-                        echo "</tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
+
+        <!-- Recent Logs -->
+        <div class="logs-container">
+            <div class="logs-box">
+                <h4>Recent Logs</h4>
+                <div class="widget-box">
+                    <div class="widget-content nopadding">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tbody>
+                                <?php
+                                $logQuery = "SELECT * FROM logs ORDER BY date_edited DESC LIMIT 5";
+                                $logResult = mysqli_query($link, $logQuery);
+                                while ($logRow = mysqli_fetch_array($logResult)) {
+                                    echo "<tr style='border: none;'>";
+                                    echo "<td style='padding: 10px; border: none;'>";
+                                    echo htmlspecialchars($logRow['date_edited']) . " " . htmlspecialchars($logRow['action']);
+                                    echo "</td>";
+                                    echo "</tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+
     </div>
 </div>
 
+</form>
+<!-- End Form -->
 
 <!-- JavaScript for Charts -->
 <script>
@@ -172,67 +166,57 @@ $totalCount = $totalEquipment + $totalPeripherals;
     };
 
     new Chart(ctxPie, {
-    type: 'pie',
-    data: chartData,
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { 
-                display: true, 
-                position: 'right' // Moves legend to the right for better readability
-            },
-            tooltip: { 
-                callbacks: { 
-                    label: function(tooltipItem) { 
-                        return tooltipItem.label + ": " + tooltipItem.raw + " items"; 
-                    } 
-                } 
-            }
-        }
-    }
-});
-
-        new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: <?php echo json_encode($labels); ?>,
-                datasets: [{
-                    label: 'Equipment Count',
-                    data: <?php echo json_encode($values); ?>,
-                    backgroundColor: '#115486',
-                    borderColor: '#115486',
-                    borderWidth: 1
-                }]
-            },
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false, 
-                scales: { 
-                    y: { 
-                        beginAtZero: true, 
-                        ticks: { 
-                            stepSize: 1 // Ensures only whole numbers appear in Y-axis
+        type: 'pie',
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: true, position: 'right' },
+                tooltip: { 
+                    callbacks: { 
+                        label: function(tooltipItem) { 
+                            return tooltipItem.label + ": " + tooltipItem.raw + " items"; 
                         } 
                     } 
-                },
-                plugins: {
-                    legend: { 
-                        display: true 
-                    },
-                    tooltip: { 
-                        callbacks: { 
-                            label: function(tooltipItem) { 
-                                return tooltipItem.label + ": " + tooltipItem.raw + " items"; 
-                            } 
-                        } 
-                    }
                 }
             }
-        });
+        }
+    });
 
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: <?php echo json_encode($labels); ?>,
+            datasets: [{
+                label: 'Equipment Count',
+                data: <?php echo json_encode($values); ?>,
+                backgroundColor: '#115486',
+                borderColor: '#115486',
+                borderWidth: 1
+            }]
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            scales: { 
+                y: { beginAtZero: true, ticks: { stepSize: 1 } } 
+            },
+            plugins: {
+                legend: { display: true },
+                tooltip: { 
+                    callbacks: { 
+                        label: function(tooltipItem) { 
+                            return tooltipItem.label + ": " + tooltipItem.raw + " items"; 
+                        } 
+                    } 
+                }
+            }
+        }
+    });
 </script>
 
 <?php include "footer.php"; ?>
+
 </body>
 </html>

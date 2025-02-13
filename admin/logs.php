@@ -67,10 +67,7 @@ $result = mysqli_query($link, $query);
         <div class="row-fluid" style="background-color: white; min-height: 1000px; padding:10px;">
             <div class="span12">
                 <div class="widget-box">
-                    <div class="widget-title">
-                        <span class="icon"><i class="icon-align-justify"></i></span>
-                        <h5>Action Logs</h5>
-                    </div>
+                    
                     <div class="widget-content nopadding">
                         <!-- Logs Display -->
                         <table style="width: 100%; border-collapse: collapse;">
