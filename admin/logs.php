@@ -1,41 +1,44 @@
 <?php
 session_start();
 include "session_verification.php";
+include "header.php";
 include "../user/connection.php";
+
+// Ensure user is logged in
+$user_id = $_SESSION['user_id'] ?? null;
 
 // Check if the "Export Logs" button is clicked
 if (isset($_POST['export_logs'])) {
-    // Clean any previous output
     if (ob_get_level()) {
         ob_end_clean();
     }
 
-    // Generate the dynamic filename
     $filename = "imslog-" . date("Y-m-d") . ".txt";
 
-    // Query to retrieve logs
-    $query = "SELECT date_edited, action FROM logs ORDER BY date_edited DESC";
+    // Query to retrieve logs with user_id and username
+    $query = "SELECT l.date_edited, l.user_id, COALESCE(u.username, 'Unknown User') AS username, l.action 
+              FROM logs l
+              LEFT JOIN user_registration u ON l.user_id = u.user_id
+              ORDER BY l.date_edited DESC";
+              
     $result = mysqli_query($link, $query);
 
-    // Set headers for the file download
     header('Content-Type: text/plain');
     header("Content-Disposition: attachment; filename=\"$filename\"");
 
-    // Output each log with a newline for better readability
     while ($row = mysqli_fetch_array($result)) {
-        // Each log entry will be printed on a new line with a separator for clarity
-        echo "Date: " . htmlspecialchars($row['date_edited']) . PHP_EOL;
+        echo "User ID: " . htmlspecialchars($row['user_id']) . PHP_EOL;
+        echo "User: " . htmlspecialchars($row['username']) . PHP_EOL;
         echo "Action: " . htmlspecialchars($row['action']) . PHP_EOL;
-        echo str_repeat("=", 50) . PHP_EOL; // Line separator for clarity
+        echo "Date: " . htmlspecialchars($row['date_edited']) . PHP_EOL;
+        echo str_repeat("=", 50) . PHP_EOL;
     }
 
-    // Stop further execution
     exit();
 }
 
 // Check if the "Delete Logs" button is clicked
 if (isset($_POST['delete_logs'])) {
-    // Query to delete all logs
     $deleteQuery = "DELETE FROM logs";
     if (mysqli_query($link, $deleteQuery)) {
         $_SESSION['message'] = "Logs deleted successfully.";
@@ -43,18 +46,19 @@ if (isset($_POST['delete_logs'])) {
         $_SESSION['message'] = "Error deleting logs: " . mysqli_error($link);
     }
 
-    // Redirect to refresh the page
     header("Location: logs.php");
     exit();
 }
 
-// The rest of the script only executes if export or delete is not triggered
-include "header.php";
+// Query to retrieve logs with user_id and username
+$query = "SELECT l.date_edited, l.user_id, 
+                 COALESCE(u.username, 'Unknown User') AS username, 
+                 l.action 
+          FROM logs l
+          LEFT JOIN user_registration u ON l.user_id = u.user_id
+          ORDER BY l.date_edited DESC";
 
-// Query to retrieve logs for display
-$query = "SELECT * FROM logs ORDER BY date_edited DESC";
 $result = mysqli_query($link, $query);
-
 ?>
 
 <!--main-container-part-->
@@ -76,7 +80,9 @@ $result = mysqli_query($link, $query);
                                 while ($row = mysqli_fetch_array($result)) {
                                     echo "<tr style='border: none;'>";
                                     echo "<td style='padding: 10px; border: none;'>";
-                                    echo htmlspecialchars($row['date_edited']) . " " . htmlspecialchars($row['action']);
+                                    echo "<strong>User ID: " . htmlspecialchars($row['user_id']) . "</strong> - ";
+                                    echo "<strong>" . htmlspecialchars($row['username']) . "</strong>: ";
+                                    echo htmlspecialchars($row['action']) . " (" . htmlspecialchars($row['date_edited']) . ")";
                                     echo "</td>";
                                     echo "</tr>";
                                 }
