@@ -25,6 +25,7 @@ if (isset($_POST["submit1"])) {
     $password = $_POST['password'];
     $department = $_POST['department'];
     $role = $_POST['role'];
+    $status = $_POST['status']; // Capture status from the form
 
     // Fetch previous user details for comparison
     $old_firstname = $user['firstname'];
@@ -33,32 +34,25 @@ if (isset($_POST["submit1"])) {
     $old_password = $user['password'];
     $old_department = $user['department'];
     $old_role = $user['role'];
+    $old_status = $user['status'];
 
-    // Update query
-    $query = "UPDATE user_registration SET firstname='$firstname', lastname='$lastname', username='$username', password='$password', department='$department', role='$role' WHERE user_id=$user_id";
+    // Update query (now includes status)
+    $query = "UPDATE user_registration 
+              SET firstname='$firstname', lastname='$lastname', username='$username', 
+                  password='$password', department='$department', role='$role', status='$status' 
+              WHERE user_id=$user_id";
     
     if (mysqli_query($link, $query)) {
         // Construct the log action for specific fields updated
         $log_action = "Updated user details: ";
 
-        // Compare each field and log the change if it differs
-        if ($old_firstname !== $firstname) {
-            $log_action .= "First Name: $old_firstname → $firstname, ";
-        }
-        if ($old_lastname !== $lastname) {
-            $log_action .= "Last Name: $old_lastname → $lastname, ";
-        }
-        if ($old_username !== $username) {
-            $log_action .= "Username: $old_username → $username, ";
-        }
-        if ($old_department !== $department) {
-            $log_action .= "Department: $old_department → $department, ";
-        }
-        if ($old_role !== $role) {
-            $log_action .= "Role: $old_role → $role, ";
-        }
+        if ($old_firstname !== $firstname) $log_action .= "First Name: $old_firstname → $firstname, ";
+        if ($old_lastname !== $lastname) $log_action .= "Last Name: $old_lastname → $lastname, ";
+        if ($old_username !== $username) $log_action .= "Username: $old_username → $username, ";
+        if ($old_department !== $department) $log_action .= "Department: $old_department → $department, ";
+        if ($old_role !== $role) $log_action .= "Role: $old_role → $role, ";
+        if ($old_status !== $status) $log_action .= "Status: $old_status → $status, ";
 
-        // Trim any trailing comma and space
         $log_action = rtrim($log_action, ", ");
 
         // Insert log into database
@@ -66,14 +60,15 @@ if (isset($_POST["submit1"])) {
         mysqli_query($link, $log_query);
 
         $_SESSION["alert"] = "success";
-        header("Location: edit_user.php?user_id=$user_id"); // Redirect to the same page to reload and show the changes
-        exit(); // Ensure the script stops after the redirect
+        header("Location: edit_user.php?user_id=$user_id");
+        exit();
     } else {
         $_SESSION["alert"] = "error";
-        header("Location: edit_user.php?user_id=$user_id"); // Redirect to show error
+        header("Location: edit_user.php?user_id=$user_id");
         exit();
     }
 }
+
 ?>
 
 <!--main-container-part-->
@@ -147,15 +142,15 @@ if (isset($_POST["submit1"])) {
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Update Status</label>
-                                <div class="controls">
-                                    <select name="status" class="span11">
-                                        <option value="" disabled>Select Role</option>
-                                        <option value="active" <?php echo ($user['status'] == 'active') ? 'selected' : ''; ?>>Active</option>
-                                        <option value="inactive" <?php echo ($user['role'] == 'inactive') ? 'selected' : ''; ?>>Inactive</option>
-                                    </select>
-                                </div>
+                            <label class="control-label">Update Status</label>
+                            <div class="controls">
+                                <select name="status" class="span11">
+                                    <option value="" disabled>Select Status</option>
+                                    <option value="active" <?php echo ($user['status'] == 'active') ? 'selected' : ''; ?>>Active</option>
+                                    <option value="inactive" <?php echo ($user['status'] == 'inactive') ? 'selected' : ''; ?>>Inactive</option>
+                                </select>
                             </div>
+                        </div>
 
                             <?php if ($alert == "error") { ?>
                                 <div class="alert alert-danger">

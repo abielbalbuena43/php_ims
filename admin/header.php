@@ -9,12 +9,28 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+include "../user/connection.php"; // Include the database connection
+
 $current_page = basename($_SERVER['PHP_SELF']);
 
-// Default username and status if not set
+// Get the username from the session
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : "Guest";
-$status = isset($_SESSION['status']) ? $_SESSION['status'] : "Active";
+
+// Fetch user status from the database
+$status = "Active"; // Default status
+if (isset($_SESSION['user_id'])) {
+    $user_id = intval($_SESSION['user_id']); // Securely get user ID
+
+    $query = "SELECT status FROM user_registration WHERE user_id = $user_id";
+    $result = mysqli_query($link, $query);
+    
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $status = $row['status']; // Set status from database
+    }
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +60,12 @@ $status = isset($_SESSION['status']) ? $_SESSION['status'] : "Active";
         <li style="padding: 15px; text-align: center; background-color: #333; color: white; border-bottom: 1px solid #444;">
             <i class="icon icon-user"></i> <strong><?php echo htmlspecialchars($username); ?></strong>
             <br>
-            <span style="font-size: 12px; color: #0f0;"><?php echo htmlspecialchars($status); ?></span>
+            <?php
+            $status_color = ($status == 'inactive') ? '#FFA500' : '#0f0'; // Orange for inactive, Green for active
+            ?>
+                <span style="font-size: 12px; color: <?php echo $status_color; ?>;">
+                    <?php echo htmlspecialchars($status); ?>
+                </span>
         </li>
 
         <!-- Navigation Links -->
