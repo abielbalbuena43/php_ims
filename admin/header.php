@@ -1,7 +1,21 @@
 <?php
-// Dynamically set the active tab based on the current page
+// Check if session is not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $current_page = basename($_SERVER['PHP_SELF']);
+
+// Default username and status if not set
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : "Guest";
+$status = isset($_SESSION['status']) ? $_SESSION['status'] : "Active";
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,21 +31,23 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <link rel="stylesheet" href="css/jquery.gritter.css"/>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
 
-    
 </head>
 <body>
 
-<div id="header" style="background-color: #28282B;">
-
-
+<div id="header" style="background-color: #28282B; display: flex; justify-content: space-between; padding: 10px;">
 </div>
-
-
 
 <!--sidebar-menu-->
 <div id="sidebar" style="margin-top: 40px;">
     <ul>
-        <!-- Dynamically add "active" class based on the current page -->
+        <!-- User Info Section -->
+        <li style="padding: 15px; text-align: center; background-color: #333; color: white; border-bottom: 1px solid #444;">
+            <i class="icon icon-user"></i> <strong><?php echo htmlspecialchars($username); ?></strong>
+            <br>
+            <span style="font-size: 12px; color: #0f0;"><?php echo htmlspecialchars($status); ?></span>
+        </li>
+
+        <!-- Navigation Links -->
         <li class="<?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
             <a href="dashboard.php"><i class="icon icon-home"></i><span>Dashboard</span></a>
         </li>
@@ -59,10 +75,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <li class="<?php echo ($current_page == 'logs.php') ? 'active' : ''; ?>">
             <a href="logs.php"><i class="icon icon-cloud"></i><span>Logs</span></a>
         </li>
-
     </ul>
 </div>
-
 
 <!-- Logout button -->
 <div id="search" style="margin-bottom: 5555px;">
@@ -72,6 +86,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </button>
     </form>
 </div>
+
 
 <style>
 /* Search Input */
