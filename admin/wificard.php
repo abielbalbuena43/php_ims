@@ -175,10 +175,6 @@ if (isset($_POST["submit"])) {
                                     ?>
                                 </div>
                             <?php } ?>
-                            <div class="form-actions">
-                                <button type="submit" name="submit" class="btn btn-success">Save Changes</button>
-                                <a href="equipment.php" class="btn">Cancel</a>
-                            </div>
                         </form>
                     </div>
                 </div>

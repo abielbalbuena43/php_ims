@@ -141,10 +141,12 @@ hr{ border-top-color:#dadada;}
 #sidebar {
 	display: block;
 	float: left;
-	position: relative;
 	width: 220px;
-	z-index: 16;
+	position: absolute; /* or fixed if you want it to stay visible when scrolling */
+	top: 5px; /* Adjust this value to move it up */
+	left: 0;
 }
+
 #sidebar > ul {
 	list-style: none;
 	margin: 0px 0 0;
