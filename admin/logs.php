@@ -87,11 +87,11 @@ if (isset($_POST["submit1"])) {
 
     // Execute the statement
     if (mysqli_stmt_execute($stmt)) {
-        // Log action
+        // Log action only after successful update
         $old_pcname = $equipment['pcname'];
         $old_assigneduser = $equipment['assigneduser'];
 
-        $log_action = " Updated equipment (ID: {$equipment_id}): ";
+        $log_action = "Updated equipment (ID: {$equipment_id}): ";
         if ($old_pcname !== $pcname) $log_action .= "PC Name: $old_pcname → $pcname, ";
         if ($old_assigneduser !== $assigneduser) $log_action .= "Assigned User: $old_assigneduser → $assigneduser, ";
 
@@ -100,20 +100,24 @@ if (isset($_POST["submit1"])) {
 
         // Insert log into the database
         $insert_log_query = "INSERT INTO logs (user_id, action, date_edited) 
-                             VALUES ('" . $_SESSION['user_id'] . "', '$log_action', NOW())";
-        mysqli_query($link, $insert_log_query);
+                             VALUES (?, ?, NOW())";
+        $stmt_log = mysqli_prepare($link, $insert_log_query);
+        mysqli_stmt_bind_param($stmt_log, "is", $_SESSION['user_id'], $log_action);
+        mysqli_stmt_execute($stmt_log);
+        mysqli_stmt_close($stmt_log);
 
         $_SESSION["alert"] = "success";
         header("Location: edit_equipment.php?equipment_id=$equipment_id");
         exit();
     } else {
         $_SESSION["alert"] = "error";
+        $_SESSION["error_message"] = "Error: " . mysqli_stmt_error($stmt);
+        error_log("MySQL Error: " . mysqli_stmt_error($stmt)); // Log the error for debugging
         header("Location: edit_equipment.php?equipment_id=$equipment_id");
         exit();
     }
 }
 ?>
-
 
 <!--main-container-part-->
 <div id="content">

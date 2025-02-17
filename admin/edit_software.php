@@ -53,7 +53,7 @@ if (isset($_POST["submit"])) {
     $old_data = $software;
 
     // Prepare log details
-    $log_action = "Updated software for equipment ({$equipment['pcname']}): ";
+    $log_action = "Updated Software for ({$equipment['pcname']}): ";
     $changes = [];
 
     if ($old_data['software_msos'] !== $software_msos) {
@@ -72,9 +72,9 @@ if (isset($_POST["submit"])) {
     // If changes exist, log them
     if (!empty($changes)) {
         $log_action .= implode(", ", $changes);
-        $log_query = "INSERT INTO logs (action, date_edited) VALUES (?, NOW())";
+        $log_query = "INSERT INTO logs (user_id, action, date_edited) VALUES (?, ?, NOW())";
         $stmt = mysqli_prepare($link, $log_query);
-        mysqli_stmt_bind_param($stmt, "s", $log_action);
+        mysqli_stmt_bind_param($stmt, "is", $_SESSION['user_id'], $log_action);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
     }

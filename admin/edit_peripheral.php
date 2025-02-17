@@ -74,7 +74,7 @@ if (isset($_POST["submit1"])) {
     mysqli_stmt_close($stmt);
 
     // Prepare log details
-    $log_action = "Updated peripheral ({$equipment['pcname']}): ";
+    $log_action = "Updated Peripheral for ({$equipment['pcname']}): ";
     $changes = [];
 
     if ($old_data['keyboard'] !== $keyboard) {
@@ -96,9 +96,9 @@ if (isset($_POST["submit1"])) {
     // If changes exist, log them
     if (!empty($changes)) {
         $log_action .= implode(", ", $changes);
-        $log_query = "INSERT INTO logs (action, date_edited) VALUES (?, NOW())";
+        $log_query = "INSERT INTO logs (user_id, action, date_edited) VALUES (?, ?, NOW())";
         $stmt = mysqli_prepare($link, $log_query);
-        mysqli_stmt_bind_param($stmt, "s", $log_action);
+        mysqli_stmt_bind_param($stmt, "is", $_SESSION['user_id'], $log_action);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
     }
@@ -126,7 +126,6 @@ if (isset($_POST["submit1"])) {
     }
 }
 ?>
-
 
 <!--main-container-part-->
 <div id="content">

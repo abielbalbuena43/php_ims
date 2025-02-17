@@ -51,7 +51,7 @@ if (isset($_POST["submit1"])) {
 
     if (mysqli_query($link, $update_query)) {
         // Log the changes made to the device
-        $log_action = "Updated Device: $device_type - $device_name";
+        $log_action = "Updated Device for (ID: $device_id): ";
 
         // Prepare to track changes
         $changes = [];
@@ -87,8 +87,10 @@ if (isset($_POST["submit1"])) {
 
         // If there are changes, log them
         if (!empty($changes)) {
-            $log_action .= ": " . implode(", ", $changes);
-            $log_query = "INSERT INTO logs (action, date_edited) VALUES ('$log_action', NOW())";
+            $log_action .= implode(", ", $changes);
+
+            // Insert log into the database without the date/time
+            $log_query = "INSERT INTO logs (user_id, action) VALUES ('" . $_SESSION['user_id'] . "', '$log_action')";
             mysqli_query($link, $log_query);
         }
 

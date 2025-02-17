@@ -6,10 +6,16 @@ include "../user/connection.php";
 
 $user_id = $_GET["user_id"]; 
 
-$query = "SELECT * FROM user_registration WHERE user_id = $user_id";
-$result = mysqli_query($link, $query);
+// Fetch the existing user details
+$query = "SELECT * FROM user_registration WHERE user_id = ?";
+$stmt = mysqli_prepare($link, $query);
+mysqli_stmt_bind_param($stmt, 'i', $user_id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 $user = mysqli_fetch_array($result);
+mysqli_stmt_close($stmt);
 
+// Handling alert messages for success or error
 if (isset($_SESSION["alert"])) {
     $alert = $_SESSION["alert"];
     unset($_SESSION["alert"]); 
@@ -17,15 +23,16 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+// Handle form submission to update user details
 if (isset($_POST["submit1"])) {
-    // Capture current values
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $department = $_POST['department'];
-    $role = $_POST['role'];
-    $status = $_POST['status']; // Capture status from the form
+    // Capture current values from the form
+    $firstname = mysqli_real_escape_string($link, $_POST['firstname']);
+    $lastname = mysqli_real_escape_string($link, $_POST['lastname']);
+    $username = mysqli_real_escape_string($link, $_POST['username']);
+    $password = mysqli_real_escape_string($link, $_POST['password']);
+    $department = mysqli_real_escape_string($link, $_POST['department']);
+    $role = mysqli_real_escape_string($link, $_POST['role']);
+    $status = mysqli_real_escape_string($link, $_POST['status']); // Capture status from the form
 
     // Fetch previous user details for comparison
     $old_firstname = $user['firstname'];
@@ -38,11 +45,14 @@ if (isset($_POST["submit1"])) {
 
     // Update query (now includes status)
     $query = "UPDATE user_registration 
-              SET firstname='$firstname', lastname='$lastname', username='$username', 
-                  password='$password', department='$department', role='$role', status='$status' 
-              WHERE user_id=$user_id";
-    
-    if (mysqli_query($link, $query)) {
+              SET firstname = ?, lastname = ?, username = ?, password = ?, 
+                  department = ?, role = ?, status = ? 
+              WHERE user_id = ?";
+    $stmt = mysqli_prepare($link, $query);
+    mysqli_stmt_bind_param($stmt, 'sssssssi', $firstname, $lastname, $username, $password, $department, $role, $status, $user_id);
+
+    // Execute the query
+    if (mysqli_stmt_execute($stmt)) {
         // Construct the log action for specific fields updated
         $log_action = "Updated user details: ";
 
@@ -55,20 +65,23 @@ if (isset($_POST["submit1"])) {
 
         $log_action = rtrim($log_action, ", ");
 
-        // Insert log into database
-        $log_query = "INSERT INTO logs (action) VALUES ('$log_action')";
-        mysqli_query($link, $log_query);
+        // Insert log into database with user ID
+        $log_query = "INSERT INTO logs (user_id, action, date_edited) VALUES (?, ?, NOW())";
+        $stmt_log = mysqli_prepare($link, $log_query);
+        mysqli_stmt_bind_param($stmt_log, 'is', $_SESSION['user_id'], $log_action);
+        mysqli_stmt_execute($stmt_log);
+        mysqli_stmt_close($stmt_log);
 
         $_SESSION["alert"] = "success";
         header("Location: edit_user.php?user_id=$user_id");
         exit();
     } else {
         $_SESSION["alert"] = "error";
+        $_SESSION["error_message"] = "Error: " . mysqli_stmt_error($stmt);
         header("Location: edit_user.php?user_id=$user_id");
         exit();
     }
 }
-
 ?>
 
 <!--main-container-part-->
