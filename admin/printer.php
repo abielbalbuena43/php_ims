@@ -45,7 +45,7 @@ if (isset($_POST["submit"])) {
                         printer_modelnumber = '$modelnumber', 
                         printer_dateacquired = '$dateacquired', 
                         printer_deviceage = '$deviceage', 
-                        printer_assigneduser = '$assigneduser',  
+                        printer_assigneduser = '$assigneduser', 
                         printer_remarks = '$remarks' 
                         WHERE equipment_id = $equipment_id";
 
@@ -80,8 +80,8 @@ if (isset($_POST["submit"])) {
 <div id="content">
     <div id="content-header">
         <div id="breadcrumb">
-            <a href="peripherals.php" class="tip-bottom">
-                <i class="icon-home"></i> Printer Details
+            <a href="equipment.php" class="tip-bottom">
+                <i class="icon-home"></i> Edit Printer Details
             </a>
         </div>
     </div>
@@ -97,54 +97,74 @@ if (isset($_POST["submit"])) {
                     <div class="widget-content nopadding">
 
                         <form name="form1" action="" method="post" class="form-horizontal">
+                            <!-- Form to edit printer details -->
                             <div class="control-group">
-                                <label class="control-label">Asset Tag :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="assettag" value="<?php echo isset($printer['printer_assettag']) ? $printer['printer_assettag'] : 'None'; ?>" required />
-                                </div>
+                            <label class="control-label">Asset Tag :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="assettag" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($printer['printer_assettag']) ? $printer['printer_assettag'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Brand :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="brand" value="<?php echo isset($printer['printer_brand']) ? $printer['printer_brand'] : 'None'; ?>" required />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Brand :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="brand" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($printer['printer_brand']) ? $printer['printer_brand'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Model Number :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="modelnumber" value="<?php echo isset($printer['printer_modelnumber']) ? $printer['printer_modelnumber'] : 'None'; ?>" required />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Model Number :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="modelnumber" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($printer['printer_modelnumber']) ? $printer['printer_modelnumber'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Date Acquired :</label>
-                                <div class="controls">
-                                    <input type="date" class="span11" name="dateacquired" value="<?php echo isset($printer['printer_dateacquired']) ? $printer['printer_dateacquired'] : 'None'; ?>" />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Date Acquired :</label>
+                            <div class="controls">
+                                <input type="date" class="span11" name="dateacquired" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($printer['printer_dateacquired']) ? $printer['printer_dateacquired'] : ''; ?>" />
                             </div>
-                            <div> <label class="control-label">Device Age :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="deviceage" 
-                                        value="<?php echo isset($printer['printer_deviceage']) ? $printer['printer_deviceage'] : 'None'; ?>" required />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Device Age :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="deviceage" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($printer['printer_deviceage']) ? $printer['printer_deviceage'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Assigned User :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="assigneduser" value="<?php echo isset($printer['printer_assigneduser']) ? $printer['printer_assigneduser'] : 'None'; ?>" />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Assigned User :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="assigneduser" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($printer['printer_assigneduser']) ? $printer['printer_assigneduser'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Remarks :</label>
-                                <div class="controls">
-                                    <textarea class="span11" name="remarks"><?php echo isset($printer['printer_remarks']) ? $printer['printer_remarks'] : 'None'; ?></textarea>
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Remarks :</label>
+                            <div class="controls">
+                                <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($printer['printer_remarks']) ? $printer['printer_remarks'] : ''; ?></textarea>
                             </div>
+                        </div>
+
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
                                 <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
-                                            echo "printer details updated successfully!";
+                                            echo "Printer details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update printer details.";
                                         }
@@ -166,6 +186,7 @@ if (isset($_POST["submit"])) {
                         <h5>Printer Details</h5>
                     </div>
                     <div class="widget-content nopadding">
+                        <!-- Wrapper div for horizontal scrolling -->
                         <div style="overflow-x: auto;">
                             <table class="table table-bordered table-striped" style="min-width: 1200px;">
                                 <thead>

@@ -45,7 +45,7 @@ if (isset($_POST["submit"])) {
                         mouse_modelnumber = '$modelnumber', 
                         mouse_dateacquired = '$dateacquired', 
                         mouse_deviceage = '$deviceage', 
-                        mouse_assigneduser = '$assigneduser',  
+                        mouse_assigneduser = '$assigneduser', 
                         mouse_remarks = '$remarks' 
                         WHERE equipment_id = $equipment_id";
 
@@ -80,8 +80,8 @@ if (isset($_POST["submit"])) {
 <div id="content">
     <div id="content-header">
         <div id="breadcrumb">
-            <a href="peripherals.php" class="tip-bottom">
-                <i class="icon-home"></i> Mouse Details
+            <a href="equipment.php" class="tip-bottom">
+                <i class="icon-home"></i> Edit Mouse Details
             </a>
         </div>
     </div>
@@ -92,59 +92,79 @@ if (isset($_POST["submit"])) {
                 <div class="widget-box">
                     <div class="widget-title"> 
                         <span class="icon"> <i class="icon-align-justify"></i> </span>
-                        <h5>Mouse Details for <?php echo htmlspecialchars($equipment['pcname']); ?></h5>
+                        <h5>Edit Mouse Details for <?php echo htmlspecialchars($equipment['pcname']); ?></h5>
                     </div>
                     <div class="widget-content nopadding">
 
                         <form name="form1" action="" method="post" class="form-horizontal">
+                            <!-- Form to edit mouse details -->
                             <div class="control-group">
-                                <label class="control-label">Asset Tag :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="assettag" value="<?php echo isset($mouse['mouse_assettag']) ? $mouse['mouse_assettag'] : 'None'; ?>" required />
-                                </div>
+                            <label class="control-label">Asset Tag :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="assettag" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($mouse['mouse_assettag']) ? $mouse['mouse_assettag'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Brand :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="brand" value="<?php echo isset($mouse['mouse_brand']) ? $mouse['mouse_brand'] : 'None'; ?>" required />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Brand :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="brand" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($mouse['mouse_brand']) ? $mouse['mouse_brand'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Model Number :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="modelnumber" value="<?php echo isset($mouse['mouse_modelnumber']) ? $mouse['mouse_modelnumber'] : 'None'; ?>" required />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Model Number :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="modelnumber" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($mouse['mouse_modelnumber']) ? $mouse['mouse_modelnumber'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Date Acquired :</label>
-                                <div class="controls">
-                                    <input type="date" class="span11" name="dateacquired" value="<?php echo isset($mouse['mouse_dateacquired']) ? $mouse['mouse_dateacquired'] : 'None'; ?>" />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Date Acquired :</label>
+                            <div class="controls">
+                                <input type="date" class="span11" name="dateacquired" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($mouse['mouse_dateacquired']) ? $mouse['mouse_dateacquired'] : ''; ?>" />
                             </div>
-                            <div> <label class="control-label">Device Age :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="deviceage" 
-                                        value="<?php echo isset($mouse['mouse_deviceage']) ? $mouse['mouse_deviceage'] : 'None'; ?>" required />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Device Age :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="deviceage" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($mouse['mouse_deviceage']) ? $mouse['mouse_deviceage'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Assigned User :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="assigneduser" value="<?php echo isset($mouse['mouse_assigneduser']) ? $mouse['mouse_assigneduser'] : 'None'; ?>" />
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Assigned User :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="assigneduser" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($mouse['mouse_assigneduser']) ? $mouse['mouse_assigneduser'] : ''; ?>" />
                             </div>
-                            <div class="control-group">
-                                <label class="control-label">Remarks :</label>
-                                <div class="controls">
-                                    <textarea class="span11" name="remarks"><?php echo isset($mouse['mouse_remarks']) ? $mouse['mouse_remarks'] : 'None'; ?></textarea>
-                                </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Remarks :</label>
+                            <div class="controls">
+                                <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($mouse['mouse_remarks']) ? $mouse['mouse_remarks'] : ''; ?></textarea>
                             </div>
+                        </div>
+
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
                                 <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
-                                            echo "mouse details updated successfully!";
+                                            echo "Mouse details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update mouse details.";
                                         }
@@ -166,6 +186,7 @@ if (isset($_POST["submit"])) {
                         <h5>Mouse Details</h5>
                     </div>
                     <div class="widget-content nopadding">
+                        <!-- Wrapper div for horizontal scrolling -->
                         <div style="overflow-x: auto;">
                             <table class="table table-bordered table-striped" style="min-width: 1200px;">
                                 <thead>
