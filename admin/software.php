@@ -38,7 +38,7 @@ if (isset($_POST["submit1"])) {
         $pcname = $pcname_data['pcname'];
 
         // Log the action after the successful insertion
-        $log_action = "Added new software for equipment: " . $pcname;
+        $log_action = "Added new Software for: " . $pcname;
 
         // Insert the log entry with user_id
         $insert_log_query = "INSERT INTO logs (user_id, action, date_edited) 
