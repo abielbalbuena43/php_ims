@@ -42,7 +42,7 @@ if (isset($_POST["submit1"])) {
 
     if (mysqli_query($link, $query)) {
         // Log the action after the successful insertion
-        $log_action = "Added new equipment: " . $_POST["pcname"];
+        $log_action = "Added new Equipment: " . $_POST["pcname"];
         
         // Insert the log entry with user_id
         $insert_log_query = "INSERT INTO logs (user_id, action, date_edited) 

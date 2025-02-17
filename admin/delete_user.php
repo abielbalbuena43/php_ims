@@ -28,7 +28,7 @@ if (isset($_GET['user_id'])) {
     $query = "DELETE FROM user_registration WHERE user_id = $user_id_to_delete";
     if (mysqli_query($link, $query)) {
         // Log the deletion action with relevant details
-        $log_action = "Deleted user: $firstname $lastname ($username)";
+        $log_action = "Deleted User: $firstname $lastname ($username)";
 
         // Insert the log with user_id and action
         $insert_log_query = "INSERT INTO logs (user_id, action, date_edited) 

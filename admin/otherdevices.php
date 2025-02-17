@@ -4,7 +4,16 @@ include "session_verification.php";
 include "header.php";
 include "../user/connection.php";
 
-// Handling redirection after form submission to prevent resubmission
+// Ensure user is logged in
+$user_id = $_SESSION['user_id'] ?? null;
+
+if (!$user_id) {
+    $_SESSION["message"] = "You must be logged in to add a device.";
+    header("Location: login.php"); // Redirect to login page if user is not logged in
+    exit();
+}
+
+// Handling form submission
 if (isset($_POST["submit1"])) {
     // Insert new device into the database
     $query = "INSERT INTO otherdevices (device_type, device_name, device_assettag, device_brand, device_modelnumber, device_deviceage, device_pcname, device_macaddress, device_remarks) 
@@ -21,8 +30,14 @@ if (isset($_POST["submit1"])) {
     if (mysqli_query($link, $query)) {
         // Log the action after the successful insertion
         $log_action = "Added new Device: " . $_POST["device_type"] . " - " . $_POST["device_name"];
-        $log_query = "INSERT INTO logs (action) VALUES ('$log_action')";
-        mysqli_query($link, $log_query);
+
+        // Insert the log entry with user_id
+        $insert_log_query = "INSERT INTO logs (user_id, action, date_edited) 
+                             VALUES (?, ?, NOW())";
+        $stmt_log = mysqli_prepare($link, $insert_log_query);
+        mysqli_stmt_bind_param($stmt_log, "is", $_SESSION['user_id'], $log_action);
+        mysqli_stmt_execute($stmt_log);
+        mysqli_stmt_close($stmt_log);
 
         $_SESSION["alert"] = "success";
         header("Location: " . $_SERVER['PHP_SELF']);
@@ -34,12 +49,8 @@ if (isset($_POST["submit1"])) {
     }
 }
 
-if (isset($_SESSION["alert"])) {
-    $alert = $_SESSION["alert"];
-    unset($_SESSION["alert"]);
-} else {
-    $alert = null;
-}
+$alert = $_SESSION["alert"] ?? null;
+unset($_SESSION["alert"]);
 ?>
 
 <!--main-container-part-->

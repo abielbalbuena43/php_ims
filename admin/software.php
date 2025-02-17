@@ -4,6 +4,15 @@ include "session_verification.php";
 include "header.php";
 include "../user/connection.php";
 
+// Ensure user is logged in
+$user_id = $_SESSION['user_id'] ?? null;
+
+if (!$user_id) {
+    $_SESSION["message"] = "You must be logged in to add software.";
+    header("Location: login.php"); // Redirect to login page if user is not logged in
+    exit();
+}
+
 // Fetch existing equipment for dropdown
 $equipment_result = mysqli_query($link, "SELECT equipment_id, pcname FROM equipment");
 $equipment_options = "";
@@ -30,8 +39,14 @@ if (isset($_POST["submit1"])) {
 
         // Log the action after the successful insertion
         $log_action = "Added new software for equipment: " . $pcname;
-        $log_query = "INSERT INTO logs (pcname, action) VALUES ('" . mysqli_real_escape_string($link, $pcname) . "', '$log_action')";
-        mysqli_query($link, $log_query);
+
+        // Insert the log entry with user_id
+        $insert_log_query = "INSERT INTO logs (user_id, action, date_edited) 
+                             VALUES (?, ?, NOW())";
+        $stmt_log = mysqli_prepare($link, $insert_log_query);
+        mysqli_stmt_bind_param($stmt_log, "is", $_SESSION['user_id'], $log_action);
+        mysqli_stmt_execute($stmt_log);
+        mysqli_stmt_close($stmt_log);
 
         $_SESSION["alert"] = "success";
         header("Location: " . $_SERVER['PHP_SELF']);

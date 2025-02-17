@@ -124,7 +124,6 @@ if (isset($_POST["submit1"])) {
 }
 ?>
 
-
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
