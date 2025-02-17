@@ -7,6 +7,12 @@ include "../user/connection.php";
 // Ensure user is logged in
 $user_id = $_SESSION['user_id'] ?? null;
 
+if (!$user_id) {
+    $_SESSION["message"] = "You must be logged in to view logs.";
+    header("Location: login.php"); // Redirect to login page if user_id is not available
+    exit();
+}
+
 // Check if the "Export Logs" button is clicked
 if (isset($_POST['export_logs'])) {
     if (ob_get_level()) {
@@ -64,7 +70,6 @@ if (isset($_POST["submit1"])) {
     // Get the form data and escape special characters
     $pcname = mysqli_real_escape_string($link, $_POST["pcname"]);
     $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
-    // Add other form fields here...
 
     // Fetch the existing equipment details to compare
     $equipment_id = $_GET["equipment_id"];
@@ -118,6 +123,7 @@ if (isset($_POST["submit1"])) {
     }
 }
 ?>
+
 
 <!--main-container-part-->
 <div id="content">

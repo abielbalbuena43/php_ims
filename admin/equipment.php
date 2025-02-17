@@ -4,6 +4,15 @@ include "session_verification.php";
 include "header.php";
 include "../user/connection.php";
 
+// Ensure user is logged in
+$user_id = $_SESSION['user_id'] ?? null;
+
+if (!$user_id) {
+    $_SESSION["message"] = "You must be logged in to add equipment.";
+    header("Location: login.php"); // Redirect to login page if user is not logged in
+    exit();
+}
+
 // Handling redirection after form submission to prevent resubmission
 if (isset($_POST["submit1"])) {
     // Insert new equipment into the database with default values for Windows and MS Product Keys
@@ -34,8 +43,14 @@ if (isset($_POST["submit1"])) {
     if (mysqli_query($link, $query)) {
         // Log the action after the successful insertion
         $log_action = "Added new equipment: " . $_POST["pcname"];
-        $log_query = "INSERT INTO logs (pcname, action) VALUES ('" . mysqli_real_escape_string($link, $_POST["pcname"]) . "', '$log_action')";
-        mysqli_query($link, $log_query);
+        
+        // Insert the log entry with user_id
+        $insert_log_query = "INSERT INTO logs (user_id, action, date_edited) 
+                             VALUES (?, ?, NOW())";
+        $stmt_log = mysqli_prepare($link, $insert_log_query);
+        mysqli_stmt_bind_param($stmt_log, "is", $_SESSION['user_id'], $log_action);
+        mysqli_stmt_execute($stmt_log);
+        mysqli_stmt_close($stmt_log);
 
         $_SESSION["alert"] = "success";
         header("Location: " . $_SERVER['PHP_SELF']);
@@ -54,6 +69,7 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 ?>
+
 
 <!--main-container-part-->
 <div id="content">

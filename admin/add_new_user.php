@@ -238,8 +238,16 @@ if (isset($_POST["submit1"])) {
 
         // Log the action of adding a new user
         $log_action = "Added new user: $firstname $lastname, Username: $username, Department: $department, Role: $role, Status: $status";
-        $log_query = "INSERT INTO logs (action) VALUES ('$log_action')";
-        mysqli_query($link, $log_query);
+        
+        // Ensure user_id is available
+        if (isset($_SESSION['user_id']) && $_SESSION['user_id']) {
+            $user_id = $_SESSION['user_id'];
+            $log_query = "INSERT INTO logs (user_id, action) VALUES ('$user_id', '$log_action')";
+            mysqli_query($link, $log_query);
+        } else {
+            // Log error if user_id is not found in session
+            error_log("Error: Attempted log entry without valid user_id.");
+        }
 
         $_SESSION["alert"] = "success";
     }
