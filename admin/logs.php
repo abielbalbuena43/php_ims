@@ -58,7 +58,62 @@ $query = "SELECT l.date_edited, l.user_id,
           ORDER BY l.date_edited DESC";
 
 $result = mysqli_query($link, $query);
+
+// Insert specific log actions when updating equipment or devices
+if (isset($_POST["submit1"])) {
+    // Get the form data and escape special characters
+    $pcname = mysqli_real_escape_string($link, $_POST["pcname"]);
+    $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
+    // Add other form fields here...
+
+    // Fetch the existing equipment details to compare
+    $equipment_id = $_GET["equipment_id"];
+    $query = "SELECT * FROM equipment WHERE equipment_id = $equipment_id";
+    $result = mysqli_query($link, $query);
+    $equipment = mysqli_fetch_array($result);
+
+    // Prepare the update statement
+    $query = "UPDATE equipment SET 
+                pcname = ?, assigneduser = ?, 
+                date_edited = NOW()
+                WHERE equipment_id = ?";
+
+    // Prepare the statement
+    $stmt = mysqli_prepare($link, $query);
+
+    // Bind parameters
+    mysqli_stmt_bind_param($stmt, "ssi", 
+        $pcname, $assigneduser, $equipment_id);
+
+    // Execute the statement
+    if (mysqli_stmt_execute($stmt)) {
+        // Log action
+        $old_pcname = $equipment['pcname'];
+        $old_assigneduser = $equipment['assigneduser'];
+
+        $log_action = " Updated equipment (ID: {$equipment_id}): ";
+        if ($old_pcname !== $pcname) $log_action .= "PC Name: $old_pcname → $pcname, ";
+        if ($old_assigneduser !== $assigneduser) $log_action .= "Assigned User: $old_assigneduser → $assigneduser, ";
+
+        // Trim trailing comma
+        $log_action = rtrim($log_action, ", ");
+
+        // Insert log into the database
+        $insert_log_query = "INSERT INTO logs (user_id, action, date_edited) 
+                             VALUES ('" . $_SESSION['user_id'] . "', '$log_action', NOW())";
+        mysqli_query($link, $insert_log_query);
+
+        $_SESSION["alert"] = "success";
+        header("Location: edit_equipment.php?equipment_id=$equipment_id");
+        exit();
+    } else {
+        $_SESSION["alert"] = "error";
+        header("Location: edit_equipment.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
 ?>
+
 
 <!--main-container-part-->
 <div id="content">

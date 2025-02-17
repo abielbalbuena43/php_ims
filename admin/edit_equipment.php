@@ -43,7 +43,6 @@ if (isset($_POST["submit1"])) {
     $ms_key = mysqli_real_escape_string($link, $_POST["ms_key"]);
     $equipment_remarks = mysqli_real_escape_string($link, $_POST["equipment_remarks"]);
 
-
     // Fetch previous equipment details for comparison
     $old_pcname = $equipment['pcname'];
     $old_assigneduser = $equipment['assigneduser'];
@@ -63,7 +62,7 @@ if (isset($_POST["submit1"])) {
     $old_msversion = $equipment['msversion'];
     $old_windows_key = $equipment['windows_key'];
     $old_ms_key = $equipment['ms_key'];
-    
+    $old_equipment_remarks = $equipment['equipment_remarks'];
 
     // Prepare the update statement
     $query = "UPDATE equipment SET 
@@ -86,7 +85,7 @@ if (isset($_POST["submit1"])) {
     // Execute the statement
     if (mysqli_stmt_execute($stmt)) {
         // Construct the log action for specific fields updated
-        $log_action = "Updated equipment ({$pcname}): ";
+        $log_action = " Updated equipment (ID: {$equipment_id}): ";
 
         // Compare each field and log the change if it differs
         if ($old_pcname !== $pcname) $log_action .= "PC Name: $old_pcname → $pcname, ";
@@ -110,15 +109,13 @@ if (isset($_POST["submit1"])) {
         if ($old_equipment_remarks !== $equipment_remarks) {
             $log_action .= "Remarks: $old_equipment_remarks → $equipment_remarks, ";
         }
-        
 
         // Trim any trailing comma and space
         $log_action = rtrim($log_action, ", ");
 
         // Insert log into the database with date/time
         mysqli_query($link, "INSERT INTO logs (user_id, action, date_edited) 
-                     VALUES ('" . $_SESSION['user_id'] . "', 'Updated equipment', NOW())");
-
+                             VALUES ('" . $_SESSION['user_id'] . "', '$log_action', NOW())");
 
         $_SESSION["alert"] = "success";
         header("Location: edit_equipment.php?equipment_id=$equipment_id");
@@ -130,6 +127,7 @@ if (isset($_POST["submit1"])) {
     }
 }
 ?>
+
 
 <!--main-container-part-->
 <div id="content">

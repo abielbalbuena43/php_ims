@@ -5,7 +5,13 @@ include "header.php";
 include "../user/connection.php";
 
 // Get the peripheral ID from the URL
-$peripheral_id = $_GET["peripheral_id"];
+$peripheral_id = $_GET["peripheral_id"] ?? null;
+if (!$peripheral_id) {
+    $_SESSION["alert"] = "error";
+    $_SESSION["error_message"] = "Error: Peripheral ID is missing.";
+    header("Location: peripherals_list.php");
+    exit();
+}
 
 // Fetch the existing peripheral details
 $query = "SELECT * FROM peripherals WHERE peripheral_id = ?";
@@ -120,6 +126,7 @@ if (isset($_POST["submit1"])) {
     }
 }
 ?>
+
 
 <!--main-container-part-->
 <div id="content">
