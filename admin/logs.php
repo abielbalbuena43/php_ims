@@ -27,7 +27,6 @@ if (isset($_POST['export_logs'])) {
     header("Content-Disposition: attachment; filename=\"$filename\"");
 
     while ($row = mysqli_fetch_array($result)) {
-        echo "User ID: " . htmlspecialchars($row['user_id']) . PHP_EOL;
         echo "User: " . htmlspecialchars($row['username']) . PHP_EOL;
         echo "Action: " . htmlspecialchars($row['action']) . PHP_EOL;
         echo "Date: " . htmlspecialchars($row['date_edited']) . PHP_EOL;
@@ -80,7 +79,6 @@ $result = mysqli_query($link, $query);
                                 while ($row = mysqli_fetch_array($result)) {
                                     echo "<tr style='border: none;'>";
                                     echo "<td style='padding: 10px; border: none;'>";
-                                    echo "<strong>User ID: " . htmlspecialchars($row['user_id']) . "</strong> - ";
                                     echo "<strong>" . htmlspecialchars($row['username']) . "</strong>: ";
                                     echo htmlspecialchars($row['action']) . " (" . htmlspecialchars($row['date_edited']) . ")";
                                     echo "</td>";

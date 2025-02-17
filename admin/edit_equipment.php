@@ -116,8 +116,9 @@ if (isset($_POST["submit1"])) {
         $log_action = rtrim($log_action, ", ");
 
         // Insert log into the database with date/time
-        $log_query = "INSERT INTO logs (action, date_added) VALUES ('$log_action', NOW())";
-        mysqli_query($link, $log_query);
+        mysqli_query($link, "INSERT INTO logs (user_id, action, date_edited) 
+                     VALUES ('" . $_SESSION['user_id'] . "', 'Updated equipment', NOW())");
+
 
         $_SESSION["alert"] = "success";
         header("Location: edit_equipment.php?equipment_id=$equipment_id");
