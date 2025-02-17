@@ -1,5 +1,8 @@
 <?php
 session_start();
+header("Cache-Control: no-cache, no-store, must-revalidate"); // Prevent caching
+header("Pragma: no-cache"); // For HTTP/1.0 compatibility
+header("Expires: 0"); // Ensure content is not cached
 include "session_verification.php";
 include "header.php";
 include "../user/connection.php";
@@ -38,9 +41,14 @@ SELECT 'Total Equipment',
     (SELECT COUNT(pccase_id) FROM pccase) + 
     (SELECT COUNT(monitor_id) FROM monitor) + 
     (SELECT COUNT(lancard_id) FROM lancard) + 
-    (SELECT COUNT(wificard_id) FROM wificard) AS count UNION ALL
+    (SELECT COUNT(wificard_id) FROM wificard) 
+    - (SELECT COUNT(keyboard_id) FROM keyboard)
+    - (SELECT COUNT(mouse_id) FROM mouse)
+    - (SELECT COUNT(printer_id) FROM printer)
+    - (SELECT COUNT(avr_id) FROM avr) AS count UNION ALL
 SELECT 'Total Other Devices', COUNT(device_id) FROM otherdevices
 ";
+    
 
 $result = mysqli_query($link, $query);
 
