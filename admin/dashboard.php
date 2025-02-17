@@ -127,12 +127,19 @@ $totalCount = $totalEquipment + $totalPeripherals;
                         <table style="width: 100%; border-collapse: collapse;">
                             <tbody>
                                 <?php
-                                $logQuery = "SELECT * FROM logs ORDER BY date_edited DESC LIMIT 5";
+                                $logQuery = "SELECT l.date_edited, COALESCE(u.username, 'Unknown User') AS username, l.action 
+                                            FROM logs l
+                                            LEFT JOIN user_registration u ON l.user_id = u.user_id
+                                            ORDER BY l.date_edited DESC LIMIT 5";
+
                                 $logResult = mysqli_query($link, $logQuery);
+
                                 while ($logRow = mysqli_fetch_array($logResult)) {
                                     echo "<tr style='border: none;'>";
                                     echo "<td style='padding: 10px; border: none;'>";
-                                    echo htmlspecialchars($logRow['date_edited']) . " " . htmlspecialchars($logRow['action']);
+                                    echo "<strong>" . htmlspecialchars($logRow['username']) . ":</strong> "; // Display username
+                                    echo htmlspecialchars($logRow['action']) . " ";
+                                    echo "(" . htmlspecialchars($logRow['date_edited']) . ")"; // Date at the end
                                     echo "</td>";
                                     echo "</tr>";
                                 }
@@ -143,7 +150,6 @@ $totalCount = $totalEquipment + $totalPeripherals;
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
