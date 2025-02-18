@@ -65,7 +65,7 @@ unset($_SESSION["alert"]);
 
                 <!-- Search bar and button -->
                 <div id="searchContainer">
-                    <input type="text" id="searchInput" placeholder="Search user...">
+                    <input type="text" id="searchInput" placeholder="Search device...">
                     <button class="btn-info" id="searchButton" onclick="searchDevices()">Search</button>
                 </div>
 

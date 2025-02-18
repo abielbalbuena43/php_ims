@@ -73,7 +73,7 @@ unset($_SESSION["alert"]);
             <div class="span12">
                 <!-- Search bar and button -->
                 <div id="searchContainer">
-                    <input type="text" id="searchInput" placeholder="Search user...">
+                    <input type="text" id="searchInput" placeholder="Search software...">
                     <button class="btn-info" id="searchButton" onclick="searchSoftware()">Search</button>
                 </div>
 
