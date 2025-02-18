@@ -13,6 +13,11 @@ if (!$user_id) {
     exit();
 }
 
+// Pagination settings
+$logs_per_page = 10;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$start_from = ($page - 1) * $logs_per_page;
+
 // Check if the "Export Logs" button is clicked
 if (isset($_POST['export_logs'])) {
     if (ob_get_level()) {
@@ -55,15 +60,23 @@ if (isset($_POST['delete_logs'])) {
     exit();
 }
 
-// Query to retrieve logs with user_id and username
+// Query to retrieve logs with user_id and username, with pagination
 $query = "SELECT l.date_edited, l.user_id, 
                  COALESCE(u.username, 'Unknown User') AS username, 
                  l.action 
           FROM logs l
           LEFT JOIN user_registration u ON l.user_id = u.user_id
-          ORDER BY l.date_edited DESC";
+          ORDER BY l.date_edited DESC
+          LIMIT $start_from, $logs_per_page";
 
 $result = mysqli_query($link, $query);
+
+// Get total number of logs to calculate total pages
+$total_query = "SELECT COUNT(*) AS total_logs FROM logs";
+$total_result = mysqli_query($link, $total_query);
+$total_row = mysqli_fetch_assoc($total_result);
+$total_logs = $total_row['total_logs'];
+$total_pages = ceil($total_logs / $logs_per_page);
 
 // Insert specific log actions when updating equipment or devices
 if (isset($_POST["submit1"])) {
@@ -124,7 +137,7 @@ if (isset($_POST["submit1"])) {
 }
 ?>
 
-<!--main-container-part-->
+<!-- main-container-part -->
 <div id="content">
     <div id="content-header">
         <div id="breadcrumb"><a href="logs.php" class="tip-bottom"><i class="icon-home"></i> Logs</a></div>
@@ -134,7 +147,6 @@ if (isset($_POST["submit1"])) {
         <div class="row-fluid" style="background-color: white; min-height: 1000px; padding:10px;">
             <div class="span12">
                 <div class="widget-box">
-                    
                     <div class="widget-content nopadding">
                         <!-- Logs Display -->
                         <table style="width: 100%; border-collapse: collapse;">
@@ -154,6 +166,27 @@ if (isset($_POST["submit1"])) {
                     </div>
                 </div>
 
+                <!-- Pagination -->
+                <div style="text-align: center; margin: 20px 0;">
+                    <div class="pagination">
+                        <ul>
+                            <?php if ($page > 1) { ?>
+                                <li><a href="logs.php?page=<?php echo $page - 1; ?>">&laquo; Prev</a></li>
+                            <?php } ?>
+
+                            <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
+                                <li <?php if ($i == $page) echo 'class="active"'; ?>>
+                                    <a href="logs.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php } ?>
+
+                            <?php if ($page < $total_pages) { ?>
+                                <li><a href="logs.php?page=<?php echo $page + 1; ?>">Next &raquo;</a></li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                </div>
+
                 <!-- Export and Delete Logs Buttons -->
                 <div style="text-align: center; margin: 20px 0;">
                     <form method="post" onsubmit="return confirmAction(event)">
@@ -165,7 +198,7 @@ if (isset($_POST["submit1"])) {
         </div>
     </div>
 </div>
-<!--end-main-container-part-->
+<!-- end-main-container-part -->
 
 <script>
     function confirmAction(event) {
