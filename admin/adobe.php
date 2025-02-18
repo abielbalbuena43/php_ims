@@ -97,47 +97,59 @@ if (isset($_POST["submit"])) {
                     <div class="widget-content nopadding">
 
                         <form name="form1" action="" method="post" class="form-horizontal">
-                            <!-- Form to edit adobe details -->
+                            <!-- Form to edit Adobe details -->
                             <div class="control-group">
                                 <label class="control-label">Asset Tag :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="assettag" value="<?php echo isset($adobe['adobe_assettag']) ? $adobe['adobe_assettag'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="assettag" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($adobe['adobe_assettag']) ? $adobe['adobe_assettag'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Brand :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="brand" value="<?php echo isset($adobe['adobe_brand']) ? $adobe['adobe_brand'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="brand" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($adobe['adobe_brand']) ? $adobe['adobe_brand'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Model Number :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="modelnumber" value="<?php echo isset($adobe['adobe_modelnumber']) ? $adobe['adobe_modelnumber'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="modelnumber" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($adobe['adobe_modelnumber']) ? $adobe['adobe_modelnumber'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Windows Version :</label>
+                                <label class="control-label">Adobe Version :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="adobeversion" value="<?php echo isset($adobe['adobe_adobeversion']) ? $adobe['adobe_adobeversion'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="windowsversion" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($adobe['adobe_windowsversion']) ? $adobe['adobe_windowsversion'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Assigned User :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="assigneduser" value="<?php echo isset($adobe['adobe_assigneduser']) ? $adobe['adobe_assigneduser'] : 'None'; ?>" />
+                                    <input type="text" class="span11" name="assigneduser" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($adobe['adobe_assigneduser']) ? $adobe['adobe_assigneduser'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">License Key :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="licensekey" value="<?php echo isset($adobe['adobe_licensekey']) ? $adobe['adobe_licensekey'] : 'None'; ?>" />
+                                    <input type="text" class="span11" name="licensekey" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($adobe['adobe_licensekey']) ? $adobe['adobe_licensekey'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Remarks :</label>
                                 <div class="controls">
-                                    <textarea class="span11" name="remarks"><?php echo isset($adobe['adobe_remarks']) ? $adobe['adobe_remarks'] : 'None'; ?></textarea>
+                                    <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($adobe['adobe_remarks']) ? $adobe['adobe_remarks'] : ''; ?></textarea>
                                 </div>
                             </div>
 
@@ -162,7 +174,7 @@ if (isset($_POST["submit"])) {
                     </div>
                 </div>
 
-                <!-- Display adobe details -->
+                <!-- Display Adobe details -->
                 <div class="widget-box" style="margin-top: 20px;">
                     <div class="widget-title"> 
                         <span class="icon"> <i class="icon-table"></i> </span>
@@ -177,7 +189,7 @@ if (isset($_POST["submit"])) {
                                         <th>Asset Tag</th>
                                         <th>Brand</th>
                                         <th>Model Number</th>
-                                        <th>Windows Version</th>
+                                        <th>Adobe Version</th>
                                         <th>Assigned User</th>
                                         <th>License Key</th>
                                         <th>Remarks</th>
@@ -189,7 +201,7 @@ if (isset($_POST["submit"])) {
                                         <td><?php echo !empty($adobe['adobe_assettag']) ? htmlspecialchars($adobe['adobe_assettag']) : 'None'; ?></td>
                                         <td><?php echo !empty($adobe['adobe_brand']) ? htmlspecialchars($adobe['adobe_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($adobe['adobe_modelnumber']) ? htmlspecialchars($adobe['adobe_modelnumber']) : 'None'; ?></td>
-                                        <td><?php echo !empty($adobe['adobe_adobeversion']) ? htmlspecialchars($adobe['adobe_adobeversion']) : 'None'; ?></td>
+                                        <td><?php echo !empty($adobe['adobe_windowsversion']) ? htmlspecialchars($adobe['adobe_windowsversion']) : 'None'; ?></td>
                                         <td><?php echo !empty($adobe['adobe_assigneduser']) ? htmlspecialchars($adobe['adobe_assigneduser']) : 'None'; ?></td>
                                         <td><?php echo !empty($adobe['adobe_licensekey']) ? htmlspecialchars($adobe['adobe_licensekey']) : 'None'; ?></td>
                                         <td><?php echo !empty($adobe['adobe_remarks']) ? htmlspecialchars($adobe['adobe_remarks']) : 'None'; ?></td>

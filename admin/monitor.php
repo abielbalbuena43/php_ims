@@ -228,11 +228,10 @@ if (isset($_POST["submit"])) {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-</div>
+                    </div>
+                </div>
             </div>
-        </div>
 
 
 <!--end-main-container-part-->

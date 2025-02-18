@@ -81,7 +81,7 @@ if (isset($_POST["submit"])) {
     <div id="content-header">
         <div id="breadcrumb">
             <a href="software.php" class="tip-bottom">
-                <i class="icon-home"></i> Edit MS Office Details
+                <i class="icon-home"></i> Edit Office Details
             </a>
         </div>
     </div>
@@ -92,52 +92,64 @@ if (isset($_POST["submit"])) {
                 <div class="widget-box">
                     <div class="widget-title"> 
                         <span class="icon"> <i class="icon-align-justify"></i> </span>
-                        <h5>Edit MS Office Details for <?php echo htmlspecialchars($equipment['pcname']); ?></h5>
+                        <h5>Edit Office Details for <?php echo htmlspecialchars($equipment['pcname']); ?></h5>
                     </div>
                     <div class="widget-content nopadding">
 
                         <form name="form1" action="" method="post" class="form-horizontal">
-                            <!-- Form to edit msoffice details -->
+                            <!-- Form to edit Office details -->
                             <div class="control-group">
                                 <label class="control-label">Asset Tag :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="assettag" value="<?php echo isset($msoffice['msoffice_assettag']) ? $msoffice['msoffice_assettag'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="assettag" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($msoffice['msoffice_assettag']) ? $msoffice['msoffice_assettag'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Brand :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="brand" value="<?php echo isset($msoffice['msoffice_brand']) ? $msoffice['msoffice_brand'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="brand" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($msoffice['msoffice_brand']) ? $msoffice['msoffice_brand'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Model Number :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="modelnumber" value="<?php echo isset($msoffice['msoffice_modelnumber']) ? $msoffice['msoffice_modelnumber'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="modelnumber" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($msoffice['msoffice_modelnumber']) ? $msoffice['msoffice_modelnumber'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Windows Version :</label>
+                                <label class="control-label">Office Version :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="officeversion" value="<?php echo isset($msoffice['msoffice_officeversion']) ? $msoffice['msoffice_officeversion'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="windowsversion" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($msoffice['msoffice_windowsversion']) ? $msoffice['msoffice_windowsversion'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Assigned User :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="assigneduser" value="<?php echo isset($msoffice['msoffice_assigneduser']) ? $msoffice['msoffice_assigneduser'] : 'None'; ?>" />
+                                    <input type="text" class="span11" name="assigneduser" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($msoffice['msoffice_assigneduser']) ? $msoffice['msoffice_assigneduser'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">License Key :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="licensekey" value="<?php echo isset($msoffice['msoffice_licensekey']) ? $msoffice['msoffice_licensekey'] : 'None'; ?>" />
+                                    <input type="text" class="span11" name="licensekey" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($msoffice['msoffice_licensekey']) ? $msoffice['msoffice_licensekey'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Remarks :</label>
                                 <div class="controls">
-                                    <textarea class="span11" name="remarks"><?php echo isset($msoffice['msoffice_remarks']) ? $msoffice['msoffice_remarks'] : 'None'; ?></textarea>
+                                    <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($msoffice['msoffice_remarks']) ? $msoffice['msoffice_remarks'] : ''; ?></textarea>
                                 </div>
                             </div>
 
@@ -146,9 +158,9 @@ if (isset($_POST["submit"])) {
                                 <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
-                                            echo "MS Office details updated successfully!";
+                                            echo "Office details updated successfully!";
                                         } elseif ($alert == "error") {
-                                            echo "Failed to update MS Office details.";
+                                            echo "Failed to update Office details.";
                                         }
                                     ?>
                                 </div>
@@ -162,11 +174,11 @@ if (isset($_POST["submit"])) {
                     </div>
                 </div>
 
-                <!-- Display msoffice details -->
+                <!-- Display Office details -->
                 <div class="widget-box" style="margin-top: 20px;">
                     <div class="widget-title"> 
                         <span class="icon"> <i class="icon-table"></i> </span>
-                        <h5>MS Office Details</h5>
+                        <h5>Office Details</h5>
                     </div>
                     <div class="widget-content nopadding">
                         <div style="overflow-x: auto;">
@@ -177,7 +189,7 @@ if (isset($_POST["submit"])) {
                                         <th>Asset Tag</th>
                                         <th>Brand</th>
                                         <th>Model Number</th>
-                                        <th>Windows Version</th>
+                                        <th>Office Version</th>
                                         <th>Assigned User</th>
                                         <th>License Key</th>
                                         <th>Remarks</th>
@@ -189,7 +201,7 @@ if (isset($_POST["submit"])) {
                                         <td><?php echo !empty($msoffice['msoffice_assettag']) ? htmlspecialchars($msoffice['msoffice_assettag']) : 'None'; ?></td>
                                         <td><?php echo !empty($msoffice['msoffice_brand']) ? htmlspecialchars($msoffice['msoffice_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($msoffice['msoffice_modelnumber']) ? htmlspecialchars($msoffice['msoffice_modelnumber']) : 'None'; ?></td>
-                                        <td><?php echo !empty($msoffice['msoffice_officeversion']) ? htmlspecialchars($msoffice['msoffice_officeversion']) : 'None'; ?></td>
+                                        <td><?php echo !empty($msoffice['msoffice_windowsversion']) ? htmlspecialchars($msoffice['msoffice_windowsversion']) : 'None'; ?></td>
                                         <td><?php echo !empty($msoffice['msoffice_assigneduser']) ? htmlspecialchars($msoffice['msoffice_assigneduser']) : 'None'; ?></td>
                                         <td><?php echo !empty($msoffice['msoffice_licensekey']) ? htmlspecialchars($msoffice['msoffice_licensekey']) : 'None'; ?></td>
                                         <td><?php echo !empty($msoffice['msoffice_remarks']) ? htmlspecialchars($msoffice['msoffice_remarks']) : 'None'; ?></td>

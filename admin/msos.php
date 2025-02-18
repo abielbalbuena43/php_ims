@@ -75,7 +75,6 @@ if (isset($_POST["submit"])) {
     }
 }
 ?>
-
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
@@ -101,43 +100,55 @@ if (isset($_POST["submit"])) {
                             <div class="control-group">
                                 <label class="control-label">Asset Tag :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="assettag" value="<?php echo isset($msos['msos_assettag']) ? $msos['msos_assettag'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="assettag" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($msos['msos_assettag']) ? $msos['msos_assettag'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Brand :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="brand" value="<?php echo isset($msos['msos_brand']) ? $msos['msos_brand'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="brand" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($msos['msos_brand']) ? $msos['msos_brand'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Model Number :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="modelnumber" value="<?php echo isset($msos['msos_modelnumber']) ? $msos['msos_modelnumber'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="modelnumber" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($msos['msos_modelnumber']) ? $msos['msos_modelnumber'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Windows Version :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="windowsversion" value="<?php echo isset($msos['msos_windowsversion']) ? $msos['msos_windowsversion'] : 'None'; ?>" required />
+                                    <input type="text" class="span11" name="windowsversion" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($msos['msos_windowsversion']) ? $msos['msos_windowsversion'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Assigned User :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="assigneduser" value="<?php echo isset($msos['msos_assigneduser']) ? $msos['msos_assigneduser'] : 'None'; ?>" />
+                                    <input type="text" class="span11" name="assigneduser" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($msos['msos_assigneduser']) ? $msos['msos_assigneduser'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">License Key :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="licensekey" value="<?php echo isset($msos['msos_licensekey']) ? $msos['msos_licensekey'] : 'None'; ?>" />
+                                    <input type="text" class="span11" name="licensekey" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($msos['msos_licensekey']) ? $msos['msos_licensekey'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label">Remarks :</label>
                                 <div class="controls">
-                                    <textarea class="span11" name="remarks"><?php echo isset($msos['msos_remarks']) ? $msos['msos_remarks'] : 'None'; ?></textarea>
+                                    <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($msos['msos_remarks']) ? $msos['msos_remarks'] : ''; ?></textarea>
                                 </div>
                             </div>
 
