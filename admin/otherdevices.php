@@ -140,7 +140,7 @@ unset($_SESSION["alert"]);
                                 <div class="control-group">
                                      <label class="control-label">Remarks :</label>
                                         <div class="controls">
-                                    <textarea class="span11" name="device_remarks"><?php echo isset($keyboard['device_remarks']) ? $keyboard['device_remarks'] : 'None'; ?></textarea>
+                                    <textarea class="span11" name="device_remarks" placeholder="Remarks"><?php echo isset($keyboard['device_remarks']) ? htmlspecialchars($keyboard['device_remarks']) : ''; ?></textarea>
                                 </div>
                                 </div>
                                 <div class="form-actions">

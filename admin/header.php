@@ -53,20 +53,28 @@ if (isset($_SESSION['user_id'])) {
 <div id="header" style="background-color: #28282B; display: flex; justify-content: space-between; padding: 10px;">
 </div>
 
-<!--sidebar-menu-->
-<div id="sidebar" style="margin-top: 40px;">
-    <ul>
-        <!-- User Info Section -->
-        <li style="padding: 15px; text-align: center; background-color: #333; color: white; border-bottom: 1px solid #444;">
-            <i class="icon icon-user"></i> <strong><?php echo htmlspecialchars($username); ?></strong>
-            <br>
+        <!--sidebar-menu-->
+        <div id="sidebar" style="margin-top: 40px;">
+            <ul>
+                <!-- User Info Section -->
+        <li style="padding: 20px; text-align: center; background-color: #333; color: white; border-bottom: 1px solid #444;">
+            <!-- User Icon -->
+            <div style="width: 60px; height: 60px; background-color: #555; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                <i class="icon icon-user" style="font-size: 30px; color: white;"></i>
+            </div>
+
+            <!-- Username -->
+            <strong style="display: block; font-size: 16px;"><?php echo htmlspecialchars($username); ?></strong>
+
+            <!-- User Status -->
             <?php
             $status_color = ($status == 'inactive') ? '#FFA500' : '#0f0'; // Orange for inactive, Green for active
             ?>
-                <span style="font-size: 12px; color: <?php echo $status_color; ?>;">
-                    <?php echo htmlspecialchars($status); ?>
-                </span>
+            <span style="font-size: 12px; color: <?php echo $status_color; ?>; display: block; margin-top: 5px;">
+                <?php echo htmlspecialchars($status); ?>
+            </span>
         </li>
+
 
         <!-- Navigation Links -->
         <li class="<?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">

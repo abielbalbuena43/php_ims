@@ -118,7 +118,7 @@ unset($_SESSION["alert"]);
                                 <div class="control-group">
                                     <label class="control-label">Remarks :</label>
                                     <div class="controls">
-                                        <textarea class="span11" name="software_remarks"></textarea>
+                                        <textarea type="text" class="span11" placeholder="Remarks" name="software_remarks" required></textarea>
                                     </div>
                                 </div>
                                 <div class="form-actions">

@@ -1635,7 +1635,10 @@ table {
     background-color: #ffffff; /* White background for the table */
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
     overflow: hidden; /* Ensures rounded corners are properly clipped */
+    border-collapse: collapse; /* Removes spacing between table cells */
+    border-spacing: 0; /* Ensures there are no gaps */
 }
+
 
 /* Table Header Styling */
 table th {

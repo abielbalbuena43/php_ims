@@ -256,7 +256,7 @@ if (isset($_POST["submit1"])) {
                             <div class="control-group">
                                 <label class="control-label">Remarks :</label>
                                 <div class="controls">
-                                <textarea class="span11" name="equipment_remarks"><?php echo isset($equipment['equipment_remarks']) ? $equipment['equipment_remarks'] : ''; ?></textarea>
+                                <textarea class="span11" placeholder="Remarks" name="equipment_remarks"><?php echo isset($equipment['equipment_remarks']) ? $equipment['equipment_remarks'] : ''; ?></textarea>
                             </div>
                             </div>
 
