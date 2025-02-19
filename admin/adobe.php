@@ -125,9 +125,9 @@ if (isset($_POST["submit"])) {
                             <div class="control-group">
                                 <label class="control-label">Adobe Version :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="windowsversion" 
+                                    <input type="text" class="span11" name="adobeversion" 
                                         placeholder="None" 
-                                        value="<?php echo isset($adobe['adobe_windowsversion']) ? $adobe['adobe_windowsversion'] : ''; ?>" />
+                                        value="<?php echo isset($adobe['adobe_adobeversion']) ? $adobe['adobe_adobeversion'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
@@ -201,7 +201,7 @@ if (isset($_POST["submit"])) {
                                         <td><?php echo !empty($adobe['adobe_assettag']) ? htmlspecialchars($adobe['adobe_assettag']) : 'None'; ?></td>
                                         <td><?php echo !empty($adobe['adobe_brand']) ? htmlspecialchars($adobe['adobe_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($adobe['adobe_modelnumber']) ? htmlspecialchars($adobe['adobe_modelnumber']) : 'None'; ?></td>
-                                        <td><?php echo !empty($adobe['adobe_windowsversion']) ? htmlspecialchars($adobe['adobe_windowsversion']) : 'None'; ?></td>
+                                        <td><?php echo !empty($adobe['adobe_adobeversion']) ? htmlspecialchars($adobe['adobe_adobeversion']) : 'None'; ?></td>
                                         <td><?php echo !empty($adobe['adobe_assigneduser']) ? htmlspecialchars($adobe['adobe_assigneduser']) : 'None'; ?></td>
                                         <td><?php echo !empty($adobe['adobe_licensekey']) ? htmlspecialchars($adobe['adobe_licensekey']) : 'None'; ?></td>
                                         <td><?php echo !empty($adobe['adobe_remarks']) ? htmlspecialchars($adobe['adobe_remarks']) : 'None'; ?></td>

@@ -125,9 +125,9 @@ if (isset($_POST["submit"])) {
                             <div class="control-group">
                                 <label class="control-label">Office Version :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="windowsversion" 
+                                    <input type="text" class="span11" name="officeversion" 
                                         placeholder="None" 
-                                        value="<?php echo isset($msoffice['msoffice_windowsversion']) ? $msoffice['msoffice_windowsversion'] : ''; ?>" />
+                                        value="<?php echo isset($msoffice['msoffice_officeversion']) ? $msoffice['msoffice_officeversion'] : ''; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">
@@ -201,7 +201,7 @@ if (isset($_POST["submit"])) {
                                         <td><?php echo !empty($msoffice['msoffice_assettag']) ? htmlspecialchars($msoffice['msoffice_assettag']) : 'None'; ?></td>
                                         <td><?php echo !empty($msoffice['msoffice_brand']) ? htmlspecialchars($msoffice['msoffice_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($msoffice['msoffice_modelnumber']) ? htmlspecialchars($msoffice['msoffice_modelnumber']) : 'None'; ?></td>
-                                        <td><?php echo !empty($msoffice['msoffice_windowsversion']) ? htmlspecialchars($msoffice['msoffice_windowsversion']) : 'None'; ?></td>
+                                        <td><?php echo !empty($msoffice['msoffice_officeversion']) ? htmlspecialchars($msoffice['msoffice_officeversion']) : 'None'; ?></td>
                                         <td><?php echo !empty($msoffice['msoffice_assigneduser']) ? htmlspecialchars($msoffice['msoffice_assigneduser']) : 'None'; ?></td>
                                         <td><?php echo !empty($msoffice['msoffice_licensekey']) ? htmlspecialchars($msoffice['msoffice_licensekey']) : 'None'; ?></td>
                                         <td><?php echo !empty($msoffice['msoffice_remarks']) ? htmlspecialchars($msoffice['msoffice_remarks']) : 'None'; ?></td>
