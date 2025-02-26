@@ -74,11 +74,13 @@ unset($_SESSION["alert"]);
     <div class="container-fluid">
         <div class="row-fluid" style="background-color: white; min-height: 1000px; padding:10px;">
             <div class="span12">
-                <!-- Search bar and button -->
+
+                <!-- Search bar and live results -->
                 <div id="searchContainer">
-                    <input type="text" id="searchInput" placeholder="Search peripherals...">
-                    <button class="btn-info" id="searchButton" onclick="searchPeripherals()">Search</button>
+                    <input type="text" id="searchInput" placeholder="Search other peripheral..." onkeyup="searchPeripherals()">
                 </div>
+                <div id="searchResults"></div>
+
                 <!-- Button to toggle the form -->
                 <button id="toggleFormButton" class="btn btn-primary" onclick="toggleForm()">Add New Peripheral</button>
 

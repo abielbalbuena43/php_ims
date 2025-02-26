@@ -6,25 +6,31 @@ if (isset($_POST['login'])) {
     $username = mysqli_real_escape_string($link, $_POST['username']);
     $password = mysqli_real_escape_string($link, $_POST['password']);
 
-    // Query to get the user
-    $query = "SELECT * FROM user_registration WHERE username = '$username' AND password = '$password' AND role = 'admin'";
+    // Check if the username exists
+    $query = "SELECT * FROM user_registration WHERE username = '$username'";
     $result = mysqli_query($link, $query);
 
-    // Check if user is found and if they are admin
     if (mysqli_num_rows($result) > 0) {
         $user = mysqli_fetch_assoc($result);
-        $_SESSION['user_id'] = $user['user_id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role'];
 
-        // Redirect to the admin dashboard
-        header("Location: dashboard.php");
-        exit();
+        // Check if the password is correct and the role is admin
+        if ($user['password'] === $password && $user['role'] === 'admin') {
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
+
+            // Redirect to the admin dashboard
+            header("Location: dashboard.php");
+            exit();
+        } else {
+            $error = "Incorrect password.";
+        }
     } else {
-        $error = "Invalid login credentials or you're not an admin.";
+        $error = "Incorrect username.";
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
