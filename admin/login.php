@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "../user/connection.php"; // Include your DB connection
+include "../admin/connection.php"; // Include your DB connection
 
 if (isset($_POST['login'])) {
     $username = mysqli_real_escape_string($link, $_POST['username']);
@@ -31,10 +31,8 @@ if (isset($_POST['login'])) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>Login - PHP Inventory Management System</title>
     <meta charset="UTF-8"/>
@@ -46,7 +44,7 @@ if (isset($_POST['login'])) {
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
     <style>
         body {
-            background: url('Malaya.jpg') no-repeat center center fixed;
+            background: url('Malayalogo.jpg') no-repeat center center fixed;
             background-size: cover;
             display: flex;
             justify-content: center;
@@ -57,10 +55,9 @@ if (isset($_POST['login'])) {
         }
         #loginbox {
             padding: 40px;
-            margin-left: 150px;
             border-radius: 10px;
             width: 400px;
-            background: rgba(30, 30, 30, 0.8);
+            background: transparent;
         }
         .form-actions {
             text-align: center;
@@ -83,13 +80,14 @@ if (isset($_POST['login'])) {
             width: calc(100% - 40px);
             font-size: 16px;
         }
-        .add-on {
-            color: black;
-            font-size: 16px;
+        .error-message {
+            color: red;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
         }
     </style>
 </head>
-
 <body>
 <div id="loginbox">
     <form id="loginform" class="form-vertical" method="post" action="login.php">
@@ -98,7 +96,6 @@ if (isset($_POST['login'])) {
         <div class="control-group">
             <div class="controls">
                 <div class="main_input_box">
-                    <span class="add-on bg_lg"><i class="icon-user"> </i></span>
                     <input type="text" placeholder="Username" name="username" required/>
                 </div>
             </div>
@@ -106,7 +103,6 @@ if (isset($_POST['login'])) {
         <div class="control-group">
             <div class="controls">
                 <div class="main_input_box">
-                    <span class="add-on bg_ly"><i class="icon-lock"></i></span>
                     <input type="password" placeholder="Password" name="password" required/>
                 </div>
             </div>
@@ -116,12 +112,11 @@ if (isset($_POST['login'])) {
         </div>
         <?php
         if (isset($error)) {
-            echo "<p style='color: red; text-align: center;'>$error</p>";
+            echo "<p class='error-message'>$error</p>";
         }
         ?>
     </form>
 </div>
-
 <script src="js/jquery.min.js"></script>
 <script src="js/matrix.login.js"></script>
 </body>

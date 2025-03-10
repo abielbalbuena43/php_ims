@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-include "../user/connection.php"; // Include the database connection
+include "../admin/connection.php"; // Include the database connection
 
 $current_page = basename($_SERVER['PHP_SELF']);
 

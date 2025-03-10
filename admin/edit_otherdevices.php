@@ -2,7 +2,7 @@
 session_start();
 include "session_verification.php";
 include "header.php";
-include "../user/connection.php";
+include "../admin/connection.php";
 
 // Get the device ID from the URL
 $device_id = isset($_GET['od_id']) ? $_GET['od_id'] : '';

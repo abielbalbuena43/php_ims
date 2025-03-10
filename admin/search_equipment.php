@@ -1,5 +1,5 @@
 <?php
-include "../user/connection.php";
+include "../admin/connection.php";
 
 // Check if the search query is set
 if (isset($_POST['query'])) {

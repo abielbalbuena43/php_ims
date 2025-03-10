@@ -2,7 +2,7 @@
 // Start session
 session_start();
 include "session_verification.php";
-include "../user/connection.php";
+include "../admin/connection.php";
 
 // Ensure user is logged in
 $user_id = $_SESSION['user_id'] ?? null;

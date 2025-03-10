@@ -2,7 +2,7 @@
 session_start();
 include "session_verification.php";
 include "header.php";
-include "../user/connection.php";
+include "../admin/connection.php";
 
 $user_id = $_GET["user_id"]; 
 

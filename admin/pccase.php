@@ -2,7 +2,7 @@
 session_start();
 include "session_verification.php";
 include "header.php";
-include "../user/connection.php";
+include "../admin/connection.php";
 
 // Get the equipment ID from the URL
 $equipment_id = $_GET["equipment_id"];

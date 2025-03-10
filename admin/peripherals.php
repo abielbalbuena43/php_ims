@@ -1,8 +1,9 @@
 <?php
+ob_start();  // Start output buffering
 session_start();
 include "session_verification.php";
 include "header.php";
-include "../user/connection.php";
+include "../admin/connection.php";
 
 // Ensure user is logged in
 $user_id = $_SESSION['user_id'] ?? null;
@@ -270,4 +271,8 @@ unset($_SESSION["alert"]);
 
 <?php
 include "footer.php";
+?>
+
+<?php
+ob_end_flush();
 ?>

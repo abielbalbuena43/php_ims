@@ -5,7 +5,7 @@ header("Pragma: no-cache"); // For HTTP/1.0 compatibility
 header("Expires: 0"); // Ensure content is not cached
 include "session_verification.php";
 include "header.php";
-include "../user/connection.php";
+include "../admin/connection.php";
 
 echo '<link rel="stylesheet" href="css/dashboard.css">';
 

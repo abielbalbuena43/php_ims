@@ -2,7 +2,7 @@
 session_start();
 include "session_verification.php";
 include "header.php";
-include "../user/connection.php";
+include "../admin/connection.php";
 
 // Get the peripheral ID from the URL
 $peripheral_id = $_GET["peripheral_id"] ?? null;

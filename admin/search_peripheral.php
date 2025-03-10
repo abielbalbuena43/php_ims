@@ -1,6 +1,6 @@
 <?php
 // Include database connection
-include "../user/connection.php";
+include "../admin/connection.php";
 
 // Get the search query from the request
 $search = isset($_POST['query']) ? mysqli_real_escape_string($link, $_POST['query']) : '';
