@@ -13,13 +13,13 @@ if (isset($_POST['login'])) {
     if (mysqli_num_rows($result) > 0) {
         $user = mysqli_fetch_assoc($result);
 
-        // Check if the password is correct and the role is admin
-        if ($user['password'] === $password && $user['role'] === 'admin') {
+        // Check if the password is correct
+        if ($user['password'] === $password) {
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['username'] = $user['username'];
-            $_SESSION['role'] = $user['role'];
+            $_SESSION['role'] = $user['role']; // Store role for reference but no restrictions
 
-            // Redirect to the admin dashboard
+            // Redirect to dashboard
             header("Location: dashboard.php");
             exit();
         } else {
