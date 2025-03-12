@@ -398,6 +398,11 @@ if (isset($_SESSION["alert"])) {
                         </table>
                     </div>
                 </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <form method="post" action="export_equipment.php" target="_blank">
+                        <button type="submit" class="btn btn-primary">Export Equipment</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
