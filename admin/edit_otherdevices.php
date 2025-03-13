@@ -205,8 +205,7 @@ if (isset($_SESSION["alert"])) {
                             <div class="control-group">
                                 <label class="control-label">Remarks :</label>
                                 <div class="controls">
-                                    <textarea class="span11" name="device_remarks"><?php echo isset($keyboard['device_remarks']) ? $keyboard['device_remarks'] : 'None'; ?></textarea>
-                                </div>
+                                <textarea class="span11" placeholder="Remarks" name="device_remarks"><?php echo isset($device['device_remarks']) ? $device['device_remarks'] : ''; ?></textarea>
                             </div>
 
                             <!-- Alert Display -->
