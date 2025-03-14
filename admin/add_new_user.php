@@ -136,8 +136,8 @@ if (isset($_SESSION["alert"])) {
                 <?php } ?>
 
                 <!-- Table displaying users -->
-                <div class="widget-content nopadding" style="margin-top: 20px;">
-                    <table class="table table-bordered table-striped">
+                <div style="overflow-x: auto; max-height: 550px; margin-top: 20px;">
+                    <table class="table table-bordered table-striped">  
                         <thead>
                             <tr>
                                 <th>First Name</th>

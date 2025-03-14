@@ -155,8 +155,8 @@ unset($_SESSION["alert"]);
                     </div>
                 <?php } ?>
 
-                <div class="widget-content nopadding" style="margin-top: 20px;">
-                    <div style="overflow-x: auto;">
+                <div style="overflow-x: auto; max-height: 550px; margin-top: 20px;">
+                    <table class="table table-bordered table-striped">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
