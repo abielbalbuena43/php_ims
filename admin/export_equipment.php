@@ -84,7 +84,7 @@ $result = mysqli_query($link, $query);
 
     <table>
         <tr>
-            <th>PC Name</th><th>Assigned User</th><th>Processor</th>
+            <th>PC Name</th><th>Department</th><th>Assigned User</th><th>Processor</th>
             <th>Motherboard</th><th>RAM</th><th>HDD</th><th>SSD</th><th>GPU</th>
             <th>PSU</th><th>PC Case</th><th>Monitor</th><th>LAN Card</th>
             <th>WiFi Card</th><th>MAC Address</th><th>OS Version</th><th>MS Version</th>
@@ -93,6 +93,7 @@ $result = mysqli_query($link, $query);
         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
         <tr>
             <td><?php echo $row['pcname']; ?></td>
+            <td><?php echo $row['department']; ?></td>
             <td><?php echo $row['assigneduser']; ?></td>
             <td><?php echo $row['processor']; ?></td>
             <td><?php echo $row['motherboard']; ?></td>

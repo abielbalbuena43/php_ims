@@ -24,6 +24,7 @@ if (isset($_SESSION["alert"])) {
 if (isset($_POST["submit1"])) {
     // Get the form data and escape special characters
     $pcname = mysqli_real_escape_string($link, $_POST["pcname"]);
+    $department = mysqli_real_escape_string($link, $_POST["department"]);
     $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
     $processor = mysqli_real_escape_string($link, $_POST["processor"]);
     $motherboard = mysqli_real_escape_string($link, $_POST["motherboard"]);
@@ -45,6 +46,7 @@ if (isset($_POST["submit1"])) {
 
     // Fetch previous equipment details for comparison
     $old_pcname = $equipment['pcname'];
+    $old_department = $equipment['department'];
     $old_assigneduser = $equipment['assigneduser'];
     $old_processor = $equipment['processor'];
     $old_motherboard = $equipment['motherboard'];
@@ -66,7 +68,7 @@ if (isset($_POST["submit1"])) {
 
     // Prepare the update statement
     $query = "UPDATE equipment SET 
-                pcname = ?, assigneduser = ?, processor = ?, motherboard = ?, 
+                pcname = ?, department = ?, assigneduser = ?, processor = ?, motherboard = ?, 
                 ram = ?, hdd = ?, ssd = ?, gpu = ?, psu = ?, pccase = ?, 
                 monitor = ?, lancard = ?, wificard = ?, macaddress = ?, osversion = ?, 
                 msversion = ?, windows_key = ?, ms_key = ?, equipment_remarks = ?, date_edited = NOW()
@@ -76,8 +78,8 @@ if (isset($_POST["submit1"])) {
     $stmt = mysqli_prepare($link, $query);
 
     // Bind parameters
-    mysqli_stmt_bind_param($stmt, "sssssssssssssssssssi", 
-    $pcname, $assigneduser, $processor, $motherboard, 
+    mysqli_stmt_bind_param($stmt, "ssssssssssssssssssssi", 
+    $pcname, $department, $assigneduser, $processor, $motherboard, 
     $ram, $hdd, $ssd, $gpu, $psu, $pccase, 
     $monitor, $lancard, $wificard, $macaddress, $osversion, 
     $msversion, $windows_key, $ms_key, $equipment_remarks, $equipment_id);    
@@ -89,6 +91,7 @@ if (isset($_POST["submit1"])) {
 
         // Compare each field and log the change if it differs
         if ($old_pcname !== $pcname) $log_action .= "PC Name: $old_pcname → $pcname, ";
+        if ($old_department !== $department) $log_action .= "Department: $old_department → $department, ";
         if ($old_assigneduser !== $assigneduser) $log_action .= "Assigned User: $old_assigneduser → $assigneduser, ";
         if ($old_processor !== $processor) $log_action .= "Processor: $old_processor → $processor, ";
         if ($old_motherboard !== $motherboard) $log_action .= "Motherboard: $old_motherboard → $motherboard, ";
@@ -151,6 +154,23 @@ if (isset($_POST["submit1"])) {
                                     <input type="text" class="span11" name="pcname" value="<?php echo $equipment['pcname']; ?>" required />
                                 </div>
                             </div>
+                            <div class="control-group">
+                                    <label class="control-label">Department :</label>
+                                    <div class="controls">
+                                        <select name="department" class="span11" required>
+                                            <option value="" disabled selected>Select Department</option>
+                                            <option>Accounting & Finance</option>
+                                            <option>Advertising</option>
+                                            <option>Circulation</option>
+                                            <option>Editorial-News</option>
+                                            <option>Editorial-Business</option>
+                                            <option>HRAD</option>
+                                            <option>Management Information System</option>
+                                            <option>Operations</option>
+                                            <option>Sales and Marketing</option>
+                                        </select>
+                                    </div>
+                                </div>
                             <div class="control-group">
                                 <label class="control-label">Assigned User :</label>
                                 <div class="controls">

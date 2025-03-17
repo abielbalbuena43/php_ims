@@ -19,8 +19,9 @@ if (isset($_POST["submit1"])) {
     $windows_key = empty($_POST["windows_key"]) ? '0' : $_POST["windows_key"];
     $ms_key = empty($_POST["ms_key"]) ? '0' : $_POST["ms_key"];
 
-    $query = "INSERT INTO equipment (pcname, assigneduser, processor, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, lancard, wificard, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
+    $query = "INSERT INTO equipment (pcname, department, assigneduser, processor, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, lancard, wificard, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
               VALUES ('" . mysqli_real_escape_string($link, $_POST["pcname"]) . "',
+                      '" . mysqli_real_escape_string($link, $_POST["department"]) . "',
                       '" . mysqli_real_escape_string($link, $_POST["assigneduser"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["processor"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["motherboard"]) . "', 
@@ -102,6 +103,23 @@ if (isset($_SESSION["alert"])) {
                                     <label class="control-label">PC Name :</label>
                                     <div class="controls">
                                         <input type="text" class="span11" placeholder="PC Name" name="pcname" required />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Department :</label>
+                                    <div class="controls">
+                                        <select name="department" class="span11" required>
+                                            <option value="" disabled selected>Select Department</option>
+                                            <option>Accounting & Finance</option>
+                                            <option>Advertising</option>
+                                            <option>Circulation</option>
+                                            <option>Editorial-News</option>
+                                            <option>Editorial-Business</option>
+                                            <option>HRAD</option>
+                                            <option>Management Information System</option>
+                                            <option>Operations</option>
+                                            <option>Sales and Marketing</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -235,6 +253,7 @@ if (isset($_SESSION["alert"])) {
                             <thead>
                                 <tr>
                                     <th>PC Name</th>
+                                    <th>Department</th>
                                     <th>Assigned User</th>
                                     <th>Processor</th>
                                     <th>Motherboard</th>
@@ -266,6 +285,7 @@ if (isset($_SESSION["alert"])) {
                                 ?>
                                     <tr>
                                         <td><?php echo $row["pcname"]; ?></td>
+                                        <td><?php echo $row["department"]; ?></td>
                                         <td><?php echo $row["assigneduser"]; ?></td>
                                         <td>
                                             <?php 
