@@ -25,9 +25,25 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
-// Handle form submission to update processor details
+// Handle delete request
+if (isset($_POST["delete_processor"])) {
+    $processor_id = $_POST["processor_id"];
+
+    $deleteQuery = "DELETE FROM processor WHERE processor_id = $processor_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: processor.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: processor.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
+// Handle form submission to update or insert processor details
 if (isset($_POST["submit"])) {
-    // Get the form data and escape special characters
     $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
@@ -36,9 +52,7 @@ if (isset($_POST["submit"])) {
     $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
     $remarks = mysqli_real_escape_string($link, $_POST["remarks"]);
 
-    // Check if processor exists for this equipment
     if ($processor) {
-        // Update processor details in the database
         $updateQuery = "UPDATE processor SET 
                         processor_assettag = '$assettag', 
                         processor_brand = '$brand', 
@@ -51,7 +65,7 @@ if (isset($_POST["submit"])) {
 
         if (mysqli_query($link, $updateQuery)) {
             $_SESSION["alert"] = "success";
-            header("Location: processor.php?equipment_id=$equipment_id"); // Redirect to avoid form resubmission
+            header("Location: processor.php?equipment_id=$equipment_id");
             exit();
         } else {
             $_SESSION["alert"] = "error";
@@ -59,13 +73,12 @@ if (isset($_POST["submit"])) {
             exit();
         }
     } else {
-        // If no record exists, create a new record in the processor table
         $insertQuery = "INSERT INTO processor (equipment_id, processor_assettag, processor_brand, processor_modelnumber, processor_dateacquired, processor_deviceage, processor_assigneduser, processor_remarks) 
                         VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
-            header("Location: processor.php?equipment_id=$equipment_id"); // Redirect to avoid form resubmission
+            header("Location: processor.php?equipment_id=$equipment_id");
             exit();
         } else {
             $_SESSION["alert"] = "error";
@@ -91,13 +104,12 @@ if (isset($_POST["submit"])) {
             <div class="span12">
                 <div class="widget-box">
                     <div class="widget-title"> 
-                        <span class="icon"> <i class="icon-align-justify"></i> </span>
+                        <span class="icon"><i class="icon-align-justify"></i></span>
                         <h5>Edit Processor Details for <?php echo htmlspecialchars($equipment['pcname']); ?></h5>
                     </div>
                     <div class="widget-content nopadding">
-
                         <form name="form1" action="" method="post" class="form-horizontal">
-                            <!-- Form to edit processor details -->
+                            <!-- Asset Tag -->
                             <div class="control-group">
                                 <label class="control-label">Asset Tag :</label>
                                 <div class="controls">
@@ -112,70 +124,75 @@ if (isset($_POST["submit"])) {
                                 </div>
                             </div>
 
-                        <div class="control-group">
-                            <label class="control-label">Brand :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" name="brand" 
-                                    placeholder="None" 
-                                    value="<?php echo isset($processor['processor_brand']) ? $processor['processor_brand'] : ''; ?>" />
+                            <!-- Processor Details -->
+                            <div class="control-group">
+                                <label class="control-label">Brand :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="brand" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($processor['processor_brand']) ? $processor['processor_brand'] : ''; ?>" />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="control-group">
-                            <label class="control-label">Model Number :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" name="modelnumber" 
-                                    placeholder="None" 
-                                    value="<?php echo isset($processor['processor_modelnumber']) ? $processor['processor_modelnumber'] : ''; ?>" />
+                            <div class="control-group">
+                                <label class="control-label">Model Number :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="modelnumber" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($processor['processor_modelnumber']) ? $processor['processor_modelnumber'] : ''; ?>" />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="control-group">
-                            <label class="control-label">Date Acquired :</label>
-                            <div class="controls">
-                                <input type="date" class="span11" name="dateacquired" 
-                                    placeholder="None" 
-                                    value="<?php echo isset($processor['processor_dateacquired']) ? $processor['processor_dateacquired'] : ''; ?>" />
+                            <div class="control-group">
+                                <label class="control-label">Date Acquired :</label>
+                                <div class="controls">
+                                    <input type="date" class="span11" name="dateacquired" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($processor['processor_dateacquired']) ? $processor['processor_dateacquired'] : ''; ?>" />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="control-group">
-                            <label class="control-label">Device Age :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" name="deviceage" 
-                                    placeholder="None" 
-                                    value="<?php echo isset($processor['processor_deviceage']) ? $processor['processor_deviceage'] : ''; ?>" />
+                            <div class="control-group">
+                                <label class="control-label">Device Age :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="deviceage" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($processor['processor_deviceage']) ? $processor['processor_deviceage'] : ''; ?>" />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="control-group">
-                            <label class="control-label">Assigned User :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" name="assigneduser" 
-                                    placeholder="None" 
-                                    value="<?php echo isset($processor['processor_assigneduser']) ? $processor['processor_assigneduser'] : ''; ?>" />
+                            <div class="control-group">
+                                <label class="control-label">Assigned User :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assigneduser" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($processor['processor_assigneduser']) ? $processor['processor_assigneduser'] : ''; ?>" />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="control-group">
-                            <label class="control-label">Remarks :</label>
-                            <div class="controls">
-                                <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($processor['processor_remarks']) ? $processor['processor_remarks'] : ''; ?></textarea>
+                            <div class="control-group">
+                                <label class="control-label">Remarks :</label>
+                                <div class="controls">
+                                    <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($processor['processor_remarks']) ? $processor['processor_remarks'] : ''; ?></textarea>
+                                </div>
                             </div>
-                        </div>
 
-                            <!-- Success/Failure Alert -->
+                           <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                                <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
                                             echo "Processor details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update processor details.";
+                                        } elseif ($alert == "deleted") {
+                                            echo "Processor deleted!";
                                         }
                                     ?>
                                 </div>
                             <?php } ?>
+
+                            <!-- Form Actions -->
                             <div class="form-actions">
                                 <button type="submit" name="submit" class="btn btn-success">Save Changes</button>
                                 <a href="equipment.php" class="btn">Cancel</a>
@@ -187,11 +204,10 @@ if (isset($_POST["submit"])) {
                 <!-- Table to display processor details -->
                 <div class="widget-box" style="margin-top: 20px;">
                     <div class="widget-title"> 
-                        <span class="icon"> <i class="icon-table"></i> </span>
+                        <span class="icon"><i class="icon-table"></i></span>
                         <h5>Processor Details</h5>
                     </div>
                     <div class="widget-content nopadding">
-                        <!-- Wrapper div for horizontal scrolling -->
                         <div style="overflow-x: auto;">
                             <table class="table table-bordered table-striped" style="min-width: 1200px;">
                                 <thead>
@@ -209,7 +225,15 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($processor['processor_assettag']) ? htmlspecialchars($processor['processor_assettag']) : 'None'; ?></td>
+                                        <td>
+                                            <?php 
+                                                if (isset($processor['processor_id']) && isset($equipment['department'])) {
+                                                    echo strtoupper($equipment['department']) . '-PROC-' . $processor['processor_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo !empty($processor['processor_brand']) ? htmlspecialchars($processor['processor_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($processor['processor_modelnumber']) ? htmlspecialchars($processor['processor_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($processor['processor_dateacquired']) ? htmlspecialchars($processor['processor_dateacquired']) : 'None'; ?></td>
@@ -223,12 +247,18 @@ if (isset($_POST["submit"])) {
                     </div>
                 </div>
 
+                <!-- Delete Button (Appears at the End, Only If a Processor Exists) -->
+                <?php if ($processor): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this processor?');">
+                        <input type="hidden" name="processor_id" value="<?php echo $processor['processor_id']; ?>">
+                        <button type="submit" name="delete_processor" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 
 <!--end-main-container-part-->
-<?php
-include "footer.php";
-?>
+<?php include "footer.php"; ?>
