@@ -19,8 +19,9 @@ if (isset($_POST["submit1"])) {
     $windows_key = empty($_POST["windows_key"]) ? '0' : $_POST["windows_key"];
     $ms_key = empty($_POST["ms_key"]) ? '0' : $_POST["ms_key"];
 
-    $query = "INSERT INTO equipment (pcname, assigneduser, processor, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, lancard, wificard, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
+    $query = "INSERT INTO equipment (pcname, department, assigneduser, processor, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, lancard, wificard, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
               VALUES ('" . mysqli_real_escape_string($link, $_POST["pcname"]) . "',
+                      '" . mysqli_real_escape_string($link, $_POST["department"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["assigneduser"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["processor"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["motherboard"]) . "', 
@@ -104,6 +105,24 @@ if (isset($_SESSION["alert"])) {
                                         <input type="text" class="span11" placeholder="PC Name" name="pcname" required />
                                     </div>
                                 </div>
+                                <div class="control-group">
+    <label class="control-label">Department :</label>
+    <div class="controls">
+        <select class="span11" name="department" required>
+            <option value="" disabled selected>Select Department</option>
+            <option value="ACFN">Accounting & Finance (ACFN)</option>
+            <option value="ADVT">Advertising (ADVT)</option>
+            <option value="CIRC">Circulation (CIRC)</option>
+            <option value="EDTN">Editorial-News (EDTN)</option>
+            <option value="EDTB">Editorial-Business (EDTB)</option>
+            <option value="HRAD">HRAD</option>
+            <option value="MIS">Management Information System (MIS)</option>
+            <option value="OPER">Operations (OPER)</option>
+            <option value="SLSM">Sales and Marketing (SLSM)</option>
+        </select>
+    </div>
+</div>
+
                                 <div class="control-group">
                                     <label class="control-label">Assigned User :</label>
                                     <div class="controls">
@@ -235,6 +254,7 @@ if (isset($_SESSION["alert"])) {
                             <thead>
                                 <tr>
                                     <th>PC Name</th>
+                                    <th>Department</th>
                                     <th>Assigned User</th>
                                     <th>Processor</th>
                                     <th>Motherboard</th>
@@ -266,6 +286,7 @@ if (isset($_SESSION["alert"])) {
                                 ?>
                                     <tr>
                                         <td><?php echo $row["pcname"]; ?></td>
+                                        <td><?php echo $row["department"]; ?></td>
                                         <td><?php echo $row["assigneduser"]; ?></td>
                                         <td>
                                             <?php 

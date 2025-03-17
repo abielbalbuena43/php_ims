@@ -7,17 +7,22 @@ include "../admin/connection.php";
 // Get the equipment ID from the URL
 $equipment_id = $_GET["equipment_id"];
 
-// Fetch existing processor details from the processor table
-$query = "SELECT * FROM processor WHERE equipment_id = $equipment_id";
-$result = mysqli_query($link, $query);
-$processor = mysqli_fetch_array($result);
-
-// Fetch equipment details from the equipment table
+// Fetch equipment details including the department
 $equipmentQuery = "SELECT * FROM equipment WHERE equipment_id = $equipment_id";
 $equipmentResult = mysqli_query($link, $equipmentQuery);
 $equipment = mysqli_fetch_array($equipmentResult);
 
-// Handling alert messages for success or error
+$department = $equipment['department']; // Get department abbreviation
+
+// Generate the Processor Asset Tag
+$default_assettag = $department . "-PROC-" . $equipment_id;
+
+// Fetch existing processor details
+$query = "SELECT * FROM processor WHERE equipment_id = $equipment_id";
+$result = mysqli_query($link, $query);
+$processor = mysqli_fetch_array($result);
+
+// Handling alert messages
 if (isset($_SESSION["alert"])) {
     $alert = $_SESSION["alert"];
     unset($_SESSION["alert"]);
@@ -25,10 +30,9 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
-// Handle form submission to update processor details
+// Handle form submission
 if (isset($_POST["submit"])) {
-    // Get the form data and escape special characters
-    $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
+    // Get the form data
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
     $dateacquired = mysqli_real_escape_string($link, $_POST["dateacquired"]);
@@ -36,9 +40,11 @@ if (isset($_POST["submit"])) {
     $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
     $remarks = mysqli_real_escape_string($link, $_POST["remarks"]);
 
-    // Check if processor exists for this equipment
+    // Always regenerate the asset tag in case department changes
+    $assettag = $department . "-PROC-" . $equipment_id;
+
     if ($processor) {
-        // Update processor details in the database
+        // Update existing processor details
         $updateQuery = "UPDATE processor SET 
                         processor_assettag = '$assettag', 
                         processor_brand = '$brand', 
@@ -51,7 +57,7 @@ if (isset($_POST["submit"])) {
 
         if (mysqli_query($link, $updateQuery)) {
             $_SESSION["alert"] = "success";
-            header("Location: processor.php?equipment_id=$equipment_id"); // Redirect to avoid form resubmission
+            header("Location: processor.php?equipment_id=$equipment_id");
             exit();
         } else {
             $_SESSION["alert"] = "error";
@@ -59,13 +65,13 @@ if (isset($_POST["submit"])) {
             exit();
         }
     } else {
-        // If no record exists, create a new record in the processor table
+        // Insert new processor details
         $insertQuery = "INSERT INTO processor (equipment_id, processor_assettag, processor_brand, processor_modelnumber, processor_dateacquired, processor_deviceage, processor_assigneduser, processor_remarks) 
                         VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
-            header("Location: processor.php?equipment_id=$equipment_id"); // Redirect to avoid form resubmission
+            header("Location: processor.php?equipment_id=$equipment_id");
             exit();
         } else {
             $_SESSION["alert"] = "error";
@@ -75,6 +81,7 @@ if (isset($_POST["submit"])) {
     }
 }
 ?>
+
 
 <!--main-container-part-->
 <div id="content">
@@ -95,18 +102,15 @@ if (isset($_POST["submit"])) {
                         <h5>Edit Processor Details for <?php echo htmlspecialchars($equipment['pcname']); ?></h5>
                     </div>
                     <div class="widget-content nopadding">
-
                         <form name="form1" action="" method="post" class="form-horizontal">
                             <!-- Form to edit processor details -->
                             <div class="control-group">
-                            <label class="control-label">Asset Tag :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" name="assettag" 
-                                    placeholder="None" 
-                                    value="<?php echo isset($processor['processor_assettag']) ? $processor['processor_assettag'] : ''; ?>" />
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" readonly
+                                        value="<?php echo isset($equipment['equipment_id']) ? 'PROC-' . $equipment['equipment_id'] : ''; ?>" />
+                                </div>
                             </div>
-                        </div>
-
                         <div class="control-group">
                             <label class="control-label">Brand :</label>
                             <div class="controls">
@@ -204,7 +208,7 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($processor['processor_assettag']) ? htmlspecialchars($processor['processor_assettag']) : 'None'; ?></td>
+                                        <td><?php echo isset($equipment['equipment_id']) ? 'PROC-' . htmlspecialchars($equipment['equipment_id']) : 'None'; ?></td>
                                         <td><?php echo !empty($processor['processor_brand']) ? htmlspecialchars($processor['processor_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($processor['processor_modelnumber']) ? htmlspecialchars($processor['processor_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($processor['processor_dateacquired']) ? htmlspecialchars($processor['processor_dateacquired']) : 'None'; ?></td>
