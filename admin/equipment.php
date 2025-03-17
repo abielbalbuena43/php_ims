@@ -110,15 +110,15 @@ if (isset($_SESSION["alert"])) {
                                     <div class="controls">
                                         <select name="department" class="span11" required>
                                             <option value="" disabled selected>Select Department</option>
-                                            <option>Accounting & Finance</option>
-                                            <option>Advertising</option>
-                                            <option>Circulation</option>
-                                            <option>Editorial-News</option>
-                                            <option>Editorial-Business</option>
+                                            <option>ACFN</option>
+                                            <option>ADVT</option>
+                                            <option>CIRC</option>
+                                            <option>EDTN</option>
+                                            <option>EDTB</option>
                                             <option>HRAD</option>
-                                            <option>Management Information System</option>
-                                            <option>Operations</option>
-                                            <option>Sales and Marketing</option>
+                                            <option>MIS</option>
+                                            <option>OPER</option>
+                                            <option>SLSM</option>
                                         </select>
                                     </div>
                                 </div>
