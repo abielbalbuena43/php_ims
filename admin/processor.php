@@ -99,13 +99,18 @@ if (isset($_POST["submit"])) {
                         <form name="form1" action="" method="post" class="form-horizontal">
                             <!-- Form to edit processor details -->
                             <div class="control-group">
-                            <label class="control-label">Asset Tag :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" name="assettag" 
-                                    placeholder="None" 
-                                    value="<?php echo isset($processor['processor_assettag']) ? $processor['processor_assettag'] : ''; ?>" />
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($processor['processor_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-PROC-' . $processor['processor_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
+                                </div>
                             </div>
-                        </div>
 
                         <div class="control-group">
                             <label class="control-label">Brand :</label>
