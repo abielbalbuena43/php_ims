@@ -1,57 +1,109 @@
 <?php
+ob_start(); // Prevent "headers already sent" errors
 session_start();
 include "session_verification.php";
 include "header.php";
 include "../admin/connection.php";
 
 // Ensure user is logged in
-$user_id = $_SESSION['user_id'] ?? null;
-
-if (!$user_id) {
+if (!isset($_SESSION['user_id'])) {
     $_SESSION["message"] = "You must be logged in to add a device.";
-    header("Location: login.php"); // Redirect to login page if user is not logged in
+    header("Location: login.php");
     exit();
 }
 
-// Handling form submission
-if (isset($_POST["submit1"])) {
-    // Insert new device into the database
-    $query = "INSERT INTO otherdevices (device_type, device_name, device_assettag, device_brand, device_modelnumber, device_deviceage, device_pcname, device_macaddress, device_remarks) 
-              VALUES ('" . mysqli_real_escape_string($link, $_POST["device_type"]) . "',
-                      '" . mysqli_real_escape_string($link, $_POST["device_name"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["device_assettag"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["device_brand"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["device_modelnumber"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["device_deviceage"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["device_pcname"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["device_macaddress"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["device_remarks"]) . "')";
+$user_id = $_SESSION['user_id'];
 
-    if (mysqli_query($link, $query)) {
-        // Log the action after the successful insertion
-        $log_action = "Added new Device: " . $_POST["device_type"] . " - " . $_POST["device_name"];
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit1"])) {
+    // Validate required fields
+    $required_fields = ["device_department", "device_type", "device_name"];
+    foreach ($required_fields as $field) {
+        if (empty($_POST[$field])) {
+            $_SESSION["alert"] = "error";
+            $_SESSION["message"] = "Error: $field is required.";
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit();
+        }
+    }
 
-        // Insert the log entry with user_id
-        $insert_log_query = "INSERT INTO logs (user_id, action, date_edited) 
-                             VALUES (?, ?, NOW())";
-        $stmt_log = mysqli_prepare($link, $insert_log_query);
-        mysqli_stmt_bind_param($stmt_log, "is", $_SESSION['user_id'], $log_action);
-        mysqli_stmt_execute($stmt_log);
-        mysqli_stmt_close($stmt_log);
+    // Assign values, ensuring they are not NULL
+    $device_type = $_POST["device_type"];
+    $device_department = $_POST["device_department"];
+    $device_name = $_POST["device_name"];
+    $device_assettag = !empty($_POST["device_assettag"]) ? $_POST["device_assettag"] : NULL;
+    $device_brand = !empty($_POST["device_brand"]) ? $_POST["device_brand"] : NULL;
+    $device_modelnumber = !empty($_POST["device_modelnumber"]) ? $_POST["device_modelnumber"] : NULL;
+    $device_deviceage = !empty($_POST["device_deviceage"]) ? $_POST["device_deviceage"] : NULL;
+    $device_pcname = !empty($_POST["device_pcname"]) ? $_POST["device_pcname"] : NULL;
+    $device_macaddress = !empty($_POST["device_macaddress"]) ? $_POST["device_macaddress"] : NULL;
+    $device_remarks = !empty($_POST["device_remarks"]) ? $_POST["device_remarks"] : NULL;
 
-        $_SESSION["alert"] = "success";
-        header("Location: " . $_SERVER['PHP_SELF']);
-        exit();
+    // Use a prepared statement to insert the data
+    $query = "INSERT INTO otherdevices 
+        (device_type, device_department, device_name, device_assettag, device_brand, 
+        device_modelnumber, device_deviceage, device_pcname, device_macaddress, device_remarks) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    if ($stmt = mysqli_prepare($link, $query)) {
+        mysqli_stmt_bind_param(
+            $stmt,
+            "ssssssssss",
+            $device_type,
+            $device_department,
+            $device_name,
+            $device_assettag,
+            $device_brand,
+            $device_modelnumber,
+            $device_deviceage,
+            $device_pcname,
+            $device_macaddress,
+            $device_remarks
+        );
+
+        if (mysqli_stmt_execute($stmt)) {
+            // Log action
+            $log_action = "Added new Device: " . $device_type . " - " . $device_name;
+            $insert_log_query = "INSERT INTO logs (user_id, action, date_edited) VALUES (?, ?, NOW())";
+
+            if ($log_stmt = mysqli_prepare($link, $insert_log_query)) {
+                mysqli_stmt_bind_param($log_stmt, "is", $user_id, $log_action);
+                mysqli_stmt_execute($log_stmt);
+                mysqli_stmt_close($log_stmt);
+            }
+
+            $_SESSION["alert"] = "success";
+            $_SESSION["message"] = "Device added successfully!";
+        } else {
+            $_SESSION["alert"] = "error";
+            $_SESSION["message"] = "Database Error: " . mysqli_error($link);
+        }
+
+        mysqli_stmt_close($stmt);
     } else {
         $_SESSION["alert"] = "error";
-        header("Location: " . $_SERVER['PHP_SELF']);
-        exit();
+        $_SESSION["message"] = "Database Error: " . mysqli_error($link);
     }
+
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
 }
 
 $alert = $_SESSION["alert"] ?? null;
-unset($_SESSION["alert"]);
+$message = $_SESSION["message"] ?? null;
+unset($_SESSION["alert"], $_SESSION["message"]);
 ?>
+
+<!-- Alert section -->
+<?php if ($alert == "error") { ?>
+    <div class="alert alert-danger" style="margin-top: 20px;">
+        <?php echo htmlspecialchars($message); ?>
+    </div>
+<?php } elseif ($alert == "success") { ?>
+    <div class="alert alert-success" style="margin-top: 20px;">
+        <?php echo htmlspecialchars($message); ?>
+    </div>
+<?php } ?>
+
 
 <!--main-container-part-->
 <div id="content">
@@ -80,31 +132,54 @@ unset($_SESSION["alert"]);
                         </div>
                         <div class="widget-content nopadding">
                             <form name="form1" action="" method="post" class="form-horizontal">
+                                <!-- Asset Tag -->
+                            <div class="control-group">
+                                    <label class="control-label">Asset Tag:</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11" name="assettag" placeholder="None" 
+                                            value="<?php
+                                                echo isset($device['device_id'], $device['device_department'], $device['device_type']) 
+                                                    ? strtoupper($device['device_department']) . '-' . $device['device_type'] . '-' . $device['device_id'] 
+                                                    : 'NOT YET SET';
+                                            ?>" readonly />
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">Department :</label>
+                                    <div class="controls">
+                                        <select name="device_department" class="span11" required>
+                                            <option value="" disabled selected>Select Department</option>
+                                            <option value="ACFN">Accounting & Finance (ACFN)</option>
+                                            <option value="ADVT">Advertising (ADVT)</option>
+                                            <option value="CIRC">Circulation (CIRC)</option>
+                                            <option value="EDTN">Editorial-News (EDTN)</option>
+                                            <option value="EDTB">Editorial-Business (EDTB)</option>
+                                            <option value="HRAD">HRAD (HRAD)</option>
+                                            <option value="MIS">Management Information System (MIS)</option>
+                                            <option value="OPER">Operations (OPER)</option>
+                                            <option value="SLSM">Sales and Marketing (SLSM)</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="control-group">
                                     <label class="control-label">Device Type :</label>
                                     <div class="controls">
-                                        <select name="device_type" class="span11" required>
-                                            <option value="">Select Device Type</option>
-                                            <option value="NAS">NAS</option>
-                                            <option value="External Storage & HDDs">External Storage & HDDs</option>
-                                            <option value="Server">Server</option>
-                                            <option value="Router">Router</option>
-                                            <option value="Network Switches">Network Switches</option>
-                                            <option value="Network Tester">Network Tester</option>
-                                            <option value="Tone Tracer">Tone Tracer</option>
-                                        </select>
+                                    <select name="device_type" class="span11" required>
+                                        <option value="">Select Device Type</option>
+                                        <option value="NAS">Network Attached Storage (NAS)</option>
+                                        <option value="EXTHDD">External Storage & HDDs (EXTHDD)</option>
+                                        <option value="SRV">Server (SRV)</option>
+                                        <option value="RTR">Router (RTR)</option>
+                                        <option value="NWSW">Network Switches (NWSW)</option>
+                                        <option value="NWTST">Network Tester (NWTST)</option>
+                                        <option value="TT">Tone Tracer (TT)</option>
+                                    </select>
                                     </div>
                                 </div>
                                 <div class="control-group">
                                     <label class="control-label">Device Name :</label>
                                     <div class="controls">
                                         <input type="text" class="span11" placeholder="Device Name" name="device_name" required />
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label">Asset Tag :</label>
-                                    <div class="controls">
-                                        <input type="text" class="span11" placeholder="Asset Tag" name="device_assettag" />
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -194,7 +269,15 @@ unset($_SESSION["alert"]);
                                     <tr>
                                         <td><?php echo $row["device_type"]; ?></td>
                                         <td><?php echo $row["device_name"]; ?></td>
-                                        <td><?php echo $row["device_assettag"]; ?></td>
+                                        <td>
+                                            <?php 
+                                                if (isset($row['device_id']) && isset($row['device_department']) && isset($row['device_type'])) {
+                                                    echo strtoupper($row['device_department']) . '-' . $row['device_type'] . '-' . $row['device_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo $row["device_brand"]; ?></td>
                                         <td><?php echo $row["device_modelnumber"]; ?></td>
                                         <td><?php echo $row["device_deviceage"]; ?></td>
