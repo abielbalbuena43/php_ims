@@ -25,6 +25,25 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+
+// Handle delete request
+if (isset($_POST["delete_wificard"])) {
+    $wificard_id = $_POST["wificard_id"];
+
+    $deleteQuery = "DELETE FROM wificard WHERE wificard_id = $wificard_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: wificard.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: wificard.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
+
 // Handle form submission to update wificard details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -75,7 +94,6 @@ if (isset($_POST["submit"])) {
     }
 }
 ?>
-
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
@@ -95,87 +113,93 @@ if (isset($_POST["submit"])) {
                         <h5>Edit WIFI Card Details for <?php echo htmlspecialchars($equipment['pcname']); ?></h5>
                     </div>
                     <div class="widget-content nopadding">
-
-                    <form name="form1" action="" method="post" class="form-horizontal">
-                    <div class="control-group">
-                        <label class="control-label">Asset Tag :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="assettag" 
-                                placeholder="None" 
-                                value="<?php echo isset($wificard['wificard_assettag']) ? $wificard['wificard_assettag'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Brand :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="brand" 
-                                placeholder="None" 
-                                value="<?php echo isset($wificard['wificard_brand']) ? $wificard['wificard_brand'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Model Number :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="modelnumber" 
-                                placeholder="None" 
-                                value="<?php echo isset($wificard['wificard_modelnumber']) ? $wificard['wificard_modelnumber'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Date Acquired :</label>
-                        <div class="controls">
-                            <input type="date" class="span11" name="dateacquired" 
-                                value="<?php echo isset($wificard['wificard_dateacquired']) ? $wificard['wificard_dateacquired'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Device Age :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="deviceage" 
-                                placeholder="None" 
-                                value="<?php echo isset($wificard['wificard_deviceage']) ? $wificard['wificard_deviceage'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Assigned User :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="assigneduser" 
-                                placeholder="None" 
-                                value="<?php echo isset($wificard['wificard_assigneduser']) ? $wificard['wificard_assigneduser'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Remarks :</label>
-                        <div class="controls">
-                            <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($wificard['wificard_remarks']) ? $wificard['wificard_remarks'] : ''; ?></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" name="submit" class="btn btn-success">Save Changes</button>
-                        <a href="equipment.php" class="btn">Cancel</a>
-                    </div>
-                </form>
-
-                            <!-- Success/Failure Alert -->
-                            <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
-                                    <?php 
-                                        if ($alert == "success") {
-                                            echo "WIFI Card details updated successfully!";
-                                        } elseif ($alert == "error") {
-                                            echo "Failed to update WIFI Card details.";
-                                        }
-                                    ?>
+                        <form name="form1" action="" method="post" class="form-horizontal">
+                            <!-- Asset Tag -->
+                            <div class="control-group">
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($wificard['wificard_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-WIFI-' . $wificard['wificard_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
                                 </div>
-                            <?php } ?>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Brand :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="brand" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($wificard['wificard_brand']) ? $wificard['wificard_brand'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Model Number :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="modelnumber" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($wificard['wificard_modelnumber']) ? $wificard['wificard_modelnumber'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Date Acquired :</label>
+                                <div class="controls">
+                                    <input type="date" class="span11" name="dateacquired" 
+                                        value="<?php echo isset($wificard['wificard_dateacquired']) ? $wificard['wificard_dateacquired'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Device Age :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="deviceage" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($wificard['wificard_deviceage']) ? $wificard['wificard_deviceage'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Assigned User :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assigneduser" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($wificard['wificard_assigneduser']) ? $wificard['wificard_assigneduser'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Remarks :</label>
+                                <div class="controls">
+                                    <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($wificard['wificard_remarks']) ? $wificard['wificard_remarks'] : ''; ?></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" name="submit" class="btn btn-success">Save Changes</button>
+                                <a href="equipment.php" class="btn">Cancel</a>
+                            </div>
                         </form>
+
+                        <!-- Success/Failure Alert -->
+                        <?php if (isset($alert)) { ?>
+                            <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
+                                <?php 
+                                    if ($alert == "success") {
+                                        echo "Wificard details updated successfully!";
+                                    } elseif ($alert == "error") {
+                                        echo "Failed to update Wificard details.";
+                                    } elseif ($alert == "deleted") {
+                                        echo "Wificard deleted!";
+                                    }
+                                ?>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
 
@@ -203,7 +227,15 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($wificard['wificard_assettag']) ? htmlspecialchars($wificard['wificard_assettag']) : 'None'; ?></td>
+                                        <td>
+                                            <?php 
+                                                if (isset($wificard['wificard_id']) && isset($equipment['department'])) {
+                                                    echo strtoupper($equipment['department']) . '-WIFI-' . $wificard['wificard_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo !empty($wificard['wificard_brand']) ? htmlspecialchars($wificard['wificard_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($wificard['wificard_modelnumber']) ? htmlspecialchars($wificard['wificard_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($wificard['wificard_dateacquired']) ? htmlspecialchars($wificard['wificard_dateacquired']) : 'None'; ?></td>
@@ -217,6 +249,14 @@ if (isset($_POST["submit"])) {
                     </div>
                 </div>
 
+                <!-- Delete Button (Appears at the End, Only If a wificard Exists) -->
+                <?php if ($wificard): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this wificard?');">
+                        <input type="hidden" name="wificard_id" value="<?php echo $wificard['wificard_id']; ?>">
+                        <button type="submit" name="delete_wificard" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>

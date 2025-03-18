@@ -25,6 +25,23 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+// Handle delete request
+if (isset($_POST["delete_gpu"])) {
+    $gpu_id = $_POST["gpu_id"];
+
+    $deleteQuery = "DELETE FROM gpu WHERE gpu_id = $gpu_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: gpu.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: gpu.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
 // Handle form submission to update gpu details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -77,7 +94,6 @@ if (isset($_POST["submit"])) {
     }
 }
 ?>
-
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
@@ -97,89 +113,97 @@ if (isset($_POST["submit"])) {
                         <h5>Edit GPU Details for <?php echo htmlspecialchars($equipment['pcname']); ?></h5>
                     </div>
                     <div class="widget-content nopadding">
-
                         <form name="form1" action="" method="post" class="form-horizontal">
-                        <div class="control-group">
-                        <label class="control-label">Asset Tag :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="assettag" 
-                                placeholder="None" 
-                                value="<?php echo isset($gpu['gpu_assettag']) ? $gpu['gpu_assettag'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <!-- Asset Tag -->
+                            <div class="control-group">
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($gpu['gpu_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-GPU-' . $gpu['gpu_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Brand :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="brand" 
-                                placeholder="None" 
-                                value="<?php echo isset($gpu['gpu_brand']) ? $gpu['gpu_brand'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Brand :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="brand" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($gpu['gpu_brand']) ? $gpu['gpu_brand'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Model Number :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="modelnumber" 
-                                placeholder="None" 
-                                value="<?php echo isset($gpu['gpu_modelnumber']) ? $gpu['gpu_modelnumber'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Model Number :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="modelnumber" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($gpu['gpu_modelnumber']) ? $gpu['gpu_modelnumber'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Size :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="size" 
-                                placeholder="None" 
-                                value="<?php echo isset($gpu['gpu_size']) ? $gpu['gpu_size'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Size :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="size" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($gpu['gpu_size']) ? $gpu['gpu_size'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Date Acquired :</label>
-                        <div class="controls">
-                            <input type="date" class="span11" name="dateacquired" 
-                                value="<?php echo isset($gpu['gpu_dateacquired']) ? $gpu['gpu_dateacquired'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Date Acquired :</label>
+                                <div class="controls">
+                                    <input type="date" class="span11" name="dateacquired" 
+                                        value="<?php echo isset($gpu['gpu_dateacquired']) ? $gpu['gpu_dateacquired'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Device Age :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="deviceage" 
-                                placeholder="None" 
-                                value="<?php echo isset($gpu['gpu_deviceage']) ? $gpu['gpu_deviceage'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Device Age :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="deviceage" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($gpu['gpu_deviceage']) ? $gpu['gpu_deviceage'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Assigned User :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="assigneduser" 
-                                placeholder="None" 
-                                value="<?php echo isset($gpu['gpu_assigneduser']) ? $gpu['gpu_assigneduser'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Assigned User :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assigneduser" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($gpu['gpu_assigneduser']) ? $gpu['gpu_assigneduser'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Remarks :</label>
-                        <div class="controls">
-                            <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($gpu['gpu_remarks']) ? $gpu['gpu_remarks'] : ''; ?></textarea>
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Remarks :</label>
+                                <div class="controls">
+                                    <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($gpu['gpu_remarks']) ? $gpu['gpu_remarks'] : ''; ?></textarea>
+                                </div>
+                            </div>
 
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                                <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
                                             echo "GPU details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update GPU details.";
+                                        } elseif ($alert == "deleted") {
+                                            echo "GPU deleted!";
                                         }
                                     ?>
                                 </div>
                             <?php } ?>
+
                             <div class="form-actions">
                                 <button type="submit" name="submit" class="btn btn-success">Save Changes</button>
                                 <a href="equipment.php" class="btn">Cancel</a>
@@ -213,7 +237,15 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($gpu['gpu_assettag']) ? htmlspecialchars($gpu['gpu_assettag']) : 'None'; ?></td>
+                                        <td>
+                                            <?php 
+                                                if (isset($gpu['gpu_id']) && isset($equipment['department'])) {
+                                                    echo strtoupper($equipment['department']) . '-GPU-' . $gpu['gpu_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo !empty($gpu['gpu_brand']) ? htmlspecialchars($gpu['gpu_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($gpu['gpu_modelnumber']) ? htmlspecialchars($gpu['gpu_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($gpu['gpu_size']) ? htmlspecialchars($gpu['gpu_size']) : 'None'; ?></td>
@@ -227,7 +259,14 @@ if (isset($_POST["submit"])) {
                         </div>
                     </div>
                 </div>
-
+                <!-- Delete Button (Appears at the End, Only If a GPU Exists) -->
+                <?php if ($gpu): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this GPU?');">
+                        <input type="hidden" name="gpu_id" value="<?php echo $gpu['gpu_id']; ?>">
+                        <button type="submit" name="delete_gpu" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>

@@ -25,6 +25,23 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+// Handle delete request
+if (isset($_POST["delete_ram"])) {
+    $ram_id = $_POST["ram_id"];
+
+    $deleteQuery = "DELETE FROM ram WHERE ram_id = $ram_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: ram.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: ram.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
 // Handle form submission to update RAM details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -97,16 +114,21 @@ if (isset($_POST["submit"])) {
                         <h5>Edit RAM Details for <?php echo htmlspecialchars($equipment['pcname']); ?></h5>
                     </div>
                     <div class="widget-content nopadding">
-
                         <form name="form1" action="" method="post" class="form-horizontal">
+                        <!-- Asset Tag -->
                         <div class="control-group">
-                        <label class="control-label">Asset Tag :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="assettag" 
-                                placeholder="None" 
-                                value="<?php echo isset($ram['ram_assettag']) ? $ram['ram_assettag'] : ''; ?>" />
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($ram['ram_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-RAM-' . $ram['ram_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
+                                </div>
                         </div>
-                    </div>
 
                     <div class="control-group">
                         <label class="control-label">Brand :</label>
@@ -170,12 +192,14 @@ if (isset($_POST["submit"])) {
                     </div>
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                                <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
                                             echo "RAM details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update RAM details.";
+                                        } elseif ($alert == "deleted") {
+                                            echo "RAM deleted!";
                                         }
                                     ?>
                                 </div>
@@ -196,38 +220,54 @@ if (isset($_POST["submit"])) {
                     </div>
                     <div class="widget-content nopadding">
                         <div style="overflow-x: auto;">
-                            <table class="table table-bordered table-striped" style="min-width: 1200px;">
-                                <thead>
-                                    <tr>
-                                        <th>PC Name</th>
-                                        <th>Asset Tag</th>
-                                        <th>Brand</th>
-                                        <th>Model Number</th>
-                                        <th>Size</th>
-                                        <th>Date Acquired</th>
-                                        <th>Device Age</th>
-                                        <th>Assigned User</th>
-                                        <th>Remarks</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($ram['ram_assettag']) ? htmlspecialchars($ram['ram_assettag']) : 'None'; ?></td>
-                                        <td><?php echo !empty($ram['ram_brand']) ? htmlspecialchars($ram['ram_brand']) : 'None'; ?></td>
-                                        <td><?php echo !empty($ram['ram_modelnumber']) ? htmlspecialchars($ram['ram_modelnumber']) : 'None'; ?></td>
-                                        <td><?php echo !empty($ram['ram_size']) ? htmlspecialchars($ram['ram_size']) : 'None'; ?></td>
-                                        <td><?php echo !empty($ram['ram_dateacquired']) ? htmlspecialchars($ram['ram_dateacquired']) : 'None'; ?></td>
-                                        <td><?php echo !empty($ram['ram_deviceage']) ? htmlspecialchars($ram['ram_deviceage']) : 'None'; ?></td>
-                                        <td><?php echo !empty($ram['ram_assigneduser']) ? htmlspecialchars($ram['ram_assigneduser']) : 'None'; ?></td>
-                                        <td><?php echo !empty($ram['ram_remarks']) ? htmlspecialchars($ram['ram_remarks']) : 'None'; ?></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <table class="table table-bordered table-striped" style="min-width: 1200px;">
+                            <thead>
+                                <tr>
+                                    <th>PC Name</th>
+                                    <th>Asset Tag</th>
+                                    <th>Brand</th>  
+                                    <th>Model Number</th>
+                                    <th>Size</th>
+                                    <th>Date Acquired</th>
+                                    <th>Device Age</th>
+                                    <th>Assigned User</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
+                                    <td>
+                                        <?php 
+                                            if (isset($ram['ram_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-RAM-' . $ram['ram_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>
+                                    </td>
+                                    <td><?php echo !empty($ram['ram_brand']) ? htmlspecialchars($ram['ram_brand']) : 'None'; ?></td>
+                                    <td><?php echo !empty($ram['ram_modelnumber']) ? htmlspecialchars($ram['ram_modelnumber']) : 'None'; ?></td>
+                                    <td><?php echo !empty($ram['ram_size']) ? htmlspecialchars($ram['ram_size']) : 'None'; ?></td>
+                                    <td><?php echo !empty($ram['ram_dateacquired']) ? htmlspecialchars($ram['ram_dateacquired']) : 'None'; ?></td>
+                                    <td><?php echo !empty($ram['ram_deviceage']) ? htmlspecialchars($ram['ram_deviceage']) : 'None'; ?></td>
+                                    <td><?php echo !empty($ram['ram_assigneduser']) ? htmlspecialchars($ram['ram_assigneduser']) : 'None'; ?></td>
+                                    <td><?php echo !empty($ram['ram_remarks']) ? htmlspecialchars($ram['ram_remarks']) : 'None'; ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
                         </div>
                     </div>
                 </div>
-
+                <!-- Delete Button (Appears at the End, Only If a ram Exists) -->
+                <?php if ($ram): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this ram?');">
+                        <input type="hidden" name="ram_id" value="<?php echo $ram['ram_id']; ?>">
+                        <button type="submit" name="delete_ram" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>

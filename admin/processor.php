@@ -246,7 +246,6 @@ if (isset($_POST["submit"])) {
                         </div>
                     </div>
                 </div>
-
                 <!-- Delete Button (Appears at the End, Only If a Processor Exists) -->
                 <?php if ($processor): ?>
                     <form method="POST" style="display:inline; margin-top: 10px;" 

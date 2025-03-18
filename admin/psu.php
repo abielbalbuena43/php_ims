@@ -25,6 +25,23 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+// Handle delete request
+if (isset($_POST["delete_psu"])) {
+    $psu_id = $_POST["psu_id"];
+
+    $deleteQuery = "DELETE FROM psu WHERE psu_id = $psu_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: psu.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: psu.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
 // Handle form submission to update psu details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -75,7 +92,6 @@ if (isset($_POST["submit"])) {
     }
 }
 ?>
-
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
@@ -95,79 +111,88 @@ if (isset($_POST["submit"])) {
                         <h5>Edit PSU Details for <?php echo htmlspecialchars($equipment['pcname']); ?></h5>
                     </div>
                     <div class="widget-content nopadding">
-
                         <form name="form1" action="" method="post" class="form-horizontal">
-                        <div class="control-group">
-                        <label class="control-label">Asset Tag :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="assettag" 
-                                placeholder="None" 
-                                value="<?php echo isset($psu['psu_assettag']) ? $psu['psu_assettag'] : ''; ?>" />
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Brand :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="brand" 
-                                placeholder="None" 
-                                value="<?php echo isset($psu['psu_brand']) ? $psu['psu_brand'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <!-- Asset Tag -->
+                            <div class="control-group">
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($psu['psu_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-PSU-' . $psu['psu_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Model Number :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="modelnumber" 
-                                placeholder="None" 
-                                value="<?php echo isset($psu['psu_modelnumber']) ? $psu['psu_modelnumber'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Brand :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="brand" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($psu['psu_brand']) ? $psu['psu_brand'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Date Acquired :</label>
-                        <div class="controls">
-                            <input type="date" class="span11" name="dateacquired" 
-                                value="<?php echo isset($psu['psu_dateacquired']) ? $psu['psu_dateacquired'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Model Number :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="modelnumber" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($psu['psu_modelnumber']) ? $psu['psu_modelnumber'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Device Age :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="deviceage" 
-                                placeholder="None" 
-                                value="<?php echo isset($psu['psu_deviceage']) ? $psu['psu_deviceage'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Date Acquired :</label>
+                                <div class="controls">
+                                    <input type="date" class="span11" name="dateacquired" 
+                                        value="<?php echo isset($psu['psu_dateacquired']) ? $psu['psu_dateacquired'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Assigned User :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="assigneduser" 
-                                placeholder="None" 
-                                value="<?php echo isset($psu['psu_assigneduser']) ? $psu['psu_assigneduser'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Device Age :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="deviceage" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($psu['psu_deviceage']) ? $psu['psu_deviceage'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Remarks :</label>
-                        <div class="controls">
-                            <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($psu['psu_remarks']) ? $psu['psu_remarks'] : ''; ?></textarea>
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Assigned User :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assigneduser" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($psu['psu_assigneduser']) ? $psu['psu_assigneduser'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Remarks :</label>
+                                <div class="controls">
+                                    <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($psu['psu_remarks']) ? $psu['psu_remarks'] : ''; ?></textarea>
+                                </div>
+                            </div>
 
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                                <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
                                             echo "PSU details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update PSU details.";
+                                        } elseif ($alert == "deleted") {
+                                            echo "PSU deleted!";
                                         }
                                     ?>
                                 </div>
                             <?php } ?>
+
                             <div class="form-actions">
                                 <button type="submit" name="submit" class="btn btn-success">Save Changes</button>
                                 <a href="equipment.php" class="btn">Cancel</a>
@@ -200,7 +225,15 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($psu['psu_assettag']) ? htmlspecialchars($psu['psu_assettag']) : 'None'; ?></td>
+                                        <td>
+                                            <?php 
+                                                if (isset($psu['psu_id']) && isset($equipment['department'])) {
+                                                    echo strtoupper($equipment['department']) . '-PSU-' . $psu['psu_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo !empty($psu['psu_brand']) ? htmlspecialchars($psu['psu_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($psu['psu_modelnumber']) ? htmlspecialchars($psu['psu_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($psu['psu_dateacquired']) ? htmlspecialchars($psu['psu_dateacquired']) : 'None'; ?></td>
@@ -214,12 +247,17 @@ if (isset($_POST["submit"])) {
                     </div>
                 </div>
 
+                <?php if ($psu): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this PSU?');">
+                        <input type="hidden" name="psu_id" value="<?php echo $psu['psu_id']; ?>">
+                        <button type="submit" name="delete_psu" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 
 <!--end-main-container-part-->
-<?php
-include "footer.php";
-?>
+<?php include "footer.php"; ?>

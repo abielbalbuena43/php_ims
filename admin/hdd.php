@@ -25,6 +25,23 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+// Handle delete request
+if (isset($_POST["delete_hdd"])) {
+    $hdd_id = $_POST["hdd_id"];
+
+    $deleteQuery = "DELETE FROM hdd WHERE hdd_id = $hdd_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: hdd.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: hdd.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
 // Handle form submission to update HDD details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -99,14 +116,20 @@ if (isset($_POST["submit"])) {
                     <div class="widget-content nopadding">
 
                         <form name="form1" action="" method="post" class="form-horizontal">
+                        <!-- Asset Tag -->
                         <div class="control-group">
-                        <label class="control-label">Asset Tag :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="assettag" 
-                                placeholder="None" 
-                                value="<?php echo isset($hdd['hdd_assettag']) ? $hdd['hdd_assettag'] : ''; ?>" />
-                        </div>
-                    </div>
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($hdd['hdd_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-HDD-' . $hdd['hdd_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
+                                </div>
+                            </div>
 
                     <div class="control-group">
                         <label class="control-label">Brand :</label>
@@ -170,12 +193,14 @@ if (isset($_POST["submit"])) {
 
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                                <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
                                             echo "HDD details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update HDD details.";
+                                        } elseif ($alert == "deleted") {
+                                            echo "HDD deleted!";
                                         }
                                     ?>
                                 </div>
@@ -196,38 +221,52 @@ if (isset($_POST["submit"])) {
                     </div>
                     <div class="widget-content nopadding">
                         <div style="overflow-x: auto;">
-                            <table class="table table-bordered table-striped" style="min-width: 1200px;">
-                                <thead>
-                                    <tr>
-                                        <th>PC Name</th>
-                                        <th>Asset Tag</th>
-                                        <th>Brand</th>
-                                        <th>Model Number</th>
-                                        <th>Size</th>
-                                        <th>Date Acquired</th>
-                                        <th>Device Age</th>
-                                        <th>Assigned User</th>
-                                        <th>Remarks</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($hdd['hdd_assettag']) ? htmlspecialchars($hdd['hdd_assettag']) : 'None'; ?></td>
-                                        <td><?php echo !empty($hdd['hdd_brand']) ? htmlspecialchars($hdd['hdd_brand']) : 'None'; ?></td>
-                                        <td><?php echo !empty($hdd['hdd_modelnumber']) ? htmlspecialchars($hdd['hdd_modelnumber']) : 'None'; ?></td>
-                                        <td><?php echo !empty($hdd['hdd_size']) ? htmlspecialchars($hdd['hdd_size']) : 'None'; ?></td>
-                                        <td><?php echo !empty($hdd['hdd_dateacquired']) ? htmlspecialchars($hdd['hdd_dateacquired']) : 'None'; ?></td>
-                                        <td><?php echo !empty($hdd['hdd_deviceage']) ? htmlspecialchars($hdd['hdd_deviceage']) : 'None'; ?></td>
-                                        <td><?php echo !empty($hdd['hdd_assigneduser']) ? htmlspecialchars($hdd['hdd_assigneduser']) : 'None'; ?></td>
-                                        <td><?php echo !empty($hdd['hdd_remarks']) ? htmlspecialchars($hdd['hdd_remarks']) : 'None'; ?></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <table class="table table-bordered table-striped" style="min-width: 1200px;">
+                            <thead>
+                                <tr>
+                                    <th>PC Name</th>
+                                    <th>Asset Tag</th>
+                                    <th>Brand</th>
+                                    <th>Model Number</th>
+                                    <th>Size</th>
+                                    <th>Date Acquired</th>
+                                    <th>Device Age</th>
+                                    <th>Assigned User</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
+                                    <td>
+                                        <?php 
+                                            if (isset($hdd['hdd_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-HDD-' . $hdd['hdd_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>
+                                    </td>
+                                    <td><?php echo !empty($hdd['hdd_brand']) ? htmlspecialchars($hdd['hdd_brand']) : 'None'; ?></td>
+                                    <td><?php echo !empty($hdd['hdd_modelnumber']) ? htmlspecialchars($hdd['hdd_modelnumber']) : 'None'; ?></td>
+                                    <td><?php echo !empty($hdd['hdd_size']) ? htmlspecialchars($hdd['hdd_size']) : 'None'; ?></td>
+                                    <td><?php echo !empty($hdd['hdd_dateacquired']) ? htmlspecialchars($hdd['hdd_dateacquired']) : 'None'; ?></td>
+                                    <td><?php echo !empty($hdd['hdd_deviceage']) ? htmlspecialchars($hdd['hdd_deviceage']) : 'None'; ?></td>
+                                    <td><?php echo !empty($hdd['hdd_assigneduser']) ? htmlspecialchars($hdd['hdd_assigneduser']) : 'None'; ?></td>
+                                    <td><?php echo !empty($hdd['hdd_remarks']) ? htmlspecialchars($hdd['hdd_remarks']) : 'None'; ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
                         </div>
                     </div>
                 </div>
-
+                <?php if ($hdd): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this hdd?');">
+                        <input type="hidden" name="hdd_id" value="<?php echo $hdd['hdd_id']; ?>">
+                        <button type="submit" name="delete_hdd" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>

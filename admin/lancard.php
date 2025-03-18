@@ -25,6 +25,23 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+// Handle delete request
+if (isset($_POST["delete_lancard"])) {
+    $lancard_id = $_POST["lancard_id"];
+
+    $deleteQuery = "DELETE FROM lancard WHERE lancard_id = $lancard_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: lancard.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: lancard.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
 // Handle form submission to update lancard details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -77,7 +94,6 @@ if (isset($_POST["submit"])) {
     }
 }
 ?>
-
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
@@ -98,95 +114,97 @@ if (isset($_POST["submit"])) {
                     </div>
                     <div class="widget-content nopadding">
 
-                    <form name="form1" action="" method="post" class="form-horizontal">
-                    <div class="control-group">
-                        <label class="control-label">Asset Tag :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="assettag" 
-                                placeholder="None" 
-                                value="<?php echo isset($lancard['lancard_assettag']) ? $lancard['lancard_assettag'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Brand :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="brand" 
-                                placeholder="None" 
-                                value="<?php echo isset($lancard['lancard_brand']) ? $lancard['lancard_brand'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Model Number :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="modelnumber" 
-                                placeholder="None" 
-                                value="<?php echo isset($lancard['lancard_modelnumber']) ? $lancard['lancard_modelnumber'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Date Acquired :</label>
-                        <div class="controls">
-                            <input type="date" class="span11" name="dateacquired" 
-                                value="<?php echo isset($lancard['lancard_dateacquired']) ? $lancard['lancard_dateacquired'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Device Age :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="deviceage" 
-                                placeholder="None" 
-                                value="<?php echo isset($lancard['lancard_deviceage']) ? $lancard['lancard_deviceage'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Assigned User :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="assigneduser" 
-                                placeholder="None" 
-                                value="<?php echo isset($lancard['lancard_assigneduser']) ? $lancard['lancard_assigneduser'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">MAC Address :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="macaddress" 
-                                placeholder="None" 
-                                value="<?php echo isset($lancard['lancard_macaddress']) ? $lancard['lancard_macaddress'] : ''; ?>" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">Remarks :</label>
-                        <div class="controls">
-                            <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($lancard['lancard_remarks']) ? $lancard['lancard_remarks'] : ''; ?></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" name="submit" class="btn btn-success">Save Changes</button>
-                        <a href="equipment.php" class="btn">Cancel</a>
-                    </div>
-                </form>
-
-                            <!-- Success/Failure Alert -->
-                            <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
-                                    <?php 
-                                        if ($alert == "success") {
-                                            echo "LAN card details updated successfully!";
-                                        } elseif ($alert == "error") {
-                                            echo "Failed to update LAN card details.";
-                                        }
-                                    ?>
+                        <form name="form1" action="" method="post" class="form-horizontal">
+                            <!-- Asset Tag -->
+                            <div class="control-group">
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($lancard['lancard_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-LAN-' . $lancard['lancard_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
                                 </div>
-                            <?php } ?>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Brand :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="brand" placeholder="None" 
+                                        value="<?php echo isset($lancard['lancard_brand']) ? $lancard['lancard_brand'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Model Number :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="modelnumber" placeholder="None" 
+                                        value="<?php echo isset($lancard['lancard_modelnumber']) ? $lancard['lancard_modelnumber'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Date Acquired :</label>
+                                <div class="controls">
+                                    <input type="date" class="span11" name="dateacquired" 
+                                        value="<?php echo isset($lancard['lancard_dateacquired']) ? $lancard['lancard_dateacquired'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Device Age :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="deviceage" placeholder="None" 
+                                        value="<?php echo isset($lancard['lancard_deviceage']) ? $lancard['lancard_deviceage'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Assigned User :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assigneduser" placeholder="None" 
+                                        value="<?php echo isset($lancard['lancard_assigneduser']) ? $lancard['lancard_assigneduser'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">MAC Address :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="macaddress" placeholder="None" 
+                                        value="<?php echo isset($lancard['lancard_macaddress']) ? $lancard['lancard_macaddress'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Remarks :</label>
+                                <div class="controls">
+                                    <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($lancard['lancard_remarks']) ? $lancard['lancard_remarks'] : ''; ?></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" name="submit" class="btn btn-success">Save Changes</button>
+                                <a href="equipment.php" class="btn">Cancel</a>
+                            </div>
                         </form>
+
+                        <!-- Success/Failure Alert -->
+                        <?php if (isset($alert)) { ?>
+                            <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
+                                <?php 
+                                    if ($alert == "success") {
+                                        echo "LAN Card details updated successfully!";
+                                    } elseif ($alert == "error") {
+                                        echo "Failed to update LAN Card details.";
+                                    } elseif ($alert == "deleted") {
+                                        echo "LAN Card deleted!";
+                                    }
+                                ?>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
 
@@ -215,7 +233,15 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($lancard['lancard_assettag']) ? htmlspecialchars($lancard['lancard_assettag']) : 'None'; ?></td>
+                                        <td>
+                                            <?php 
+                                                if (isset($lancard['lancard_id']) && isset($equipment['department'])) {
+                                                    echo strtoupper($equipment['department']) . '-LAN-' . $lancard['lancard_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo !empty($lancard['lancard_brand']) ? htmlspecialchars($lancard['lancard_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($lancard['lancard_modelnumber']) ? htmlspecialchars($lancard['lancard_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($lancard['lancard_dateacquired']) ? htmlspecialchars($lancard['lancard_dateacquired']) : 'None'; ?></td>
@@ -230,12 +256,17 @@ if (isset($_POST["submit"])) {
                     </div>
                 </div>
 
+                <?php if ($lancard): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this LAN Card?');">
+                        <input type="hidden" name="lancard_id" value="<?php echo $lancard['lancard_id']; ?>">
+                        <button type="submit" name="delete_lancard" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 
 <!--end-main-container-part-->
-<?php
-include "footer.php";
-?>
+<?php include "footer.php"; ?>

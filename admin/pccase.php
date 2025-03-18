@@ -25,6 +25,23 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+// Handle delete request
+if (isset($_POST["delete_pccase"])) {
+    $pccase_id = $_POST["pccase_id"];
+
+    $deleteQuery = "DELETE FROM pccase WHERE pccase_id = $pccase_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: pccase.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: pccase.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
 // Handle form submission to update pccase details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -75,13 +92,12 @@ if (isset($_POST["submit"])) {
     }
 }
 ?>
-
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
         <div id="breadcrumb">
             <a href="equipment.php" class="tip-bottom">
-                <i class="icon-home"></i> Edit pccase Details
+                <i class="icon-home"></i> Edit PC Case Details
             </a>
         </div>
     </div>
@@ -90,85 +106,94 @@ if (isset($_POST["submit"])) {
         <div class="row-fluid" style="background-color: white; min-height: 1000px; padding:10px;">
             <div class="span12">
                 <div class="widget-box">
-                    <div class="widget-title"> 
+                    <div class="widget-title">
                         <span class="icon"> <i class="icon-align-justify"></i> </span>
-                        <h5>Edit pccase Details for <?php echo htmlspecialchars($equipment['pcname']); ?></h5>
+                        <h5>Edit PC Case Details for <?php echo htmlspecialchars($equipment['pcname']); ?></h5>
                     </div>
                     <div class="widget-content nopadding">
 
                         <form name="form1" action="" method="post" class="form-horizontal">
-                        <div class="control-group">
-                        <label class="control-label">Asset Tag :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="assettag" 
-                                placeholder="None" 
-                                value="<?php echo isset($pccase['pccase_assettag']) ? $pccase['pccase_assettag'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <!-- Asset Tag -->
+                            <div class="control-group">
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assettag" placeholder="None"
+                                        value="<?php
+                                            if (isset($pccase['pccase_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-CASE-' . $pccase['pccase_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Brand :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="brand" 
-                                placeholder="None" 
-                                value="<?php echo isset($pccase['pccase_brand']) ? $pccase['pccase_brand'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Brand :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="brand"
+                                        placeholder="None"
+                                        value="<?php echo isset($pccase['pccase_brand']) ? $pccase['pccase_brand'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Model Number :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="modelnumber" 
-                                placeholder="None" 
-                                value="<?php echo isset($pccase['pccase_modelnumber']) ? $pccase['pccase_modelnumber'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Model Number :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="modelnumber"
+                                        placeholder="None"
+                                        value="<?php echo isset($pccase['pccase_modelnumber']) ? $pccase['pccase_modelnumber'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Date Acquired :</label>
-                        <div class="controls">
-                            <input type="date" class="span11" name="dateacquired" 
-                                value="<?php echo isset($pccase['pccase_dateacquired']) ? $pccase['pccase_dateacquired'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Date Acquired :</label>
+                                <div class="controls">
+                                    <input type="date" class="span11" name="dateacquired"
+                                        value="<?php echo isset($pccase['pccase_dateacquired']) ? $pccase['pccase_dateacquired'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Device Age :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="deviceage" 
-                                placeholder="None" 
-                                value="<?php echo isset($pccase['pccase_deviceage']) ? $pccase['pccase_deviceage'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Device Age :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="deviceage"
+                                        placeholder="None"
+                                        value="<?php echo isset($pccase['pccase_deviceage']) ? $pccase['pccase_deviceage'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Assigned User :</label>
-                        <div class="controls">
-                            <input type="text" class="span11" name="assigneduser" 
-                                placeholder="None" 
-                                value="<?php echo isset($pccase['pccase_assigneduser']) ? $pccase['pccase_assigneduser'] : ''; ?>" />
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Assigned User :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assigneduser"
+                                        placeholder="None"
+                                        value="<?php echo isset($pccase['pccase_assigneduser']) ? $pccase['pccase_assigneduser'] : ''; ?>" />
+                                </div>
+                            </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Remarks :</label>
-                        <div class="controls">
-                            <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($pccase['pccase_remarks']) ? $pccase['pccase_remarks'] : ''; ?></textarea>
-                        </div>
-                    </div>
+                            <div class="control-group">
+                                <label class="control-label">Remarks :</label>
+                                <div class="controls">
+                                    <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($pccase['pccase_remarks']) ? $pccase['pccase_remarks'] : ''; ?></textarea>
+                                </div>
+                            </div>
 
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
-                                    <?php 
+                                <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
+                                    <?php
                                         if ($alert == "success") {
-                                            echo "pccase details updated successfully!";
+                                            echo "PC Case details updated successfully!";
                                         } elseif ($alert == "error") {
-                                            echo "Failed to update pccase details.";
+                                            echo "Failed to update PC Case details.";
+                                        } elseif ($alert == "deleted") {
+                                            echo "PC Case deleted!";
                                         }
                                     ?>
                                 </div>
                             <?php } ?>
+
                             <div class="form-actions">
                                 <button type="submit" name="submit" class="btn btn-success">Save Changes</button>
                                 <a href="equipment.php" class="btn">Cancel</a>
@@ -177,11 +202,11 @@ if (isset($_POST["submit"])) {
                     </div>
                 </div>
 
-                <!-- Table to display pccase details -->
+                <!-- Table to display PC Case details -->
                 <div class="widget-box" style="margin-top: 20px;">
-                    <div class="widget-title"> 
+                    <div class="widget-title">
                         <span class="icon"> <i class="icon-table"></i> </span>
-                        <h5>pccase Details</h5>
+                        <h5>PC Case Details</h5>
                     </div>
                     <div class="widget-content nopadding">
                         <div style="overflow-x: auto;">
@@ -201,7 +226,15 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($pccase['pccase_assettag']) ? htmlspecialchars($pccase['pccase_assettag']) : 'None'; ?></td>
+                                        <td>
+                                            <?php
+                                                if (isset($pccase['pccase_id']) && isset($equipment['department'])) {
+                                                    echo strtoupper($equipment['department']) . '-CASE-' . $pccase['pccase_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo !empty($pccase['pccase_brand']) ? htmlspecialchars($pccase['pccase_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($pccase['pccase_modelnumber']) ? htmlspecialchars($pccase['pccase_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($pccase['pccase_dateacquired']) ? htmlspecialchars($pccase['pccase_dateacquired']) : 'None'; ?></td>
@@ -215,6 +248,13 @@ if (isset($_POST["submit"])) {
                     </div>
                 </div>
 
+                <?php if ($pccase): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;"
+                          onsubmit="return confirm('Are you sure you want to delete this PC Case?');">
+                        <input type="hidden" name="pccase_id" value="<?php echo $pccase['pccase_id']; ?>">
+                        <button type="submit" name="delete_pccase" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>
