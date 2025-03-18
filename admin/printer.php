@@ -25,6 +25,24 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+
+// Handle delete request
+if (isset($_POST["delete_printer"])) {
+    $printer_id = $_POST["printer_id"];
+
+    $deleteQuery = "DELETE FROM printer WHERE printer_id = $printer_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: printer.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: printer.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
 // Handle form submission to update printer details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -98,14 +116,20 @@ if (isset($_POST["submit"])) {
 
                         <form name="form1" action="" method="post" class="form-horizontal">
                             <!-- Form to edit printer details -->
+                            <!-- Asset Tag -->
                             <div class="control-group">
-                            <label class="control-label">Asset Tag :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" name="assettag" 
-                                    placeholder="None" 
-                                    value="<?php echo isset($printer['printer_assettag']) ? $printer['printer_assettag'] : ''; ?>" />
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($printer['printer_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-KEYB-' . $printer['printer_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
+                                </div>
                             </div>
-                        </div>
 
                         <div class="control-group">
                             <label class="control-label">Brand :</label>
@@ -161,12 +185,14 @@ if (isset($_POST["submit"])) {
 
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                                <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
-                                            echo "Printer details updated successfully!";
+                                            echo "printer details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update printer details.";
+                                        } elseif ($alert == "deleted") {
+                                            echo "printer deleted!";
                                         }
                                     ?>
                                 </div>
@@ -204,7 +230,15 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($printer['printer_assettag']) ? htmlspecialchars($printer['printer_assettag']) : 'None'; ?></td>
+                                        <td>
+                                            <?php 
+                                                if (isset($printer['printer_id']) && isset($equipment['department'])) {
+                                                    echo strtoupper($equipment['department']) . '-KEYB-' . $printer['printer_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo !empty($printer['printer_brand']) ? htmlspecialchars($printer['printer_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($printer['printer_modelnumber']) ? htmlspecialchars($printer['printer_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($printer['printer_dateacquired']) ? htmlspecialchars($printer['printer_dateacquired']) : 'None'; ?></td>
@@ -217,7 +251,14 @@ if (isset($_POST["submit"])) {
                         </div>
                     </div>
                 </div>
-
+                <!-- Delete Button (Appears at the End, Only If a printer Exists) -->
+                <?php if ($printer): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this printer?');">
+                        <input type="hidden" name="printer_id" value="<?php echo $printer['printer_id']; ?>">
+                        <button type="submit" name="delete_printer" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>

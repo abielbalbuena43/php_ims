@@ -25,6 +25,23 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+// Handle delete request
+if (isset($_POST["delete_mouse"])) {
+    $mouse_id = $_POST["mouse_id"];
+
+    $deleteQuery = "DELETE FROM mouse WHERE mouse_id = $mouse_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: mouse.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: mouse.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
 // Handle form submission to update mouse details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -98,14 +115,20 @@ if (isset($_POST["submit"])) {
 
                         <form name="form1" action="" method="post" class="form-horizontal">
                             <!-- Form to edit mouse details -->
+                            <!-- Asset Tag -->
                             <div class="control-group">
-                            <label class="control-label">Asset Tag :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" name="assettag" 
-                                    placeholder="None" 
-                                    value="<?php echo isset($mouse['mouse_assettag']) ? $mouse['mouse_assettag'] : ''; ?>" />
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($mouse['mouse_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-MOUSE-' . $mouse['mouse_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
+                                </div>
                             </div>
-                        </div>
 
                         <div class="control-group">
                             <label class="control-label">Brand :</label>
@@ -159,14 +182,16 @@ if (isset($_POST["submit"])) {
                             </div>
                         </div>
 
-                            <!-- Success/Failure Alert -->
-                            <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                             <!-- Success/Failure Alert -->
+                             <?php if (isset($alert)) { ?>
+                                <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
                                             echo "Mouse details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update mouse details.";
+                                        } elseif ($alert == "deleted") {
+                                            echo "Mouse deleted!";
                                         }
                                     ?>
                                 </div>
@@ -204,7 +229,15 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($mouse['mouse_assettag']) ? htmlspecialchars($mouse['mouse_assettag']) : 'None'; ?></td>
+                                        <td>
+                                            <?php 
+                                                if (isset($mouse['mouse_id']) && isset($equipment['department'])) {
+                                                    echo strtoupper($equipment['department']) . '-MOUSE-' . $mouse['mouse_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo !empty($mouse['mouse_brand']) ? htmlspecialchars($mouse['mouse_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($mouse['mouse_modelnumber']) ? htmlspecialchars($mouse['mouse_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($mouse['mouse_dateacquired']) ? htmlspecialchars($mouse['mouse_dateacquired']) : 'None'; ?></td>
@@ -217,7 +250,14 @@ if (isset($_POST["submit"])) {
                         </div>
                     </div>
                 </div>
-
+                <!-- Delete Button (Appears at the End, Only If a mouse Exists) -->
+                <?php if ($mouse): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this mouse?');">
+                        <input type="hidden" name="mouse_id" value="<?php echo $mouse['mouse_id']; ?>">
+                        <button type="submit" name="delete_mouse" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>

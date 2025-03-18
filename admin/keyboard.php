@@ -25,6 +25,23 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+// Handle delete request
+if (isset($_POST["delete_keyboard"])) {
+    $keyboard_id = $_POST["keyboard_id"];
+
+    $deleteQuery = "DELETE FROM keyboard WHERE keyboard_id = $keyboard_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: keyboard.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: keyboard.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
 // Handle form submission to update keyboard details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -98,14 +115,20 @@ if (isset($_POST["submit"])) {
 
                         <form name="form1" action="" method="post" class="form-horizontal">
                             <!-- Form to edit keyboard details -->
+                            <!-- Asset Tag -->
                             <div class="control-group">
-                            <label class="control-label">Asset Tag :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" name="assettag" 
-                                    placeholder="None" 
-                                    value="<?php echo isset($keyboard['keyboard_assettag']) ? $keyboard['keyboard_assettag'] : ''; ?>" />
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($keyboard['keyboard_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-KEYB-' . $keyboard['keyboard_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
+                                </div>
                             </div>
-                        </div>
 
                         <div class="control-group">
                             <label class="control-label">Brand :</label>
@@ -161,12 +184,14 @@ if (isset($_POST["submit"])) {
 
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                                <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
                                             echo "Keyboard details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update keyboard details.";
+                                        } elseif ($alert == "deleted") {
+                                            echo "Keyboard deleted!";
                                         }
                                     ?>
                                 </div>
@@ -204,7 +229,15 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($keyboard['keyboard_assettag']) ? htmlspecialchars($keyboard['keyboard_assettag']) : 'None'; ?></td>
+                                        <td>
+                                            <?php 
+                                                if (isset($keyboard['keyboard_id']) && isset($equipment['department'])) {
+                                                    echo strtoupper($equipment['department']) . '-KEYB-' . $keyboard['keyboard_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo !empty($keyboard['keyboard_brand']) ? htmlspecialchars($keyboard['keyboard_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($keyboard['keyboard_modelnumber']) ? htmlspecialchars($keyboard['keyboard_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($keyboard['keyboard_dateacquired']) ? htmlspecialchars($keyboard['keyboard_dateacquired']) : 'None'; ?></td>
@@ -217,6 +250,14 @@ if (isset($_POST["submit"])) {
                         </div>
                     </div>
                 </div>
+                <!-- Delete Button (Appears at the End, Only If a keyboard Exists) -->
+                <?php if ($keyboard): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this keyboard?');">
+                        <input type="hidden" name="keyboard_id" value="<?php echo $keyboard['keyboard_id']; ?>">
+                        <button type="submit" name="delete_keyboard" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
 
             </div>
         </div>

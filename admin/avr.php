@@ -25,6 +25,23 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+// Handle delete request
+if (isset($_POST["delete_avr"])) {
+    $avr_id = $_POST["avr_id"];
+
+    $deleteQuery = "DELETE FROM avr WHERE avr_id = $avr_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: avr.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: avr.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
 // Handle form submission to update avr details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -98,14 +115,20 @@ if (isset($_POST["submit"])) {
 
                         <form name="form1" action="" method="post" class="form-horizontal">
                             <!-- Form to edit avr details -->
+                            <!-- Asset Tag -->
                             <div class="control-group">
-                            <label class="control-label">Asset Tag :</label>
-                            <div class="controls">
-                                <input type="text" class="span11" name="assettag" 
-                                    placeholder="None" 
-                                    value="<?php echo isset($avr['avr_assettag']) ? $avr['avr_assettag'] : ''; ?>" />
+                                <label class="control-label">Asset Tag :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($avr['avr_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-AVR-' . $avr['avr_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
+                                </div>
                             </div>
-                        </div>
 
                         <div class="control-group">
                             <label class="control-label">Brand :</label>
@@ -161,12 +184,14 @@ if (isset($_POST["submit"])) {
 
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                                <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
-                                            echo "AVR details updated successfully!";
+                                            echo "avr details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update avr details.";
+                                        } elseif ($alert == "deleted") {
+                                            echo "avr deleted!";
                                         }
                                     ?>
                                 </div>
@@ -204,7 +229,15 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($avr['avr_assettag']) ? htmlspecialchars($avr['avr_assettag']) : 'None'; ?></td>
+                                        <td>
+                                            <?php 
+                                                if (isset($avr['avr_id']) && isset($equipment['department'])) {
+                                                    echo strtoupper($equipment['department']) . '-AVR-' . $avr['avr_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo !empty($avr['avr_brand']) ? htmlspecialchars($avr['avr_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($avr['avr_modelnumber']) ? htmlspecialchars($avr['avr_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($avr['avr_dateacquired']) ? htmlspecialchars($avr['avr_dateacquired']) : 'None'; ?></td>
@@ -217,6 +250,14 @@ if (isset($_POST["submit"])) {
                         </div>
                     </div>
                 </div>
+                <!-- Delete Button (Appears at the End, Only If a avr Exists) -->
+                <?php if ($avr): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this avr?');">
+                        <input type="hidden" name="avr_id" value="<?php echo $avr['avr_id']; ?>">
+                        <button type="submit" name="delete_avr" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
 
             </div>
         </div>
