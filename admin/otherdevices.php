@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit1"])) {
     if ($stmt = mysqli_prepare($link, $query)) {
         mysqli_stmt_bind_param(
             $stmt,
-            "ssssssssss",
+            "sssssssssss",
             $device_type,
             $device_department,
             $device_name,
