@@ -27,7 +27,13 @@ if (isset($_POST['query'])) {
             echo "<tr>
                     <td>{$row['device_type']}</td>
                     <td>{$row['device_name']}</td>
-                    <td>{$row['device_assettag']}</td>
+                    <td>";
+                        if (isset($row['device_id']) && isset($row['device_department']) && isset($row['device_type'])) {
+                            echo strtoupper($row['device_department']) . '-' . $row['device_type'] . '-' . $row['device_id'];
+                        } else {
+                            echo 'NOT YET SET';
+                        }
+            echo   "</td>
                     <td>{$row['device_brand']}</td>
                     <td>{$row['device_modelnumber']}</td>
                     <td>{$row['device_deviceage']}</td>
@@ -35,13 +41,15 @@ if (isset($_POST['query'])) {
                     <td>{$row['device_macaddress']}</td>
                     <td>{$row['device_dateacquired']}</td>
                     <td>" . ($row['device_dateedited'] ? $row['device_dateedited'] : 'N/A') . "</td>
+                    <td>{$row['device_remarks']}</td>
                     <td><a href='edit_otherdevices.php?od_id={$row['device_id']}' class='btn btn-primary'>Edit</a></td>
                     <td><a href='delete_otherdevices.php?od_id={$row['device_id']}' class='btn btn-danger' onclick='return confirm(\"Are you sure you want to delete this device?\")'>Delete</a></td>
                   </tr>";
         }
     } else {
         // If no records are found, show a message
-        echo "<tr><td colspan='12' class='text-center'><strong>No matching devices found.</strong></td></tr>";
+        echo "<tr><td colspan='13' class='text-center'><strong>No matching devices found.</strong></td></tr>";
     }
+    
 }
 ?>
