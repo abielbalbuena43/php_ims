@@ -95,18 +95,6 @@ $message = $_SESSION["message"] ?? null;
 unset($_SESSION["alert"], $_SESSION["message"]);
 ?>
 
-<!-- Alert section -->
-<?php if ($alert == "error") { ?>
-    <div class="alert alert-danger" style="margin-top: 20px;">
-        <?php echo htmlspecialchars($message); ?>
-    </div>
-<?php } elseif ($alert == "success") { ?>
-    <div class="alert alert-success" style="margin-top: 20px;">
-        <?php echo htmlspecialchars($message); ?>
-    </div>
-<?php } ?>
-
-
 <!--main-container-part-->
 <div id="content">
     <div id="content-header">
