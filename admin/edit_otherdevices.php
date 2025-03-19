@@ -28,6 +28,7 @@ if (isset($_POST["submit1"])) {
     $device_name = mysqli_real_escape_string($link, $_POST["device_name"]);
     $device_brand = mysqli_real_escape_string($link, $_POST["device_brand"]);
     $device_modelnumber = mysqli_real_escape_string($link, $_POST["device_modelnumber"]);
+    $device_serialnumber = mysqli_real_escape_string($link, $_POST["device_serialnumber"]);
     $device_deviceage = mysqli_real_escape_string($link, $_POST["device_deviceage"]);
     $device_pcname = mysqli_real_escape_string($link, $_POST["device_pcname"]);
     $device_macaddress = mysqli_real_escape_string($link, $_POST["device_macaddress"]);
@@ -44,7 +45,8 @@ if (isset($_POST["submit1"])) {
                         device_type = '$device_type',
                         device_name = '$device_name', 
                         device_brand = '$device_brand', 
-                        device_modelnumber = '$device_modelnumber', 
+                        device_modelnumber = '$device_modelnumber',
+                        device_serialnumber = '$device_serialnumber',
                         device_deviceage = '$device_deviceage', 
                         device_pcname = '$device_pcname',
                         device_macaddress = '$device_macaddress', 
@@ -77,6 +79,9 @@ if (isset($_POST["submit1"])) {
         }
         if ($old_device_data['device_modelnumber'] !== $device_modelnumber) {
             $changes[] = "Model Number: {$old_device_data['device_modelnumber']} → $device_modelnumber";
+        }
+        if ($old_device_data['device_serialnumber'] !== $device_serialnumber) {
+            $changes[] = "Model Number: {$old_device_data['device_serialnumber']} → $device_serialnumber";
         }
         if ($old_device_data['device_deviceage'] !== $device_deviceage) {
             $changes[] = "Device Age: {$old_device_data['device_deviceage']} → $device_deviceage";
@@ -206,6 +211,7 @@ if (isset($_SESSION["alert"])) {
                                 'device_name' => 'Device Name',
                                 'device_brand' => 'Brand',
                                 'device_modelnumber' => 'Model Number',
+                                'device_serialnumber' => 'Serial Number',
                                 'device_deviceage' => 'Device Age',
                                 'device_pcname' => 'PC Name',
                                 'device_macaddress' => 'MAC Address'

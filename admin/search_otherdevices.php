@@ -12,7 +12,8 @@ if (isset($_POST['query'])) {
                  OR device_name LIKE '%$search%' 
                  OR device_assettag LIKE '%$search%' 
                  OR device_brand LIKE '%$search%' 
-                 OR device_modelnumber LIKE '%$search%' 
+                 OR device_modelnumber LIKE '%$search%'
+                 OR device_serialnumber LIKE '%$search%'
                  OR device_deviceage LIKE '%$search%' 
                  OR device_pcname LIKE '%$search%' 
                  OR device_macaddress LIKE '%$search%'";
@@ -36,6 +37,7 @@ if (isset($_POST['query'])) {
             echo   "</td>
                     <td>{$row['device_brand']}</td>
                     <td>{$row['device_modelnumber']}</td>
+                    <td>{$row['device_serialnumber']}</td>
                     <td>{$row['device_deviceage']}</td>
                     <td>{$row['device_pcname']}</td>
                     <td>{$row['device_macaddress']}</td>

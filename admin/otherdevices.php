@@ -33,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit1"])) {
     $device_assettag = !empty($_POST["device_assettag"]) ? $_POST["device_assettag"] : NULL;
     $device_brand = !empty($_POST["device_brand"]) ? $_POST["device_brand"] : NULL;
     $device_modelnumber = !empty($_POST["device_modelnumber"]) ? $_POST["device_modelnumber"] : NULL;
+    $device_serialnumber = !empty($_POST["device_serialnumber"]) ? $_POST["device_serialnumber"] : NULL;
     $device_deviceage = !empty($_POST["device_deviceage"]) ? $_POST["device_deviceage"] : NULL;
     $device_pcname = !empty($_POST["device_pcname"]) ? $_POST["device_pcname"] : NULL;
     $device_macaddress = !empty($_POST["device_macaddress"]) ? $_POST["device_macaddress"] : NULL;
@@ -41,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit1"])) {
     // Use a prepared statement to insert the data
     $query = "INSERT INTO otherdevices 
         (device_type, device_department, device_name, device_assettag, device_brand, 
-        device_modelnumber, device_deviceage, device_pcname, device_macaddress, device_remarks) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        device_modelnumber, device_serialnumber, device_deviceage, device_pcname, device_macaddress, device_remarks) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     if ($stmt = mysqli_prepare($link, $query)) {
         mysqli_stmt_bind_param(
@@ -54,6 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["submit1"])) {
             $device_assettag,
             $device_brand,
             $device_modelnumber,
+            $device_serialnumber,
             $device_deviceage,
             $device_pcname,
             $device_macaddress,
@@ -197,6 +199,12 @@ unset($_SESSION["alert"], $_SESSION["message"]);
                                     </div>
                                 </div>
                                 <div class="control-group">
+                                    <label class="control-label">Serial Number :</label>
+                                    <div class="controls">
+                                        <input type="text" class="span11" placeholder="Serial Number" name="device_serialnumber" />
+                                    </div>
+                                </div>
+                                <div class="control-group">
                                     <label class="control-label">Device Age :</label>
                                     <div class="controls">
                                         <input type="text" class="span11" placeholder="Device Age" name="device_deviceage" />
@@ -253,6 +261,7 @@ unset($_SESSION["alert"], $_SESSION["message"]);
                                     <th>Asset Tag</th>
                                     <th>Brand</th>
                                     <th>Model Number</th>
+                                    <th>Serial Number</th>
                                     <th>Device Age</th>
                                     <th>PC Name</th>
                                     <th>MAC Address</th>
@@ -282,6 +291,7 @@ unset($_SESSION["alert"], $_SESSION["message"]);
                                         </td>
                                         <td><?php echo $row["device_brand"]; ?></td>
                                         <td><?php echo $row["device_modelnumber"]; ?></td>
+                                        <td><?php echo $row["device_serialnumber"]; ?></td>
                                         <td><?php echo $row["device_deviceage"]; ?></td>
                                         <td><?php echo $row["device_pcname"]; ?></td>
                                         <td><?php echo $row["device_macaddress"]; ?></td>
