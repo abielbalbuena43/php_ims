@@ -182,12 +182,14 @@ if (isset($_SESSION["alert"])) {
                                         <?php
                                         $device_types = [
                                             "NAS" => "Network Attached Storage (NAS)",
-                                            "EXTHDD" => "External Storage & HDDs (EXTHDD)",
-                                            "SRV" => "Server (SRV)",
+                                            "STRG" => "External Storage & HDDs (STRG)",
+                                            "SRVR" => "Server (SRVR)",
                                             "RTR" => "Router (RTR)",
-                                            "NWSW" => "Network Switches (NWSW)",
-                                            "NWTST" => "Network Tester (NWTST)",
-                                            "TT" => "Tone Tracer (TT)"
+                                            "SWTC" => "Network Switches (SWTC)",
+                                            "TSTR" => "Network Tester (TSTR)",
+                                            "TONE" => "Tone Tracer (TONE)",
+                                            "WIFI" => "WIFI Card (WIFI)",
+                                            "LAN" => "LAN Card (LAN)"
                                         ];
                                         foreach ($device_types as $key => $value) {
                                             $selected = isset($device['device_type']) && $device['device_type'] == $key ? 'selected' : '';

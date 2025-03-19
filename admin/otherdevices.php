@@ -167,12 +167,14 @@ unset($_SESSION["alert"], $_SESSION["message"]);
                                     <select name="device_type" class="span11" required>
                                         <option value="">Select Device Type</option>
                                         <option value="NAS">Network Attached Storage (NAS)</option>
-                                        <option value="EXTHDD">External Storage & HDDs (EXTHDD)</option>
-                                        <option value="SRV">Server (SRV)</option>
+                                        <option value="STRG">External Storage & HDDs (STRG)</option>
+                                        <option value="SRVR">Server (SRVR)</option>
                                         <option value="RTR">Router (RTR)</option>
-                                        <option value="NWSW">Network Switches (NWSW)</option>
-                                        <option value="NWTST">Network Tester (NWTST)</option>
-                                        <option value="TT">Tone Tracer (TT)</option>
+                                        <option value="SWTC">Network Switches (SWTC)</option>
+                                        <option value="TSTR">Network Tester (TSTR)</option>
+                                        <option value="TONE">Tone Tracer (TONE)</option>
+                                        <option value="WIFI">WIFI Card (WIFI)</option>
+                                        <option value="LAN">LAN Card (LAN)</option>
                                     </select>
                                     </div>
                                 </div>

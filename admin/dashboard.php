@@ -14,7 +14,6 @@ SELECT 'AVR' AS category, COUNT(avr_id) AS count FROM avr UNION ALL
 SELECT 'GPU', COUNT(gpu_id) FROM gpu UNION ALL
 SELECT 'HDD', COUNT(hdd_id) FROM hdd UNION ALL
 SELECT 'Keyboard', COUNT(keyboard_id) FROM keyboard UNION ALL
-SELECT 'LAN Card', COUNT(lancard_id) FROM lancard UNION ALL
 SELECT 'Monitor', COUNT(monitor_id) FROM monitor UNION ALL
 SELECT 'Motherboard', COUNT(mobo_id) FROM motherboard UNION ALL
 SELECT 'Mouse', COUNT(mouse_id) FROM mouse UNION ALL
@@ -24,7 +23,6 @@ SELECT 'Processor', COUNT(processor_id) FROM processor UNION ALL
 SELECT 'PSU', COUNT(psu_id) FROM psu UNION ALL
 SELECT 'RAM', COUNT(ram_id) FROM ram UNION ALL
 SELECT 'SSD', COUNT(ssd_id) FROM ssd UNION ALL
-SELECT 'Wi-Fi Card', COUNT(wificard_id) FROM wificard UNION ALL
 SELECT 'Total Peripherals', 
     (SELECT COUNT(keyboard_id) FROM keyboard) + 
     (SELECT COUNT(mouse_id) FROM mouse) + 
@@ -40,8 +38,6 @@ SELECT 'Total Equipment',
     (SELECT COUNT(psu_id) FROM psu) + 
     (SELECT COUNT(pccase_id) FROM pccase) + 
     (SELECT COUNT(monitor_id) FROM monitor) + 
-    (SELECT COUNT(lancard_id) FROM lancard) + 
-    (SELECT COUNT(wificard_id) FROM wificard) 
     - (SELECT COUNT(keyboard_id) FROM keyboard)
     - (SELECT COUNT(mouse_id) FROM mouse)
     - (SELECT COUNT(printer_id) FROM printer)

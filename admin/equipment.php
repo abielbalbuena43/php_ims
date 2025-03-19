@@ -19,7 +19,7 @@ if (isset($_POST["submit1"])) {
     $windows_key = empty($_POST["windows_key"]) ? '0' : $_POST["windows_key"];
     $ms_key = empty($_POST["ms_key"]) ? '0' : $_POST["ms_key"];
 
-    $query = "INSERT INTO equipment (pcname, department, assigneduser, processor, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, lancard, wificard, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
+    $query = "INSERT INTO equipment (pcname, department, assigneduser, processor, motherboard, ram, hdd, ssd, gpu, psu, pccase, monitor, macaddress, osversion, msversion, windows_key, ms_key, date_added, date_edited) 
               VALUES ('" . mysqli_real_escape_string($link, $_POST["pcname"]) . "',
                       '" . mysqli_real_escape_string($link, $_POST["department"]) . "',
                       '" . mysqli_real_escape_string($link, $_POST["assigneduser"]) . "', 
@@ -31,9 +31,7 @@ if (isset($_POST["submit1"])) {
                       '" . mysqli_real_escape_string($link, $_POST["gpu"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["psu"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["pccase"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["monitor"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["lancard"]) . "', 
-                      '" . mysqli_real_escape_string($link, $_POST["wificard"]) . "', 
+                      '" . mysqli_real_escape_string($link, $_POST["monitor"]) . "',   
                       '" . mysqli_real_escape_string($link, $_POST["macaddress"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["osversion"]) . "', 
                       '" . mysqli_real_escape_string($link, $_POST["msversion"]) . "', 
@@ -138,18 +136,6 @@ if (isset($_SESSION["alert"])) {
                                     <label class="control-label">Motherboard :</label>
                                     <div class="controls">
                                         <input type="text" class="span11" placeholder="Motherboard" name="motherboard" required />
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label">LAN Card :</label>
-                                    <div class="controls">
-                                        <input type="text" class="span11" placeholder="LAN Card" name="lancard" required />
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label">WIFI Card :</label>
-                                    <div class="controls">
-                                        <input type="text" class="span11" placeholder="WIFI Card" name="wificard" required />
                                     </div>
                                 </div>
                                 <div class="control-group">
@@ -264,8 +250,6 @@ if (isset($_SESSION["alert"])) {
                                     <th>PSU</th>
                                     <th>PC Case</th>
                                     <th>Monitor</th>
-                                    <th>LAN Card</th>
-                                    <th>WIFI Card</th>
                                     <th>MAC Address</th>
                                     <th>OS Version</th>
                                     <th>MS Version</th>
@@ -373,26 +357,6 @@ if (isset($_SESSION["alert"])) {
                                                 echo $row["monitor"];
                                             } else {
                                                 echo "<a href='monitor.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["monitor"] . "</a>";
-                                            }
-                                            ?>
-                                        </td>
-
-                                        <td>
-                                            <?php 
-                                            if ($row["lancard"] == "None") {
-                                                echo $row["lancard"];
-                                            } else {
-                                                echo "<a href='lancard.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["lancard"] . "</a>";
-                                            }
-                                            ?>
-                                        </td>
-
-                                        <td>
-                                            <?php 
-                                            if ($row["wificard"] == "None") {
-                                                echo $row["wificard"];
-                                            } else {
-                                                echo "<a href='wificard.php?equipment_id=" . urlencode($row['equipment_id']) . "'>" . $row["wificard"] . "</a>";
                                             }
                                             ?>
                                         </td>
