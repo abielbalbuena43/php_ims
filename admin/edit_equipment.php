@@ -35,8 +35,6 @@ if (isset($_POST["submit1"])) {
     $psu = mysqli_real_escape_string($link, $_POST["psu"]);
     $pccase = mysqli_real_escape_string($link, $_POST["pccase"]);
     $monitor = mysqli_real_escape_string($link, $_POST["monitor"]);
-    $lancard = mysqli_real_escape_string($link, $_POST["lancard"]);
-    $wificard = mysqli_real_escape_string($link, $_POST["wificard"]);
     $macaddress = mysqli_real_escape_string($link, $_POST["macaddress"]);
     $osversion = mysqli_real_escape_string($link, $_POST["osversion"]);
     $msversion = mysqli_real_escape_string($link, $_POST["msversion"]);
@@ -57,8 +55,6 @@ if (isset($_POST["submit1"])) {
     $old_psu = $equipment['psu'];
     $old_pccase = $equipment['pccase'];
     $old_monitor = $equipment['monitor'];
-    $old_lancard = $equipment['lancard'];
-    $old_wificard = $equipment['wificard'];
     $old_macaddress = $equipment['macaddress'];
     $old_osversion = $equipment['osversion'];
     $old_msversion = $equipment['msversion'];
@@ -70,7 +66,7 @@ if (isset($_POST["submit1"])) {
     $query = "UPDATE equipment SET 
                 pcname = ?, department = ?, assigneduser = ?, processor = ?, motherboard = ?, 
                 ram = ?, hdd = ?, ssd = ?, gpu = ?, psu = ?, pccase = ?, 
-                monitor = ?, lancard = ?, wificard = ?, macaddress = ?, osversion = ?, 
+                monitor = ?, macaddress = ?, osversion = ?, 
                 msversion = ?, windows_key = ?, ms_key = ?, equipment_remarks = ?, date_edited = NOW()
                 WHERE equipment_id = ?";
 
@@ -78,10 +74,10 @@ if (isset($_POST["submit1"])) {
     $stmt = mysqli_prepare($link, $query);
 
     // Bind parameters
-    mysqli_stmt_bind_param($stmt, "ssssssssssssssssssssi", 
+    mysqli_stmt_bind_param($stmt, "ssssssssssssssssssi", 
     $pcname, $department, $assigneduser, $processor, $motherboard, 
     $ram, $hdd, $ssd, $gpu, $psu, $pccase, 
-    $monitor, $lancard, $wificard, $macaddress, $osversion, 
+    $monitor, $macaddress, $osversion, 
     $msversion, $windows_key, $ms_key, $equipment_remarks, $equipment_id);    
 
     // Execute the statement
@@ -102,8 +98,6 @@ if (isset($_POST["submit1"])) {
         if ($old_psu !== $psu) $log_action .= "PSU: $old_psu → $psu, ";
         if ($old_pccase !== $pccase) $log_action .= "PC Case: $old_pccase → $pccase, ";
         if ($old_monitor !== $monitor) $log_action .= "Monitor: $old_monitor → $monitor, ";
-        if ($old_lancard !== $lancard) $log_action .= "LAN Card: $old_lancard → $lancard, ";
-        if ($old_wificard !== $wificard) $log_action .= "WIFI Card: $old_wificard → $wificard, ";
         if ($old_macaddress !== $macaddress) $log_action .= "MAC Address: $old_macaddress → $macaddress, ";
         if ($old_osversion !== $osversion) $log_action .= "OS Version: $old_osversion → $osversion, ";
         if ($old_msversion !== $msversion) $log_action .= "MS Version: $old_msversion → $msversion, ";
@@ -229,18 +223,6 @@ if (isset($_POST["submit1"])) {
                                 <label class="control-label">Monitor :</label>
                                 <div class="controls">
                                     <input type="text" class="span11" name="monitor" value="<?php echo $equipment['monitor']; ?>" />
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">LAN Card :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="lancard" value="<?php echo $equipment['lancard']; ?>" />
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label">WIFI Card :</label>
-                                <div class="controls">
-                                    <input type="text" class="span11" name="wificard" value="<?php echo $equipment['wificard']; ?>" />
                                 </div>
                             </div>
                             <div class="control-group">

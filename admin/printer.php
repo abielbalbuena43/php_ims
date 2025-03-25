@@ -49,6 +49,7 @@ if (isset($_POST["submit"])) {
     $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
+    $serialnumber = mysqli_real_escape_string($link, $_POST["serialnumber"]);
     $dateacquired = mysqli_real_escape_string($link, $_POST["dateacquired"]);
     $deviceage = mysqli_real_escape_string($link, $_POST["deviceage"]);
     $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
@@ -61,6 +62,7 @@ if (isset($_POST["submit"])) {
                         printer_assettag = '$assettag', 
                         printer_brand = '$brand', 
                         printer_modelnumber = '$modelnumber', 
+                        printer_serialnumber = '$serialnumber',
                         printer_dateacquired = '$dateacquired', 
                         printer_deviceage = '$deviceage', 
                         printer_assigneduser = '$assigneduser', 
@@ -78,8 +80,8 @@ if (isset($_POST["submit"])) {
         }
     } else {
         // If no record exists, create a new record in the printer table
-        $insertQuery = "INSERT INTO printer (equipment_id, printer_assettag, printer_brand, printer_modelnumber, printer_dateacquired, printer_deviceage, printer_assigneduser, printer_remarks) 
-                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
+        $insertQuery = "INSERT INTO printer (equipment_id, printer_assettag, printer_brand, printer_modelnumber, printer_serialnumber, printer_dateacquired, printer_deviceage, printer_assigneduser, printer_remarks) 
+                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$serialnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
@@ -150,6 +152,15 @@ if (isset($_POST["submit"])) {
                         </div>
 
                         <div class="control-group">
+                            <label class="control-label">Serial Number :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="serialnumber" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($printer['printer_serialnumber']) ? $printer['printer_serialnumber'] : ''; ?>" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
                             <label class="control-label">Date Acquired :</label>
                             <div class="controls">
                                 <input type="date" class="span11" name="dateacquired" 
@@ -188,11 +199,11 @@ if (isset($_POST["submit"])) {
                                 <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
-                                            echo "printer details updated successfully!";
+                                            echo "Printer details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update printer details.";
                                         } elseif ($alert == "deleted") {
-                                            echo "printer deleted!";
+                                            echo "Printer deleted!";
                                         }
                                     ?>
                                 </div>
@@ -221,6 +232,7 @@ if (isset($_POST["submit"])) {
                                         <th>Asset Tag</th>
                                         <th>Brand</th>
                                         <th>Model Number</th>
+                                        <th>Serial Number</th>
                                         <th>Date Acquired</th>
                                         <th>Device Age</th>
                                         <th>Assigned User</th>
@@ -241,6 +253,7 @@ if (isset($_POST["submit"])) {
                                         </td>
                                         <td><?php echo !empty($printer['printer_brand']) ? htmlspecialchars($printer['printer_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($printer['printer_modelnumber']) ? htmlspecialchars($printer['printer_modelnumber']) : 'None'; ?></td>
+                                        <td><?php echo !empty($printer['printer_serialnumber']) ? htmlspecialchars($printer['printer_serialnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($printer['printer_dateacquired']) ? htmlspecialchars($printer['printer_dateacquired']) : 'None'; ?></td>
                                         <td><?php echo !empty($printer['printer_deviceage']) ? htmlspecialchars($printer['printer_deviceage']) : 'None'; ?></td>
                                         <td><?php echo !empty($printer['printer_assigneduser']) ? htmlspecialchars($printer['printer_assigneduser']) : 'None'; ?></td>

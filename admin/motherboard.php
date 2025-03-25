@@ -48,6 +48,7 @@ if (isset($_POST["submit"])) {
     $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
+    $serialnumber = mysqli_real_escape_string($link, $_POST["serialnumber"]);
     $ramslot = mysqli_real_escape_string($link, $_POST["ramslot"]);
     $dateacquired = mysqli_real_escape_string($link, $_POST["dateacquired"]);
     $deviceage = mysqli_real_escape_string($link, $_POST["deviceage"]);
@@ -62,7 +63,8 @@ if (isset($_POST["submit"])) {
         $updateQuery = "UPDATE motherboard SET 
                         mobo_assettag = '$assettag', 
                         mobo_brand = '$brand', 
-                        mobo_modelnumber = '$modelnumber', 
+                        mobo_modelnumber = '$modelnumber',
+                        mobo_serialnumber = '$serialnumber', 
                         mobo_ramslot = '$ramslot', 
                         mobo_dateacquired = '$dateacquired', 
                         mobo_deviceage = '$deviceage', 
@@ -83,8 +85,8 @@ if (isset($_POST["submit"])) {
         }
     } else {
         // If no record exists, create a new record in the motherboard table
-        $insertQuery = "INSERT INTO motherboard (equipment_id, mobo_assettag, mobo_brand, mobo_modelnumber, mobo_ramslot, mobo_dateacquired, mobo_deviceage, mobo_assigneduser, mobo_computername, mobo_macaddress, mobo_remarks) 
-                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$ramslot', '$dateacquired', '$deviceage', '$assigneduser', '$computername', '$macaddress', '$remarks')";
+        $insertQuery = "INSERT INTO motherboard (equipment_id, mobo_assettag, mobo_brand, mobo_modelnumber, mobo_serialnumber, mobo_ramslot, mobo_dateacquired, mobo_deviceage, mobo_assigneduser, mobo_computername, mobo_macaddress, mobo_remarks) 
+                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$serialnumber', '$ramslot', '$dateacquired', '$deviceage', '$assigneduser', '$computername', '$macaddress', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
@@ -148,6 +150,15 @@ if (isset($_POST["submit"])) {
                                 <div class="controls">
                                     <input type="text" class="span11" name="modelnumber" placeholder="None" 
                                         value="<?php echo isset($motherboard['mobo_modelnumber']) ? $motherboard['mobo_modelnumber'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <!-- Serial Number -->
+                            <div class="control-group">
+                                <label class="control-label">Serial Number :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="serialnumber" placeholder="None" 
+                                        value="<?php echo isset($motherboard['mobo_serialnumber']) ? $motherboard['mobo_serialnumber'] : ''; ?>" />
                                 </div>
                             </div>
 
@@ -254,6 +265,7 @@ if (isset($_POST["submit"])) {
                                         <th>Asset Tag</th>
                                         <th>Brand</th>
                                         <th>Model Number</th>
+                                        <th>Serial Number</th>
                                         <th>RAM Slot</th>
                                         <th>Date Acquired</th>
                                         <th>Device Age</th>
@@ -277,6 +289,7 @@ if (isset($_POST["submit"])) {
                                         </td>
                                         <td><?php echo htmlspecialchars($motherboard['mobo_brand'] ?? 'None'); ?></td>
                                         <td><?php echo htmlspecialchars($motherboard['mobo_modelnumber'] ?? 'None'); ?></td>
+                                        <td><?php echo htmlspecialchars($motherboard['mobo_serialnumber'] ?? 'None'); ?></td>
                                         <td><?php echo htmlspecialchars($motherboard['mobo_ramslot'] ?? 'None'); ?></td>
                                         <td><?php echo htmlspecialchars($motherboard['mobo_dateacquired'] ?? 'None'); ?></td>
                                         <td><?php echo htmlspecialchars($motherboard['mobo_deviceage'] ?? 'None'); ?></td>

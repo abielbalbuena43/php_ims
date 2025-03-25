@@ -48,6 +48,7 @@ if (isset($_POST["submit"])) {
     $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
+    $serialnumber = mysqli_real_escape_string($link, $_POST["serialnumber"]);
     $dateacquired = mysqli_real_escape_string($link, $_POST["dateacquired"]);
     $deviceage = mysqli_real_escape_string($link, $_POST["deviceage"]);
     $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
@@ -60,6 +61,7 @@ if (isset($_POST["submit"])) {
                         pccase_assettag = '$assettag', 
                         pccase_brand = '$brand', 
                         pccase_modelnumber = '$modelnumber', 
+                        pccase_serialnumber = '$serialnumber',
                         pccase_dateacquired = '$dateacquired', 
                         pccase_deviceage = '$deviceage', 
                         pccase_assigneduser = '$assigneduser',  
@@ -77,8 +79,8 @@ if (isset($_POST["submit"])) {
         }
     } else {
         // If no record exists, create a new record in the pccase table
-        $insertQuery = "INSERT INTO pccase (equipment_id, pccase_assettag, pccase_brand, pccase_modelnumber, pccase_dateacquired, pccase_deviceage, pccase_assigneduser, pccase_remarks) 
-                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
+        $insertQuery = "INSERT INTO pccase (equipment_id, pccase_assettag, pccase_brand, pccase_modelnumber, pccase_serialnumber, pccase_dateacquired, pccase_deviceage, pccase_assigneduser, pccase_remarks) 
+                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$serialnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
@@ -143,6 +145,15 @@ if (isset($_POST["submit"])) {
                                     <input type="text" class="span11" name="modelnumber"
                                         placeholder="None"
                                         value="<?php echo isset($pccase['pccase_modelnumber']) ? $pccase['pccase_modelnumber'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Serial Number :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="serialnumber"
+                                        placeholder="None"
+                                        value="<?php echo isset($pccase['pccase_serialnumber']) ? $pccase['pccase_serialnumber'] : ''; ?>" />
                                 </div>
                             </div>
 
@@ -217,6 +228,7 @@ if (isset($_POST["submit"])) {
                                         <th>Asset Tag</th>
                                         <th>Brand</th>
                                         <th>Model Number</th>
+                                        <th>Serial Number</th>
                                         <th>Date Acquired</th>
                                         <th>Device Age</th>
                                         <th>Assigned User</th>
@@ -237,6 +249,7 @@ if (isset($_POST["submit"])) {
                                         </td>
                                         <td><?php echo !empty($pccase['pccase_brand']) ? htmlspecialchars($pccase['pccase_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($pccase['pccase_modelnumber']) ? htmlspecialchars($pccase['pccase_modelnumber']) : 'None'; ?></td>
+                                        <td><?php echo !empty($pccase['pccase_serialnumber']) ? htmlspecialchars($pccase['pccase_serialnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($pccase['pccase_dateacquired']) ? htmlspecialchars($pccase['pccase_dateacquired']) : 'None'; ?></td>
                                         <td><?php echo !empty($pccase['pccase_deviceage']) ? htmlspecialchars($pccase['pccase_deviceage']) : 'None'; ?></td>
                                         <td><?php echo !empty($pccase['pccase_assigneduser']) ? htmlspecialchars($pccase['pccase_assigneduser']) : 'None'; ?></td>

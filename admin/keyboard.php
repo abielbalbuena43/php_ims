@@ -48,6 +48,7 @@ if (isset($_POST["submit"])) {
     $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
+    $serialnumber = mysqli_real_escape_string($link, $_POST["serialnumber"]);
     $dateacquired = mysqli_real_escape_string($link, $_POST["dateacquired"]);
     $deviceage = mysqli_real_escape_string($link, $_POST["deviceage"]);
     $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
@@ -60,6 +61,7 @@ if (isset($_POST["submit"])) {
                         keyboard_assettag = '$assettag', 
                         keyboard_brand = '$brand', 
                         keyboard_modelnumber = '$modelnumber', 
+                        keyboard_serialnumber = '$serialnumber',
                         keyboard_dateacquired = '$dateacquired', 
                         keyboard_deviceage = '$deviceage', 
                         keyboard_assigneduser = '$assigneduser', 
@@ -77,8 +79,8 @@ if (isset($_POST["submit"])) {
         }
     } else {
         // If no record exists, create a new record in the keyboard table
-        $insertQuery = "INSERT INTO keyboard (equipment_id, keyboard_assettag, keyboard_brand, keyboard_modelnumber, keyboard_dateacquired, keyboard_deviceage, keyboard_assigneduser, keyboard_remarks) 
-                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
+        $insertQuery = "INSERT INTO keyboard (equipment_id, keyboard_assettag, keyboard_brand, keyboard_modelnumber, keyboard_serialnumber, keyboard_dateacquired, keyboard_deviceage, keyboard_assigneduser, keyboard_remarks) 
+                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$serialnumber','$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
@@ -145,6 +147,15 @@ if (isset($_POST["submit"])) {
                                 <input type="text" class="span11" name="modelnumber" 
                                     placeholder="None" 
                                     value="<?php echo isset($keyboard['keyboard_modelnumber']) ? $keyboard['keyboard_modelnumber'] : ''; ?>" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Serial Number :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="serialnumber" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($keyboard['keyboard_serialnumber']) ? $keyboard['keyboard_serialnumber'] : ''; ?>" />
                             </div>
                         </div>
 
@@ -220,6 +231,7 @@ if (isset($_POST["submit"])) {
                                         <th>Asset Tag</th>
                                         <th>Brand</th>
                                         <th>Model Number</th>
+                                        <th>Serial Number</th>
                                         <th>Date Acquired</th>
                                         <th>Device Age</th>
                                         <th>Assigned User</th>
@@ -240,6 +252,7 @@ if (isset($_POST["submit"])) {
                                         </td>
                                         <td><?php echo !empty($keyboard['keyboard_brand']) ? htmlspecialchars($keyboard['keyboard_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($keyboard['keyboard_modelnumber']) ? htmlspecialchars($keyboard['keyboard_modelnumber']) : 'None'; ?></td>
+                                        <td><?php echo !empty($keyboard['keyboard_serialnumber']) ? htmlspecialchars($keyboard['keyboard_serialnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($keyboard['keyboard_dateacquired']) ? htmlspecialchars($keyboard['keyboard_dateacquired']) : 'None'; ?></td>
                                         <td><?php echo !empty($keyboard['keyboard_deviceage']) ? htmlspecialchars($keyboard['keyboard_deviceage']) : 'None'; ?></td>
                                         <td><?php echo !empty($keyboard['keyboard_assigneduser']) ? htmlspecialchars($keyboard['keyboard_assigneduser']) : 'None'; ?></td>

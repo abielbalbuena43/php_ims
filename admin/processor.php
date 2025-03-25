@@ -47,6 +47,7 @@ if (isset($_POST["submit"])) {
     $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
+    $serialnumber = mysqli_real_escape_string($link, $_POST["serialnumber"]);
     $dateacquired = mysqli_real_escape_string($link, $_POST["dateacquired"]);
     $deviceage = mysqli_real_escape_string($link, $_POST["deviceage"]);
     $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
@@ -57,6 +58,7 @@ if (isset($_POST["submit"])) {
                         processor_assettag = '$assettag', 
                         processor_brand = '$brand', 
                         processor_modelnumber = '$modelnumber', 
+                        processor_serialnumber = '$serialnumber',
                         processor_dateacquired = '$dateacquired', 
                         processor_deviceage = '$deviceage', 
                         processor_assigneduser = '$assigneduser', 
@@ -73,8 +75,8 @@ if (isset($_POST["submit"])) {
             exit();
         }
     } else {
-        $insertQuery = "INSERT INTO processor (equipment_id, processor_assettag, processor_brand, processor_modelnumber, processor_dateacquired, processor_deviceage, processor_assigneduser, processor_remarks) 
-                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
+        $insertQuery = "INSERT INTO processor (equipment_id, processor_assettag, processor_brand, processor_modelnumber, processor_serialnumber, processor_dateacquired, processor_deviceage, processor_assigneduser, processor_remarks) 
+                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$serialnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
@@ -140,6 +142,15 @@ if (isset($_POST["submit"])) {
                                     <input type="text" class="span11" name="modelnumber" 
                                         placeholder="None" 
                                         value="<?php echo isset($processor['processor_modelnumber']) ? $processor['processor_modelnumber'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Serial Number :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="serialnumber" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($processor['processor_serialnumber']) ? $processor['processor_serialnumber'] : ''; ?>" />
                                 </div>
                             </div>
 
@@ -216,6 +227,7 @@ if (isset($_POST["submit"])) {
                                         <th>Asset Tag</th>
                                         <th>Brand</th>
                                         <th>Model Number</th>
+                                        <th>Serial Number</th>
                                         <th>Date Acquired</th>
                                         <th>Device Age</th>
                                         <th>Assigned User</th>
@@ -236,6 +248,7 @@ if (isset($_POST["submit"])) {
                                         </td>
                                         <td><?php echo !empty($processor['processor_brand']) ? htmlspecialchars($processor['processor_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($processor['processor_modelnumber']) ? htmlspecialchars($processor['processor_modelnumber']) : 'None'; ?></td>
+                                        <td><?php echo !empty($processor['processor_serialnumber']) ? htmlspecialchars($processor['processor_serialnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($processor['processor_dateacquired']) ? htmlspecialchars($processor['processor_dateacquired']) : 'None'; ?></td>
                                         <td><?php echo !empty($processor['processor_deviceage']) ? htmlspecialchars($processor['processor_deviceage']) : 'None'; ?></td>
                                         <td><?php echo !empty($processor['processor_assigneduser']) ? htmlspecialchars($processor['processor_assigneduser']) : 'None'; ?></td>

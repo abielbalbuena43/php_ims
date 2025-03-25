@@ -48,6 +48,7 @@ if (isset($_POST["submit"])) {
     $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
+    $serialnumber = mysqli_real_escape_string($link, $_POST["serialnumber"]);
     $size = mysqli_real_escape_string($link, $_POST["size"]);
     $dateacquired = mysqli_real_escape_string($link, $_POST["dateacquired"]);
     $deviceage = mysqli_real_escape_string($link, $_POST["deviceage"]);
@@ -60,7 +61,8 @@ if (isset($_POST["submit"])) {
         $updateQuery = "UPDATE gpu SET 
                         gpu_assettag = '$assettag', 
                         gpu_brand = '$brand', 
-                        gpu_modelnumber = '$modelnumber', 
+                        gpu_modelnumber = '$modelnumber',
+                        gpu_serialnumber = '$serialnumber',
                         gpu_size = '$size', 
                         gpu_dateacquired = '$dateacquired', 
                         gpu_deviceage = '$deviceage', 
@@ -79,8 +81,8 @@ if (isset($_POST["submit"])) {
         }
     } else {
         // If no record exists, create a new record in the gpu table
-        $insertQuery = "INSERT INTO gpu (equipment_id, gpu_assettag, gpu_brand, gpu_modelnumber, gpu_size, gpu_dateacquired, gpu_deviceage, gpu_assigneduser, gpu_remarks) 
-                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$size', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
+        $insertQuery = "INSERT INTO gpu (equipment_id, gpu_assettag, gpu_brand, gpu_modelnumber, gpu_serialnumber, gpu_size, gpu_dateacquired, gpu_deviceage, gpu_assigneduser, gpu_remarks) 
+                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$serialnumber', '$size', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
@@ -144,6 +146,15 @@ if (isset($_POST["submit"])) {
                                     <input type="text" class="span11" name="modelnumber" 
                                         placeholder="None" 
                                         value="<?php echo isset($gpu['gpu_modelnumber']) ? $gpu['gpu_modelnumber'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Serial Number :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="serialnumber" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($gpu['gpu_serialnumber']) ? $gpu['gpu_serialnumber'] : ''; ?>" />
                                 </div>
                             </div>
 
@@ -227,6 +238,7 @@ if (isset($_POST["submit"])) {
                                         <th>Asset Tag</th>
                                         <th>Brand</th>
                                         <th>Model Number</th>
+                                        <th>Serial Number</th>
                                         <th>Size</th>
                                         <th>Date Acquired</th>
                                         <th>Device Age</th>
@@ -248,6 +260,7 @@ if (isset($_POST["submit"])) {
                                         </td>
                                         <td><?php echo !empty($gpu['gpu_brand']) ? htmlspecialchars($gpu['gpu_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($gpu['gpu_modelnumber']) ? htmlspecialchars($gpu['gpu_modelnumber']) : 'None'; ?></td>
+                                        <td><?php echo !empty($gpu['gpu_serialnumber']) ? htmlspecialchars($gpu['gpu_serialnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($gpu['gpu_size']) ? htmlspecialchars($gpu['gpu_size']) : 'None'; ?></td>
                                         <td><?php echo !empty($gpu['gpu_dateacquired']) ? htmlspecialchars($gpu['gpu_dateacquired']) : 'None'; ?></td>
                                         <td><?php echo !empty($gpu['gpu_deviceage']) ? htmlspecialchars($gpu['gpu_deviceage']) : 'None'; ?></td>

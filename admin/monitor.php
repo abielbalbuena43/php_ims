@@ -48,6 +48,7 @@ if (isset($_POST["submit"])) {
     $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
+    $serialnumber = mysqli_real_escape_string($link, $_POST["serialnumber"]);
     $size = mysqli_real_escape_string($link, $_POST["size"]);
     $dateacquired = mysqli_real_escape_string($link, $_POST["dateacquired"]);
     $deviceage = mysqli_real_escape_string($link, $_POST["deviceage"]);
@@ -61,6 +62,7 @@ if (isset($_POST["submit"])) {
                         monitor_assettag = '$assettag', 
                         monitor_brand = '$brand', 
                         monitor_modelnumber = '$modelnumber', 
+                        monitor_serialnumber = '$serialnumber',
                         monitor_size = '$size', 
                         monitor_dateacquired = '$dateacquired', 
                         monitor_deviceage = '$deviceage', 
@@ -79,8 +81,8 @@ if (isset($_POST["submit"])) {
         }
     } else {
         // If no record exists, create a new record in the monitor table
-        $insertQuery = "INSERT INTO monitor (equipment_id, monitor_assettag, monitor_brand, monitor_modelnumber, monitor_size, monitor_dateacquired, monitor_deviceage, monitor_assigneduser, monitor_remarks) 
-                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$size', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
+        $insertQuery = "INSERT INTO monitor (equipment_id, monitor_assettag, monitor_brand, monitor_modelnumber, monitor_serialnumber, monitor_size, monitor_dateacquired, monitor_deviceage, monitor_assigneduser, monitor_remarks) 
+                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$serialnumber', '$size', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
@@ -145,6 +147,15 @@ if (isset($_POST["submit"])) {
                                     <input type="text" class="span11" name="modelnumber"
                                         placeholder="None"
                                         value="<?php echo isset($monitor['monitor_modelnumber']) ? $monitor['monitor_modelnumber'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Serial Number :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="serialnumber"
+                                        placeholder="None"
+                                        value="<?php echo isset($monitor['monitor_serialnumber']) ? $monitor['monitor_serialnumber'] : ''; ?>" />
                                 </div>
                             </div>
 
@@ -228,6 +239,7 @@ if (isset($_POST["submit"])) {
                                         <th>Asset Tag</th>
                                         <th>Brand</th>
                                         <th>Model Number</th>
+                                        <th>Serial Number</th>
                                         <th>Monitor Size</th>
                                         <th>Date Acquired</th>
                                         <th>Device Age</th>
@@ -249,6 +261,7 @@ if (isset($_POST["submit"])) {
                                         </td>
                                         <td><?php echo !empty($monitor['monitor_brand']) ? htmlspecialchars($monitor['monitor_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($monitor['monitor_modelnumber']) ? htmlspecialchars($monitor['monitor_modelnumber']) : 'None'; ?></td>
+                                        <td><?php echo !empty($monitor['monitor_serialnumber']) ? htmlspecialchars($monitor['monitor_serialnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($monitor['monitor_size']) ? htmlspecialchars($monitor['monitor_size']) : 'None'; ?></td>
                                         <td><?php echo !empty($monitor['monitor_dateacquired']) ? htmlspecialchars($monitor['monitor_dateacquired']) : 'None'; ?></td>
                                         <td><?php echo !empty($monitor['monitor_deviceage']) ? htmlspecialchars($monitor['monitor_deviceage']) : 'None'; ?></td>

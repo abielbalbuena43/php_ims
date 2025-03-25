@@ -48,6 +48,7 @@ if (isset($_POST["submit"])) {
     $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
+    $serialnumber = mysqli_real_escape_string($link, $_POST["serialnumber"]);
     $size = mysqli_real_escape_string($link, $_POST["size"]);
     $dateacquired = mysqli_real_escape_string($link, $_POST["dateacquired"]);
     $deviceage = mysqli_real_escape_string($link, $_POST["deviceage"]);
@@ -61,6 +62,7 @@ if (isset($_POST["submit"])) {
                         hdd_assettag = '$assettag', 
                         hdd_brand = '$brand', 
                         hdd_modelnumber = '$modelnumber', 
+                        hdd_serialnumber = '$serialnumber',
                         hdd_size = '$size', 
                         hdd_dateacquired = '$dateacquired', 
                         hdd_deviceage = '$deviceage', 
@@ -79,8 +81,8 @@ if (isset($_POST["submit"])) {
         }
     } else {
         // If no record exists, create a new record in the hdd table
-        $insertQuery = "INSERT INTO hdd (equipment_id, hdd_assettag, hdd_brand, hdd_modelnumber, hdd_size, hdd_dateacquired, hdd_deviceage, hdd_assigneduser, hdd_remarks) 
-                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$size', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
+        $insertQuery = "INSERT INTO hdd (equipment_id, hdd_assettag, hdd_brand, hdd_modelnumber, hdd_serialnumber, hdd_size, hdd_dateacquired, hdd_deviceage, hdd_assigneduser, hdd_remarks) 
+                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$serialnumber', '$size', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
@@ -146,6 +148,15 @@ if (isset($_POST["submit"])) {
                             <input type="text" class="span11" name="modelnumber" 
                                 placeholder="None" 
                                 value="<?php echo isset($hdd['hdd_modelnumber']) ? $hdd['hdd_modelnumber'] : ''; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Serial Number :</label>
+                        <div class="controls">
+                            <input type="text" class="span11" name="serialnumber" 
+                                placeholder="None" 
+                                value="<?php echo isset($hdd['hdd_serialnumber']) ? $hdd['hdd_serialnumber'] : ''; ?>" />
                         </div>
                     </div>
 
@@ -228,6 +239,7 @@ if (isset($_POST["submit"])) {
                                     <th>Asset Tag</th>
                                     <th>Brand</th>
                                     <th>Model Number</th>
+                                    <th>Serial Number</th>
                                     <th>Size</th>
                                     <th>Date Acquired</th>
                                     <th>Device Age</th>
@@ -249,6 +261,7 @@ if (isset($_POST["submit"])) {
                                     </td>
                                     <td><?php echo !empty($hdd['hdd_brand']) ? htmlspecialchars($hdd['hdd_brand']) : 'None'; ?></td>
                                     <td><?php echo !empty($hdd['hdd_modelnumber']) ? htmlspecialchars($hdd['hdd_modelnumber']) : 'None'; ?></td>
+                                    <td><?php echo !empty($hdd['hdd_serialnumber']) ? htmlspecialchars($hdd['hdd_serialnumber']) : 'None'; ?></td>
                                     <td><?php echo !empty($hdd['hdd_size']) ? htmlspecialchars($hdd['hdd_size']) : 'None'; ?></td>
                                     <td><?php echo !empty($hdd['hdd_dateacquired']) ? htmlspecialchars($hdd['hdd_dateacquired']) : 'None'; ?></td>
                                     <td><?php echo !empty($hdd['hdd_deviceage']) ? htmlspecialchars($hdd['hdd_deviceage']) : 'None'; ?></td>

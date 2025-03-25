@@ -48,6 +48,7 @@ if (isset($_POST["submit"])) {
     $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
+    $serialnumber = mysqli_real_escape_string($link, $_POST["serialnumber"]);
     $size = mysqli_real_escape_string($link, $_POST["size"]);
     $dateacquired = mysqli_real_escape_string($link, $_POST["dateacquired"]);
     $deviceage = mysqli_real_escape_string($link, $_POST["deviceage"]);
@@ -60,7 +61,8 @@ if (isset($_POST["submit"])) {
         $updateQuery = "UPDATE ram SET 
                         ram_assettag = '$assettag', 
                         ram_brand = '$brand', 
-                        ram_modelnumber = '$modelnumber', 
+                        ram_modelnumber = '$modelnumber',
+                        ram_serialnumber = '$serialnumber',  
                         ram_size = '$size', 
                         ram_dateacquired = '$dateacquired', 
                         ram_deviceage = '$deviceage', 
@@ -79,8 +81,8 @@ if (isset($_POST["submit"])) {
         }
     } else {
         // If no record exists, create a new record in the ram table
-        $insertQuery = "INSERT INTO ram (equipment_id, ram_assettag, ram_brand, ram_modelnumber, ram_size, ram_dateacquired, ram_deviceage, ram_assigneduser, ram_remarks) 
-                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$size', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
+        $insertQuery = "INSERT INTO ram (equipment_id, ram_assettag, ram_brand, ram_modelnumber, ram_serialnumber, ram_size, ram_dateacquired, ram_deviceage, ram_assigneduser, ram_remarks) 
+                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$serialnumber', '$size', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
@@ -145,6 +147,15 @@ if (isset($_POST["submit"])) {
                             <input type="text" class="span11" name="modelnumber" 
                                 placeholder="None" 
                                 value="<?php echo isset($ram['ram_modelnumber']) ? $ram['ram_modelnumber'] : ''; ?>" />
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Serial Number :</label>
+                        <div class="controls">
+                            <input type="text" class="span11" name="serialnumber" 
+                                placeholder="None" 
+                                value="<?php echo isset($ram['ram_serialnumber']) ? $ram['ram_serialnumber'] : ''; ?>" />
                         </div>
                     </div>
 
@@ -227,6 +238,7 @@ if (isset($_POST["submit"])) {
                                     <th>Asset Tag</th>
                                     <th>Brand</th>  
                                     <th>Model Number</th>
+                                    <th>Serial Number</th>
                                     <th>Size</th>
                                     <th>Date Acquired</th>
                                     <th>Device Age</th>
@@ -248,6 +260,7 @@ if (isset($_POST["submit"])) {
                                     </td>
                                     <td><?php echo !empty($ram['ram_brand']) ? htmlspecialchars($ram['ram_brand']) : 'None'; ?></td>
                                     <td><?php echo !empty($ram['ram_modelnumber']) ? htmlspecialchars($ram['ram_modelnumber']) : 'None'; ?></td>
+                                    <td><?php echo !empty($ram['ram_serialnumber']) ? htmlspecialchars($ram['ram_serialnumber']) : 'None'; ?></td>
                                     <td><?php echo !empty($ram['ram_size']) ? htmlspecialchars($ram['ram_size']) : 'None'; ?></td>
                                     <td><?php echo !empty($ram['ram_dateacquired']) ? htmlspecialchars($ram['ram_dateacquired']) : 'None'; ?></td>
                                     <td><?php echo !empty($ram['ram_deviceage']) ? htmlspecialchars($ram['ram_deviceage']) : 'None'; ?></td>

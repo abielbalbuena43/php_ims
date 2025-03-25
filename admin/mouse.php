@@ -48,6 +48,7 @@ if (isset($_POST["submit"])) {
     $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
+    $serialnumber = mysqli_real_escape_string($link, $_POST["serialnumber"]);
     $dateacquired = mysqli_real_escape_string($link, $_POST["dateacquired"]);
     $deviceage = mysqli_real_escape_string($link, $_POST["deviceage"]);
     $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
@@ -60,6 +61,7 @@ if (isset($_POST["submit"])) {
                         mouse_assettag = '$assettag', 
                         mouse_brand = '$brand', 
                         mouse_modelnumber = '$modelnumber', 
+                        mouse_serialnumber = '$serialnumber',
                         mouse_dateacquired = '$dateacquired', 
                         mouse_deviceage = '$deviceage', 
                         mouse_assigneduser = '$assigneduser', 
@@ -77,8 +79,8 @@ if (isset($_POST["submit"])) {
         }
     } else {
         // If no record exists, create a new record in the mouse table
-        $insertQuery = "INSERT INTO mouse (equipment_id, mouse_assettag, mouse_brand, mouse_modelnumber, mouse_dateacquired, mouse_deviceage, mouse_assigneduser, mouse_remarks) 
-                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
+        $insertQuery = "INSERT INTO mouse (equipment_id, mouse_assettag, mouse_brand, mouse_modelnumber, mouse_serialnumber, mouse_dateacquired, mouse_deviceage, mouse_assigneduser, mouse_remarks) 
+                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$serialnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
@@ -145,6 +147,15 @@ if (isset($_POST["submit"])) {
                                 <input type="text" class="span11" name="modelnumber" 
                                     placeholder="None" 
                                     value="<?php echo isset($mouse['mouse_modelnumber']) ? $mouse['mouse_modelnumber'] : ''; ?>" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">Serial Number :</label>
+                            <div class="controls">
+                                <input type="text" class="span11" name="serialnumber" 
+                                    placeholder="None" 
+                                    value="<?php echo isset($mouse['mouse_serialnumber']) ? $mouse['mouse_serialnumber'] : ''; ?>" />
                             </div>
                         </div>
 
@@ -220,6 +231,7 @@ if (isset($_POST["submit"])) {
                                         <th>Asset Tag</th>
                                         <th>Brand</th>
                                         <th>Model Number</th>
+                                        <th>Serial Number</th>
                                         <th>Date Acquired</th>
                                         <th>Device Age</th>
                                         <th>Assigned User</th>
@@ -240,6 +252,7 @@ if (isset($_POST["submit"])) {
                                         </td>
                                         <td><?php echo !empty($mouse['mouse_brand']) ? htmlspecialchars($mouse['mouse_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($mouse['mouse_modelnumber']) ? htmlspecialchars($mouse['mouse_modelnumber']) : 'None'; ?></td>
+                                        <td><?php echo !empty($mouse['mouse_serialnumber']) ? htmlspecialchars($mouse['mouse_serialnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($mouse['mouse_dateacquired']) ? htmlspecialchars($mouse['mouse_dateacquired']) : 'None'; ?></td>
                                         <td><?php echo !empty($mouse['mouse_deviceage']) ? htmlspecialchars($mouse['mouse_deviceage']) : 'None'; ?></td>
                                         <td><?php echo !empty($mouse['mouse_assigneduser']) ? htmlspecialchars($mouse['mouse_assigneduser']) : 'None'; ?></td>

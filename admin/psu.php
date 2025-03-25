@@ -48,6 +48,7 @@ if (isset($_POST["submit"])) {
     $assettag = mysqli_real_escape_string($link, $_POST["assettag"]);
     $brand = mysqli_real_escape_string($link, $_POST["brand"]);
     $modelnumber = mysqli_real_escape_string($link, $_POST["modelnumber"]);
+    $serialnumber = mysqli_real_escape_string($link, $_POST["serialnumber"]);
     $dateacquired = mysqli_real_escape_string($link, $_POST["dateacquired"]);
     $deviceage = mysqli_real_escape_string($link, $_POST["deviceage"]);
     $assigneduser = mysqli_real_escape_string($link, $_POST["assigneduser"]);
@@ -60,6 +61,7 @@ if (isset($_POST["submit"])) {
                         psu_assettag = '$assettag', 
                         psu_brand = '$brand', 
                         psu_modelnumber = '$modelnumber', 
+                        psu_serialnumber = '$serialnumber',
                         psu_dateacquired = '$dateacquired', 
                         psu_deviceage = '$deviceage', 
                         psu_assigneduser = '$assigneduser',  
@@ -77,8 +79,8 @@ if (isset($_POST["submit"])) {
         }
     } else {
         // If no record exists, create a new record in the psu table
-        $insertQuery = "INSERT INTO psu (equipment_id, psu_assettag, psu_brand, psu_modelnumber, psu_dateacquired, psu_deviceage, psu_assigneduser, psu_remarks) 
-                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
+        $insertQuery = "INSERT INTO psu (equipment_id, psu_assettag, psu_brand, psu_modelnumber, psu_serialnumber, psu_dateacquired, psu_deviceage, psu_assigneduser, psu_remarks) 
+                        VALUES ($equipment_id, '$assettag', '$brand', '$modelnumber', '$serialnumber', '$dateacquired', '$deviceage', '$assigneduser', '$remarks')";
 
         if (mysqli_query($link, $insertQuery)) {
             $_SESSION["alert"] = "success";
@@ -142,6 +144,15 @@ if (isset($_POST["submit"])) {
                                     <input type="text" class="span11" name="modelnumber" 
                                         placeholder="None" 
                                         value="<?php echo isset($psu['psu_modelnumber']) ? $psu['psu_modelnumber'] : ''; ?>" />
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">Serial Number :</label>
+                                <div class="controls">
+                                    <input type="text" class="span11" name="serialnumber" 
+                                        placeholder="None" 
+                                        value="<?php echo isset($psu['psu_serialnumber']) ? $psu['psu_serialnumber'] : ''; ?>" />
                                 </div>
                             </div>
 
@@ -216,6 +227,7 @@ if (isset($_POST["submit"])) {
                                         <th>Asset Tag</th>
                                         <th>Brand</th>
                                         <th>Model Number</th>
+                                        <th>Serial Number</th>
                                         <th>Date Acquired</th>
                                         <th>Device Age</th>
                                         <th>Assigned User</th>
@@ -236,6 +248,7 @@ if (isset($_POST["submit"])) {
                                         </td>
                                         <td><?php echo !empty($psu['psu_brand']) ? htmlspecialchars($psu['psu_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($psu['psu_modelnumber']) ? htmlspecialchars($psu['psu_modelnumber']) : 'None'; ?></td>
+                                        <td><?php echo !empty($psu['psu_serialnumber']) ? htmlspecialchars($psu['psu_serialnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($psu['psu_dateacquired']) ? htmlspecialchars($psu['psu_dateacquired']) : 'None'; ?></td>
                                         <td><?php echo !empty($psu['psu_deviceage']) ? htmlspecialchars($psu['psu_deviceage']) : 'None'; ?></td>
                                         <td><?php echo !empty($psu['psu_assigneduser']) ? htmlspecialchars($psu['psu_assigneduser']) : 'None'; ?></td>
