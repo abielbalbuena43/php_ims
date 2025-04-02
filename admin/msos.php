@@ -25,6 +25,24 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+
+// Handle delete request
+if (isset($_POST["delete_msos"])) {
+    $msos_id = $_POST["msos_id"];
+
+    $deleteQuery = "DELETE FROM msos WHERE msos_id = $msos_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: msos.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: msos.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
 // Handle form submission to update msos details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -96,13 +114,18 @@ if (isset($_POST["submit"])) {
                     <div class="widget-content nopadding">
 
                         <form name="form1" action="" method="post" class="form-horizontal">
-                            <!-- Form to edit MSOS details -->
+                            <!-- Asset Tag -->
                             <div class="control-group">
                                 <label class="control-label">Asset Tag :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="assettag" 
-                                        placeholder="None" 
-                                        value="<?php echo isset($msos['msos_assettag']) ? $msos['msos_assettag'] : ''; ?>" />
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($msos['msos_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-MSOS-' . $msos['msos_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
                                 </div>
                             </div>
                             <div class="control-group">
@@ -154,12 +177,14 @@ if (isset($_POST["submit"])) {
 
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                                <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
                                             echo "MSOS details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update MSOS details.";
+                                        } elseif ($alert == "deleted") {
+                                            echo "MSOS deleted!";
                                         }
                                     ?>
                                 </div>
@@ -197,7 +222,15 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($msos['msos_assettag']) ? htmlspecialchars($msos['msos_assettag']) : 'None'; ?></td>
+                                        <td>
+                                            <?php 
+                                                if (isset($msos['msos_id']) && isset($equipment['department'])) {
+                                                    echo strtoupper($equipment['department']) . '-MSOS-' . $msos['msos_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo !empty($msos['msos_brand']) ? htmlspecialchars($msos['msos_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($msos['msos_modelnumber']) ? htmlspecialchars($msos['msos_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($msos['msos_windowsversion']) ? htmlspecialchars($msos['msos_windowsversion']) : 'None'; ?></td>
@@ -210,6 +243,14 @@ if (isset($_POST["submit"])) {
                         </div>
                     </div>
                 </div>
+                <!-- Delete Button (Appears at the End, Only If an msos Exists) -->
+                <?php if ($msos): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this MSOS?');">
+                        <input type="hidden" name="msos_id" value="<?php echo $msos['msos_id']; ?>">
+                        <button type="submit" name="delete_msos" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>

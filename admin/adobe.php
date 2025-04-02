@@ -25,6 +25,24 @@ if (isset($_SESSION["alert"])) {
     $alert = null;
 }
 
+
+// Handle delete request
+if (isset($_POST["delete_adobe"])) {
+    $adobe_id = $_POST["adobe_id"];
+
+    $deleteQuery = "DELETE FROM adobe WHERE adobe_id = $adobe_id";
+
+    if (mysqli_query($link, $deleteQuery)) {
+        $_SESSION["alert"] = "deleted";
+        header("Location: adobe.php?equipment_id=$equipment_id"); // Redirect after deletion
+        exit();
+    } else {
+        $_SESSION["alert"] = "delete_error";
+        header("Location: adobe.php?equipment_id=$equipment_id");
+        exit();
+    }
+}
+
 // Handle form submission to update adobe details
 if (isset($_POST["submit"])) {
     // Get the form data and escape special characters
@@ -97,13 +115,18 @@ if (isset($_POST["submit"])) {
                     <div class="widget-content nopadding">
 
                         <form name="form1" action="" method="post" class="form-horizontal">
-                            <!-- Form to edit Adobe details -->
+                            <!-- Asset Tag -->
                             <div class="control-group">
                                 <label class="control-label">Asset Tag :</label>
                                 <div class="controls">
-                                    <input type="text" class="span11" name="assettag" 
-                                        placeholder="None" 
-                                        value="<?php echo isset($adobe['adobe_assettag']) ? $adobe['adobe_assettag'] : ''; ?>" />
+                                    <input type="text" class="span11" name="assettag" placeholder="None" 
+                                        value="<?php
+                                            if (isset($adobe['adobe_id']) && isset($equipment['department'])) {
+                                                echo strtoupper($equipment['department']) . '-ADOBE-' . $adobe['adobe_id'];
+                                            } else {
+                                                echo 'NOT YET SET';
+                                            }
+                                        ?>" readonly />
                                 </div>
                             </div>
                             <div class="control-group">
@@ -155,12 +178,14 @@ if (isset($_POST["submit"])) {
 
                             <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
-                                <div class="alert <?php echo $alert == 'success' ? 'alert-success' : 'alert-danger'; ?>">
+                                <div class="alert <?php echo ($alert == 'success') ? 'alert-success' : 'alert-danger'; ?>">
                                     <?php 
                                         if ($alert == "success") {
                                             echo "Adobe details updated successfully!";
                                         } elseif ($alert == "error") {
                                             echo "Failed to update Adobe details.";
+                                        } elseif ($alert == "deleted") {
+                                            echo "Adobe deleted!";
                                         }
                                     ?>
                                 </div>
@@ -198,7 +223,15 @@ if (isset($_POST["submit"])) {
                                 <tbody>
                                     <tr>
                                         <td><?php echo htmlspecialchars($equipment['pcname']); ?></td>
-                                        <td><?php echo !empty($adobe['adobe_assettag']) ? htmlspecialchars($adobe['adobe_assettag']) : 'None'; ?></td>
+                                        <td>
+                                            <?php 
+                                                if (isset($adobe['adobe_id']) && isset($equipment['department'])) {
+                                                    echo strtoupper($equipment['department']) . '-ADOBE-' . $adobe['adobe_id'];
+                                                } else {
+                                                    echo 'NOT YET SET';
+                                                }
+                                            ?>
+                                        </td>
                                         <td><?php echo !empty($adobe['adobe_brand']) ? htmlspecialchars($adobe['adobe_brand']) : 'None'; ?></td>
                                         <td><?php echo !empty($adobe['adobe_modelnumber']) ? htmlspecialchars($adobe['adobe_modelnumber']) : 'None'; ?></td>
                                         <td><?php echo !empty($adobe['adobe_adobeversion']) ? htmlspecialchars($adobe['adobe_adobeversion']) : 'None'; ?></td>
@@ -210,6 +243,14 @@ if (isset($_POST["submit"])) {
                             </table>
                         </div>
                     </div>
+                    <!-- Delete Button (Appears at the End, Only If an adobe Exists) -->
+                <?php if ($adobe): ?>
+                    <form method="POST" style="display:inline; margin-top: 10px;" 
+                          onsubmit="return confirm('Are you sure you want to delete this adobe?');">
+                        <input type="hidden" name="adobe_id" value="<?php echo $adobe['adobe_id']; ?>">
+                        <button type="submit" name="delete_adobe" class="btn btn-danger">Delete</button>
+                    </form>
+                <?php endif; ?>
                 </div>
             </div>
         </div>
