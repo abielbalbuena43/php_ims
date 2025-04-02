@@ -79,15 +79,14 @@ $result = mysqli_query($link, $query);
 </head>
 <body>
 
-    <h2>Equipment List</h2>
     <button class="print-button" onclick="window.print()">Export as PDF</button>
 
     <table>
         <tr>
             <th>PC Name</th><th>Department</th><th>Assigned User</th><th>Processor</th>
             <th>Motherboard</th><th>RAM</th><th>HDD</th><th>SSD</th><th>GPU</th>
-            <th>PSU</th><th>PC Case</th><th>Monitor</th><th>LAN Card</th>
-            <th>WiFi Card</th><th>MAC Address</th><th>OS Version</th><th>MS Version</th>
+            <th>PSU</th><th>PC Case</th><th>Monitor</th>
+            <th>MAC Address</th><th>OS Version</th><th>MS Version</th>
             <th>Windows Key</th><th>MS Key</th><th>Date Added</th><th>Date Edited</th><th>Remarks</th>
         </tr>
         <?php while ($row = mysqli_fetch_assoc($result)) { ?>
@@ -104,8 +103,6 @@ $result = mysqli_query($link, $query);
             <td><?php echo $row['psu']; ?></td>
             <td><?php echo $row['pccase']; ?></td>
             <td><?php echo $row['monitor']; ?></td>
-            <td><?php echo $row['lancard']; ?></td>
-            <td><?php echo $row['wificard']; ?></td>
             <td><?php echo $row['macaddress']; ?></td>
             <td><?php echo $row['osversion']; ?></td>
             <td><?php echo $row['msversion']; ?></td>
