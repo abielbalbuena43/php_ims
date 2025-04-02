@@ -125,7 +125,7 @@ if (isset($_POST["submit"])) {
                                     <input type="text" class="span11" name="assettag" placeholder="None" 
                                         value="<?php
                                             if (isset($printer['printer_id']) && isset($equipment['department'])) {
-                                                echo strtoupper($equipment['department']) . '-KEYB-' . $printer['printer_id'];
+                                                echo strtoupper($equipment['department']) . '-PRNTR-' . $printer['printer_id'];
                                             } else {
                                                 echo 'NOT YET SET';
                                             }
@@ -245,7 +245,7 @@ if (isset($_POST["submit"])) {
                                         <td>
                                             <?php 
                                                 if (isset($printer['printer_id']) && isset($equipment['department'])) {
-                                                    echo strtoupper($equipment['department']) . '-KEYB-' . $printer['printer_id'];
+                                                    echo strtoupper($equipment['department']) . '-PRNTR-' . $printer['printer_id'];
                                                 } else {
                                                     echo 'NOT YET SET';
                                                 }

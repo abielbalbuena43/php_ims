@@ -17,9 +17,7 @@ if (isset($_POST['query'])) {
                  OR gpu LIKE '%$search%' 
                  OR psu LIKE '%$search%' 
                  OR pccase LIKE '%$search%' 
-                 OR monitor LIKE '%$search%' 
-                 OR lancard LIKE '%$search%' 
-                 OR wificard LIKE '%$search%' 
+                 OR monitor LIKE '%$search%'  
                  OR macaddress LIKE '%$search%' 
                  OR osversion LIKE '%$search%' 
                  OR msversion LIKE '%$search%'";
@@ -42,8 +40,6 @@ if (isset($_POST['query'])) {
                     <td>{$row['psu']}</td>
                     <td>{$row['pccase']}</td>
                     <td>{$row['monitor']}</td>
-                    <td>{$row['lancard']}</td>
-                    <td>{$row['wificard']}</td>
                     <td>{$row['macaddress']}</td>
                     <td>{$row['osversion']}</td>
                     <td>{$row['msversion']}</td>
