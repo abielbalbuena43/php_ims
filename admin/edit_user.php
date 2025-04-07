@@ -177,6 +177,7 @@ if (isset($_POST["submit1"])) {
 
                             <div class="form-actions">
                                 <button type="submit" name="submit1" class="btn btn-success">Save Changes</button>
+                                <a href="add_new_user.php" class="btn">Cancel</a> <!-- Redirects to equipment.php -->
                             </div>
                         </form>
                     </div>
