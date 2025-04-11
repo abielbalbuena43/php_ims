@@ -190,7 +190,7 @@ if (isset($_POST["submit1"])) {
                 <!-- Export and Delete Logs Buttons -->
                 <div style="text-align: center; margin: 20px 0;">
                     <form method="post" onsubmit="return confirmAction(event)">
-                        <button type="submit" name="export_logs" class="btn btn-primary">Export Logs as .txt</button>
+                        <button type="submit" name="export_logs" class="btn btn-primary">Export Logs as PDF</button>
                         <button type="submit" name="delete_logs" class="btn btn-danger">Delete Logs</button>
                     </form>
                 </div>
