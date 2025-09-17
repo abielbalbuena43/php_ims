@@ -155,10 +155,19 @@ if (isset($_POST["submit"])) {
                                     <input type="text" class="span11" name="software_adobe" value="<?php echo isset($software['software_adobe']) ? htmlspecialchars($software['software_adobe']) : ''; ?>" required />
                                 </div>
                             </div>
+
                             <div class="control-group">
-                                <label class="control-label">Remarks:</label>
+                                <label class="control-label">Remarks :</label>
                                 <div class="controls">
-                                    <textarea class="span11" name="software_remarks"><?php echo isset($software['software_remarks']) ? htmlspecialchars($software['software_remarks']) : ''; ?></textarea>
+                                    <select name="software_remarks" class="span11" required>
+                                        <option value="" disabled <?php echo empty($software['software_remarks']) ? 'selected' : ''; ?>>Select Remark</option>
+                                        <option value="Available" <?php echo (isset($software['software_remarks']) && $software['software_remarks'] == 'Available') ? 'selected' : ''; ?>>Available</option>
+                                        <option value="In Use" <?php echo (isset($software['software_remarks']) && $software['software_remarks'] == 'In Use') ? 'selected' : ''; ?>>In Use</option>
+                                        <option value="Defective" <?php echo (isset($software['software_remarks']) && $software['software_remarks'] == 'Defective') ? 'selected' : ''; ?>>Defective</option>
+                                        <option value="For Repair" <?php echo (isset($software['software_remarks']) && $software['software_remarks'] == 'For Repair') ? 'selected' : ''; ?>>For Repair</option>
+                                        <option value="Under Repair" <?php echo (isset($software['software_remarks']) && $software['software_remarks'] == 'Under Repair') ? 'selected' : ''; ?>>Under Repair</option>
+                                        <option value="For Disposal" <?php echo (isset($software['software_remarks']) && $software['software_remarks'] == 'For Disposal') ? 'selected' : ''; ?>>For Disposal</option>
+                                    </select>
                                 </div>
                             </div>
 

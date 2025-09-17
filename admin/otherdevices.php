@@ -211,11 +211,19 @@ unset($_SESSION["alert"], $_SESSION["message"]);
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                     <label class="control-label">Remarks :</label>
-                                        <div class="controls">
-                                    <textarea class="span11" name="device_remarks" placeholder="Remarks"><?php echo isset($keyboard['device_remarks']) ? htmlspecialchars($keyboard['device_remarks']) : ''; ?></textarea>
+                                <label class="control-label">Remarks :</label>
+                                <div class="controls">
+                                    <select name="device_remarks" class="span11" required>
+                                        <option value="" disabled <?php echo empty($device['device_remarks']) ? 'selected' : ''; ?>>Select Remark</option>
+                                        <option value="Available" <?php echo (isset($device['device_remarks']) && $device['device_remarks'] == 'Available') ? 'selected' : ''; ?>>Available</option>
+                                        <option value="In Use" <?php echo (isset($device['device_remarks']) && $device['device_remarks'] == 'In Use') ? 'selected' : ''; ?>>In Use</option>
+                                        <option value="Defective" <?php echo (isset($device['device_remarks']) && $device['device_remarks'] == 'Defective') ? 'selected' : ''; ?>>Defective</option>
+                                        <option value="For Repair" <?php echo (isset($device['device_remarks']) && $device['device_remarks'] == 'For Repair') ? 'selected' : ''; ?>>For Repair</option>
+                                        <option value="Under Repair" <?php echo (isset($device['device_remarks']) && $device['device_remarks'] == 'Under Repair') ? 'selected' : ''; ?>>Under Repair</option>
+                                        <option value="For Disposal" <?php echo (isset($device['device_remarks']) && $device['device_remarks'] == 'For Disposal') ? 'selected' : ''; ?>>For Disposal</option>
+                                    </select>
                                 </div>
-                                </div>
+                            </div>
                                 <div class="form-actions">
                                     <button type="submit" name="submit1" class="btn btn-success">Save</button>
                                 </div>

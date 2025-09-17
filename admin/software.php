@@ -116,12 +116,22 @@ unset($_SESSION["alert"]);
                                         <input type="text" class="span11" placeholder="Adobe" name="software_adobe" required />
                                     </div>
                                 </div>
+
                                 <div class="control-group">
-                                    <label class="control-label">Remarks :</label>
+                                <label class="control-label">Remarks :</label>
                                     <div class="controls">
-                                        <textarea type="text" class="span11" placeholder="Remarks" name="software_remarks" required></textarea>
+                                        <select name="software_remarks" class="span11" required>
+                                            <option value="" disabled <?php echo empty($software['software_remarks']) ? 'selected' : ''; ?>>Select Remark</option>
+                                            <option value="Available" <?php echo (isset($software['software_remarks']) && $software['software_remarks'] == 'Available') ? 'selected' : ''; ?>>Available</option>
+                                            <option value="In Use" <?php echo (isset($software['software_remarks']) && $software['software_remarks'] == 'In Use') ? 'selected' : ''; ?>>In Use</option>
+                                            <option value="Defective" <?php echo (isset($software['software_remarks']) && $software['software_remarks'] == 'Defective') ? 'selected' : ''; ?>>Defective</option>
+                                            <option value="For Repair" <?php echo (isset($software['software_remarks']) && $software['software_remarks'] == 'For Repair') ? 'selected' : ''; ?>>For Repair</option>
+                                            <option value="Under Repair" <?php echo (isset($software['software_remarks']) && $software['software_remarks'] == 'Under Repair') ? 'selected' : ''; ?>>Under Repair</option>
+                                            <option value="For Disposal" <?php echo (isset($software['software_remarks']) && $software['software_remarks'] == 'For Disposal') ? 'selected' : ''; ?>>For Disposal</option>
+                                        </select>
                                     </div>
                                 </div>
+
                                 <div class="form-actions">
                                     <button type="submit" name="submit1" class="btn btn-success">Save</button>
                                 </div>

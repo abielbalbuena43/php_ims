@@ -186,7 +186,15 @@ if (isset($_POST["submit"])) {
                             <div class="control-group">
                                 <label class="control-label">Remarks :</label>
                                 <div class="controls">
-                                    <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($pccase['pccase_remarks']) ? $pccase['pccase_remarks'] : ''; ?></textarea>
+                                    <select name="remarks" class="span11" required>
+                                        <option value="" disabled <?php echo empty($pccase['pccase_remarks']) ? 'selected' : ''; ?>>Select Remark</option>
+                                        <option value="Available" <?php echo (isset($pccase['pccase_remarks']) && $pccase['pccase_remarks'] == 'Available') ? 'selected' : ''; ?>>Available</option>
+                                        <option value="In Use" <?php echo (isset($pccase['pccase_remarks']) && $pccase['pccase_remarks'] == 'In Use') ? 'selected' : ''; ?>>In Use</option>
+                                        <option value="Defective" <?php echo (isset($pccase['pccase_remarks']) && $pccase['pccase_remarks'] == 'Defective') ? 'selected' : ''; ?>>Defective</option>
+                                        <option value="For Repair" <?php echo (isset($pccase['pccase_remarks']) && $pccase['pccase_remarks'] == 'For Repair') ? 'selected' : ''; ?>>For Repair</option>
+                                        <option value="Under Repair" <?php echo (isset($pccase['pccase_remarks']) && $pccase['pccase_remarks'] == 'Under Repair') ? 'selected' : ''; ?>>Under Repair</option>
+                                        <option value="For Disposal" <?php echo (isset($pccase['pccase_remarks']) && $pccase['pccase_remarks'] == 'For Disposal') ? 'selected' : ''; ?>>For Disposal</option>
+                                    </select>
                                 </div>
                             </div>
 

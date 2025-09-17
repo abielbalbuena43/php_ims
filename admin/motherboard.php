@@ -220,9 +220,15 @@ if (isset($_POST["submit"])) {
                             <div class="control-group">
                                 <label class="control-label">Remarks :</label>
                                 <div class="controls">
-                                    <textarea class="span11" name="remarks" placeholder="None"><?php 
-                                        echo isset($motherboard['mobo_remarks']) ? $motherboard['mobo_remarks'] : ''; 
-                                    ?></textarea>
+                                    <select name="remarks" class="span11" required>
+                                        <option value="" disabled <?php echo empty($mobo['mobo_remarks']) ? 'selected' : ''; ?>>Select Remark</option>
+                                        <option value="Available" <?php echo (isset($mobo['mobo_remarks']) && $mobo['mobo_remarks'] == 'Available') ? 'selected' : ''; ?>>Available</option>
+                                        <option value="In Use" <?php echo (isset($mobo['mobo_remarks']) && $mobo['mobo_remarks'] == 'In Use') ? 'selected' : ''; ?>>In Use</option>
+                                        <option value="Defective" <?php echo (isset($mobo['mobo_remarks']) && $mobo['mobo_remarks'] == 'Defective') ? 'selected' : ''; ?>>Defective</option>
+                                        <option value="For Repair" <?php echo (isset($mobo['mobo_remarks']) && $mobo['mobo_remarks'] == 'For Repair') ? 'selected' : ''; ?>>For Repair</option>
+                                        <option value="Under Repair" <?php echo (isset($mobo['mobo_remarks']) && $mobo['mobo_remarks'] == 'Under Repair') ? 'selected' : ''; ?>>Under Repair</option>
+                                        <option value="For Disposal" <?php echo (isset($mobo['mobo_remarks']) && $mobo['mobo_remarks'] == 'For Disposal') ? 'selected' : ''; ?>>For Disposal</option>
+                                    </select>
                                 </div>
                             </div>
 

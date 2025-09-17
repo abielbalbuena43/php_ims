@@ -127,9 +127,17 @@ unset($_SESSION["alert"]);
                                     </div>
                                 </div>
                                 <div class="control-group">
-                                    <label class="control-label">Remarks :</label>
+                                <label class="control-label">Remarks :</label>
                                     <div class="controls">
-                                        <textarea class="span11" placeholder="Remarks" name="peripheral_remarks" required></textarea>
+                                        <select name="peripheral_remarks" class="span11" required>
+                                            <option value="" disabled <?php echo empty($peripheral['peripheral_remarks']) ? 'selected' : ''; ?>>Select Remark</option>
+                                            <option value="Available" <?php echo (isset($peripheral['peripheral_remarks']) && $peripheral['peripheral_remarks'] == 'Available') ? 'selected' : ''; ?>>Available</option>
+                                            <option value="In Use" <?php echo (isset($peripheral['peripheral_remarks']) && $peripheral['peripheral_remarks'] == 'In Use') ? 'selected' : ''; ?>>In Use</option>
+                                            <option value="Defective" <?php echo (isset($peripheral['peripheral_remarks']) && $peripheral['peripheral_remarks'] == 'Defective') ? 'selected' : ''; ?>>Defective</option>
+                                            <option value="For Repair" <?php echo (isset($peripheral['peripheral_remarks']) && $peripheral['peripheral_remarks'] == 'For Repair') ? 'selected' : ''; ?>>For Repair</option>
+                                            <option value="Under Repair" <?php echo (isset($peripheral['peripheral_remarks']) && $peripheral['peripheral_remarks'] == 'Under Repair') ? 'selected' : ''; ?>>Under Repair</option>
+                                            <option value="For Disposal" <?php echo (isset($peripheral['peripheral_remarks']) && $peripheral['peripheral_remarks'] == 'For Disposal') ? 'selected' : ''; ?>>For Disposal</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-actions">

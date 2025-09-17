@@ -182,11 +182,19 @@ if (isset($_POST["submit"])) {
                             </div>
 
                             <div class="control-group">
-                                <label class="control-label">Remarks :</label>
-                                <div class="controls">
-                                    <textarea class="span11" name="remarks" placeholder="None"><?php echo isset($processor['processor_remarks']) ? $processor['processor_remarks'] : ''; ?></textarea>
-                                </div>
+                            <label class="control-label">Remarks :</label>
+                            <div class="controls">
+                                <select name="remarks" class="span11" required>
+                                    <option value="" disabled <?php echo empty($processor['processor_remarks']) ? 'selected' : ''; ?>>Select Remark</option>
+                                    <option value="Available" <?php echo (isset($processor['processor_remarks']) && $processor['processor_remarks'] == 'Available') ? 'selected' : ''; ?>>Available</option>
+                                    <option value="In Use" <?php echo (isset($processor['processor_remarks']) && $processor['processor_remarks'] == 'In Use') ? 'selected' : ''; ?>>In Use</option>
+                                    <option value="Defective" <?php echo (isset($processor['processor_remarks']) && $processor['processor_remarks'] == 'Defective') ? 'selected' : ''; ?>>Defective</option>
+                                    <option value="For Repair" <?php echo (isset($processor['processor_remarks']) && $processor['processor_remarks'] == 'For Repair') ? 'selected' : ''; ?>>For Repair</option>
+                                    <option value="Under Repair" <?php echo (isset($processor['processor_remarks']) && $processor['processor_remarks'] == 'Under Repair') ? 'selected' : ''; ?>>Under Repair</option>
+                                    <option value="For Disposal" <?php echo (isset($processor['processor_remarks']) && $processor['processor_remarks'] == 'For Disposal') ? 'selected' : ''; ?>>For Disposal</option>
+                                </select>
                             </div>
+                        </div>
 
                            <!-- Success/Failure Alert -->
                             <?php if (isset($alert)) { ?>
