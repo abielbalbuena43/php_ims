@@ -256,10 +256,19 @@ if (isset($_POST["submit1"])) {
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Remarks :</label>
-                                <div class="controls">
-                                <textarea class="span11" placeholder="Remarks" name="equipment_remarks"><?php echo isset($equipment['equipment_remarks']) ? $equipment['equipment_remarks'] : ''; ?></textarea>
-                            </div>
+                                    <label class="control-label">Remarks :</label>
+                                    <div class="controls">
+                                        <select name="equipment_remarks" class="span11" required>
+                                            <option value="" disabled selected>Select Remark</option>
+                                            <option>Available</option>
+                                            <option>In Use</option>
+                                            <option>Defective</option>
+                                            <option>For Repair</option>
+                                            <option>Under Repair</option>
+                                            <option>For Disposal</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Alert Display -->

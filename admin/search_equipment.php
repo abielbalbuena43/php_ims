@@ -8,6 +8,7 @@ if (isset($_POST['query'])) {
     // Search query: Matches closest results using LIKE
     $query = "SELECT * FROM equipment 
               WHERE pcname LIKE '%$search%' 
+                 OR department LIKE '%$search%' 
                  OR assigneduser LIKE '%$search%' 
                  OR processor LIKE '%$search%' 
                  OR motherboard LIKE '%$search%' 
@@ -20,7 +21,9 @@ if (isset($_POST['query'])) {
                  OR monitor LIKE '%$search%'  
                  OR macaddress LIKE '%$search%' 
                  OR osversion LIKE '%$search%' 
-                 OR msversion LIKE '%$search%'";
+                 OR msversion LIKE '%$search%'
+                 OR equipment_remarks LIKE '%$search%'";
+                 
 
     // Execute the query
     $res = mysqli_query($link, $query);
@@ -30,6 +33,7 @@ if (isset($_POST['query'])) {
         while ($row = mysqli_fetch_array($res)) {
             echo "<tr>
                     <td>{$row['pcname']}</td>
+                    <td>{$row['department']}</td>
                     <td>{$row['assigneduser']}</td>
                     <td>{$row['processor']}</td>
                     <td>{$row['motherboard']}</td>
@@ -47,6 +51,7 @@ if (isset($_POST['query'])) {
                     <td>{$row['ms_key']}</td>
                     <td>{$row['date_added']}</td>
                     <td>{$row['date_edited']}</td>
+                    <td>{$row['equipment_remarks']}</td>
                     <td><a href='edit_equipment.php?equipment_id={$row['equipment_id']}' class='btn btn-primary'>Edit</a></td>
                     <td><a href='delete_equipment.php?equipment_id={$row['equipment_id']}' class='btn btn-danger' onclick='return confirm(\"Are you sure you want to delete this equipment?\");'>Delete</a></td>
                   </tr>";
