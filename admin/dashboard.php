@@ -9,6 +9,9 @@ include "../admin/connection.php";
 
 echo '<link rel="stylesheet" href="css/dashboard.css">';
 
+/* ===============================
+   BAR CHART QUERY (Unchanged)
+   =============================== */
 $query = "
 SELECT 'AVR' AS category, COUNT(avr_id) AS count FROM avr UNION ALL
 SELECT 'GPU', COUNT(gpu_id) FROM gpu UNION ALL
@@ -37,27 +40,27 @@ SELECT 'Total Equipment',
     (SELECT COUNT(gpu_id) FROM gpu) + 
     (SELECT COUNT(psu_id) FROM psu) + 
     (SELECT COUNT(pccase_id) FROM pccase) + 
-    (SELECT COUNT(monitor_id) FROM monitor) + 
-    - (SELECT COUNT(keyboard_id) FROM keyboard)
-    - (SELECT COUNT(mouse_id) FROM mouse)
-    - (SELECT COUNT(printer_id) FROM printer)
-    - (SELECT COUNT(avr_id) FROM avr) AS count UNION ALL
+    (SELECT COUNT(monitor_id) FROM monitor) -
+    (SELECT COUNT(keyboard_id) FROM keyboard) -
+    (SELECT COUNT(mouse_id) FROM mouse) -
+    (SELECT COUNT(printer_id) FROM printer) -
+    (SELECT COUNT(avr_id) FROM avr) AS count UNION ALL
 SELECT 'Total Other Devices', COUNT(device_id) FROM otherdevices
 ";
-    
 
 $result = mysqli_query($link, $query);
 
 $totalPeripherals = 0;
 $totalEquipment = 0;
 $totalOtherDevices = 0;
-$labels = [];
-$values = [];
+$labelsBar = [];
+$valuesBar = [];
 
+// Process bar chart data
 while ($row = mysqli_fetch_assoc($result)) {
     if (!in_array($row['category'], ['Total Peripherals', 'Total Equipment', 'Total Other Devices'])) {
-        $labels[] = $row['category'];
-        $values[] = $row['count'];
+        $labelsBar[] = $row['category'];
+        $valuesBar[] = $row['count'];
     }
 
     if ($row['category'] === 'Total Peripherals') {
@@ -70,6 +73,26 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 
 $totalCount = $totalEquipment + $totalPeripherals;
+
+/* ===============================
+   PIE CHART QUERY (Modified)
+   =============================== */
+$pieQuery = "
+SELECT equipment_remarks AS category, COUNT(*) AS count
+FROM equipment
+WHERE equipment_remarks IN ('Available', 'In Use', 'Defective', 'For Repair', 'Under Repair', 'For Disposal')
+GROUP BY equipment_remarks
+";
+
+$pieResult = mysqli_query($link, $pieQuery);
+
+$labelsPie = [];
+$valuesPie = [];
+
+while ($pieRow = mysqli_fetch_assoc($pieResult)) {
+    $labelsPie[] = $pieRow['category'];
+    $valuesPie[] = $pieRow['count'];
+}
 ?>
 
 <!-- Start Form -->
@@ -112,7 +135,7 @@ $totalCount = $totalEquipment + $totalPeripherals;
         <!-- Charts -->
         <div class="chart-container">
             <div class="chart-box">
-                <h4>Equipment Distribution</h4>
+                <h4>Equipment Remarks Distribution</h4>
                 <canvas id="idPieChart"></canvas>
             </div>
 
@@ -141,9 +164,9 @@ $totalCount = $totalEquipment + $totalPeripherals;
                                 while ($logRow = mysqli_fetch_array($logResult)) {
                                     echo "<tr style='border: none;'>";
                                     echo "<td style='padding: 10px; border: none;'>";
-                                    echo "<strong>" . htmlspecialchars($logRow['username']) . ":</strong> "; // Display username
+                                    echo "<strong>" . htmlspecialchars($logRow['username']) . ":</strong> ";
                                     echo htmlspecialchars($logRow['action']) . " ";
-                                    echo "(" . htmlspecialchars($logRow['date_edited']) . ")"; // Date at the end
+                                    echo "(" . htmlspecialchars($logRow['date_edited']) . ")";
                                     echo "</td>";
                                     echo "</tr>";
                                 }
@@ -161,55 +184,51 @@ $totalCount = $totalEquipment + $totalPeripherals;
 <!-- End Form -->
 
 <script>
-    var totalEquipment = <?php echo $totalEquipment; ?>;
-    var totalPeripherals = <?php echo $totalPeripherals; ?>;
-    var totalOtherDevices = <?php echo $totalOtherDevices; ?>;
-
     var ctxPie = document.getElementById('idPieChart').getContext('2d');
     var ctxBar = document.getElementById('idBarChart').getContext('2d');
 
     const chartColors = [
-    '#FF0000', // Red (Primary)
-    '#0000FF', // Blue (Primary)
-    '#FFFF00', // Yellow (Primary)
-    '#008000', // Green (Secondary)
-    '#FFA500', // Orange (Secondary)
-    '#800080', // Purple (Secondary)
-    '#00CED1', // Dark Turquoise (Extra)
-    '#FF4500', // Orange-Red (Extra)
-    '#1E90FF', // Dodger Blue (Extra)
-    '#32CD32', // Lime Green (Extra)
-    '#FFD700', // Gold (Extra)
-    '#8A2BE2', // Blue Violet (Extra)
-    '#DC143C', // Crimson (Extra)
-    '#4682B4', // Steel Blue (Extra)
-    '#DA70D6'  // Orchid (Extra)
-];
+        '#FF0000', '#0000FF', '#FFFF00', '#008000',
+        '#FFA500', '#800080', '#00CED1', '#FF4500',
+        '#1E90FF', '#32CD32', '#FFD700', '#8A2BE2'
+    ];
 
-
-
-    var chartData = {
-        labels: <?php echo json_encode($labels); ?>,
+    /* PIE CHART DATA */
+    var pieData = {
+        labels: <?php echo json_encode($labelsPie); ?>,
         datasets: [{
-            data: <?php echo json_encode($values); ?>,
-            backgroundColor: chartColors.slice(0, <?php echo count($labels); ?>),
+            data: <?php echo json_encode($valuesPie); ?>,
+            backgroundColor: chartColors.slice(0, <?php echo count($labelsPie); ?>),
             borderColor: "#fff",
             borderWidth: 2
         }]
     };
 
+    /* BAR CHART DATA */
+    var barData = {
+        labels: <?php echo json_encode($labelsBar); ?>,
+        datasets: [{
+            label: 'Equipment Count',
+            data: <?php echo json_encode($valuesBar); ?>,
+            backgroundColor: chartColors.slice(0, <?php echo count($labelsBar); ?>),
+            borderColor: chartColors.slice(0, <?php echo count($labelsBar); ?>),
+            borderWidth: 1
+        }]
+    };
+
+    /* PIE CHART */
     new Chart(ctxPie, {
         type: 'pie',
-        data: chartData,
+        data: pieData,
         options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { display: false }, // Hides legend in Pie Chart
+                legend: { display: false },
                 tooltip: { 
                     callbacks: { 
-                        label: function(tooltipItem) { 
-                            return tooltipItem.label + ": " + tooltipItem.raw + " items"; 
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ": " + tooltipItem.raw + " items";
                         } 
                     } 
                 }
@@ -217,18 +236,10 @@ $totalCount = $totalEquipment + $totalPeripherals;
         }
     });
 
+    /* BAR CHART */
     new Chart(ctxBar, {
         type: 'bar',
-        data: {
-            labels: <?php echo json_encode($labels); ?>,
-            datasets: [{
-                label: 'Equipment Count',
-                data: <?php echo json_encode($values); ?>,
-                backgroundColor: chartColors.slice(0, <?php echo count($labels); ?>),
-                borderColor: chartColors.slice(0, <?php echo count($labels); ?>),
-                borderWidth: 1
-            }]
-        },
+        data: barData,
         options: { 
             responsive: true, 
             maintainAspectRatio: false, 
@@ -236,11 +247,11 @@ $totalCount = $totalEquipment + $totalPeripherals;
                 y: { beginAtZero: true, ticks: { stepSize: 1 } } 
             },
             plugins: {
-                legend: { display: true }, // Keeps legend in Bar Chart
+                legend: { display: true },
                 tooltip: { 
                     callbacks: { 
-                        label: function(tooltipItem) { 
-                            return tooltipItem.label + ": " + tooltipItem.raw + " items"; 
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ": " + tooltipItem.raw + " items";
                         } 
                     } 
                 }
@@ -248,8 +259,6 @@ $totalCount = $totalEquipment + $totalPeripherals;
         }
     });
 </script>
-
-
 
 <?php include "footer.php"; ?>
 
