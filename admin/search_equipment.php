@@ -54,6 +54,7 @@ if (isset($_POST['query'])) {
                     <td>{$row['equipment_remarks']}</td>
                     <td><a href='edit_equipment.php?equipment_id={$row['equipment_id']}' class='btn btn-primary'>Edit</a></td>
                     <td><a href='delete_equipment.php?equipment_id={$row['equipment_id']}' class='btn btn-danger' onclick='return confirm(\"Are you sure you want to delete this equipment?\");'>Delete</a></td>
+                    <td><a href='export_equipment.php?equipment_id={$row['equipment_id']}' class='btn btn-primary'>Export</a></td>
                   </tr>";
         }
     } else {
