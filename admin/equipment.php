@@ -377,7 +377,9 @@ if (isset($_SESSION["alert"])) {
                                                 Delete
                                             </a>
                                         </td>
-                                        <td><a href="export_equipment.php?equipment_id=<?php echo $row['equipment_id']; ?>" class="btn btn-primary">Export</a></td>
+                                        <td>
+                                            <a href="export_equipment.php?equipment_id=<?php echo $row['equipment_id']; ?>" class="btn btn-success">Export</a>
+                                        </td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -386,7 +388,7 @@ if (isset($_SESSION["alert"])) {
                 </div>
                 <div style="text-align: center; margin-top: 20px;">
                     <form method="post" action="export_all.php" target="_blank">
-                        <button type="submit" class="btn btn-primary">Export All Equipment</button>
+                        <button type="submit" class="btn btn-success">Export All Equipment</button>
                     </form>
                 </div>
             </div>
